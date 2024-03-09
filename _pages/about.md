@@ -8,11 +8,11 @@ subtitle: <a href='#'>Shinjuku, Tokyo, Japan</a>.
 profile:
   align: right
   image: prof_pic.jpg
-  image_circular: false # crops the image to make it circular
+  image_circular: true # crops the image to make it circular
   more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+    <p>2023/12</p>
+    <p></p>
+    <p></p>
 
 news: true # includes a list of news items
 selected_papers: true # includes a list of papers marked as "selected={true}"
@@ -28,6 +28,6 @@ Link to your social media connections, too. This theme is set up to use [Font Aw
 
 I am a Ph.D. student at the Department of Computer Science and Communications Engineering, [Waseda University](https://www.waseda.jp/top/en/) in Tokyo, Japan. I am supervised by Prof. [Hironori Washizaki](http://www.washi.cs.waseda.ac.jp/washizaki/). My Ph.D. study focuses on requirement engineering and machine learning, specifically on enhancing reliability in software and systems through generative AI.
 
-I obtained my M.S. degree from JAIST, under the guidance of Prof. [Masashi Unoki](https://fp.jaist.ac.jp/public/Default2.aspx?id=293&l=1). My research topic was deep-fake speech detection with a focus on leveraging insights from the human auditory system. Additionally, under the guidance of Junior Associate Professor [Teeradaj Racharak](https://sites.google.com/view/teeradaj), I completed minor research related to knowledge graphs and machine learning.
+I obtained my M.S. degree from [Japan Advanced Institute of Science and Technology](https://www.jaist.ac.jp/english/)(JAIST), under the guidance of Prof. [Masashi Unoki](https://fp.jaist.ac.jp/public/Default2.aspx?id=293&l=1). My research topic was deep-fake speech detection with a focus on leveraging insights from the human auditory system. Additionally, under the guidance of Junior Associate Professor [Teeradaj Racharak](https://sites.google.com/view/teeradaj), I completed minor research related to knowledge graphs and machine learning.
 
 **Research Interests**: reliable software engineering, requirements engineering, machine learning, speech signal processing, and trustworthy AI.
