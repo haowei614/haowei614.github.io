@@ -1,8 +1,9 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Moto. Etc.
+subtitle: <a href='#'>Shinjuku, Tokyo, Japan</a>.
+#subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Moto. Etc.
 
 profile:
   align: right
@@ -29,4 +30,4 @@ I am a Ph.D. student at the Department of Computer Science and Communications En
 
 I obtained my M.S. degree from JAIST, under the guidance of Prof. [Masashi Unoki](https://fp.jaist.ac.jp/public/Default2.aspx?id=293&l=1). My research topic was deep-fake speech detection with a focus on leveraging insights from the human auditory system. Additionally, under the guidance of Junior Associate Professor [Teeradaj Racharak](https://sites.google.com/view/teeradaj), I completed minor research related to knowledge graphs and machine learning.
 
-**Research Interests**: software engineering (SE), requirements engineering (RE), AI for SE/RE, machine learning, speech signal processing, and trustworthy AI.
+**Research Interests**: reliable software engineering, requirements engineering, machine learning, speech signal processing, and trustworthy AI.
