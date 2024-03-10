@@ -1,24 +1,20 @@
 {
-  "Information": {
+  "Information":[ 
+    {
     "name": "Haowei Cheng",
     
     "email": "hwcheng614@gmail.com",
     "languages":"Chinese'(Native), English(Fluent), Japanese(Fluent), Spanish(Beginner)" ,
-    "location": {
-      "address": "2712 Broadway St",
-      "postalCode": "CA 94115",
-      "city": "San Francisco",
-      "countryCode": "US",
-      "region": "California"
-    },
-    "profiles": [
-      {
-        "network": "Twitter",
-        "username": "AlbertEinstein",
-        "url": "https://twitter.com/AlbertEinstein"
-      }
-    ]
-  },
+
+      "profiles": [
+        {
+          "network": "Twitter",
+          "username": "AlbertEinstein",
+          "url": "https://twitter.com/AlbertEinstein"
+        }
+      ]
+    }
+  ],
 
   "education": [
     {
