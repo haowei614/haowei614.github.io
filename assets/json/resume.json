@@ -18,13 +18,13 @@
 
   "education": [
     {
-      "institution": "Waseda University",
-      "location": "Tokyo, Japan",
-      "url": "https://www.waseda.jp/top/en/",
-      "area": "Reliable Software Engineering",
-      "studyType": "PhD",
-      "startDate": "2024-04-01-2027",
-      "endDate": "2027-03-01"
+      "institution": "",
+      "location": "",
+      "url": "",
+      "area": "",
+      "studyType": "",
+      "startDate": "",
+      "endDate": ""
 
     }
   ],
