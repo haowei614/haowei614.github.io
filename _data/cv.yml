@@ -2,18 +2,18 @@
   type: map
   contents:
     - name: Full Name
-      value: Albert Einstein
+      value: Haowei Cheng
     - name: Date of Birth
-      value: 14th March 1879
+      value: 14th June 1998
     - name: Languages
-      value: English, German
+      value: Chinese, English, Japanese
 
 - title: Education
   type: time_table
   contents:
     - title: PhD
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1905
+      institution: Waseda University
+      year: 2024
       description:
         - Description 1.
         - Description 2.
