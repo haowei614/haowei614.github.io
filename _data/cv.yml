@@ -2,11 +2,11 @@
   type: map
   contents:
     - name: Full Name
-      value: Haowei Cheng
+      value: "Haowei Cheng"
     - name: Date of Birth
-      value: 14th June 1998
+      value: "14th June 1998"
     - name: Languages
-      value: Chinese, English, Japanese
+      value: "Chinese, English, Japanese"
 
 - title: Education
   type: time_table
