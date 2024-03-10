@@ -1,10 +1,8 @@
 {
-  "Information":[ 
-    {
-    "name": "",
-    
-    "email": "",
-    "languages":"" ,
+  "basics": {
+    "name": "Haowei Cheng",
+    "email": "hwcheng614@gmail.com",
+    "languages":"Chinese, English, Japanese" ,
 
       "profiles": [
         {
@@ -13,8 +11,7 @@
           "url": "https://twitter.com/AlbertEinstein"
         }
       ]
-    }
-  ],
+    },
 
   "education": [
     {
