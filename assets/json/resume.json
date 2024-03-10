@@ -15,13 +15,8 @@
 
   "education": [
     {
-      "institution": "",
-      "location": "",
-      "url": "",
-      "area": "",
-      "studyType": "",
-      "startDate": "",
-      "endDate": ""
+      "institution": "Waseda University",
+      "date":"2024.4-2027.3"
 
     }
   ],
