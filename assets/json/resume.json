@@ -2,7 +2,7 @@
   "basics": {
     "name": "Haowei Cheng",
     "email": "hwcheng614@gmail.com",
-    "languages":"Chinese, English, Japanese" ,
+    "languages":"Chinese(Native), English(Fluent), Japanese(Fluent), Spanish(Begineer)" ,
 
       "profiles": [
         {
@@ -16,7 +16,7 @@
   "education": [
     {
       "institution": "Waseda University",
-      "date":"2024.4-2027.3"
+      "startDate":"2024.4-2027.3"
 
     }
   ],
