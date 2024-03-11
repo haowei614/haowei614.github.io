@@ -13,13 +13,13 @@
       ]
     },
 
-  "education": {
-    
+  "education": [
+    {
       "institution": "Waseda University",
       "date":"2024.4-2027.3"
 
-    
-  },
+    }
+  ],
 
   "work": [
     {
