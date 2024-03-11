@@ -1,21 +1,18 @@
 {
-  "basics": {
+  "basics": [
+    {
     "name": "Haowei Cheng",
     "email": "hwcheng614@gmail.com",
     "languages":"Chinese(Native), English(Fluent), Japanese(Fluent), Spanish(Begineer)" ,
 
-      "profiles": [
-        {
-          "network": "Twitter",
-          "username": "AlbertEinstein",
-          "url": "https://twitter.com/AlbertEinstein"
-        }
-      ]
-    },
+      
+    }
+  ],
 
   "education": [
-    { "position":"Waseda University",
+    { 
       "name": "Ph.D candidate",
+      "position":"Waseda University",
       "highlights":["Supervised by Prof. [Washizaki Hironori](http://www.washi.cs.waseda.ac.jp/washizaki/)" ],
       "startDate":"2024.4",
       "endDate":"2027.3"
