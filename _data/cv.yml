@@ -30,7 +30,8 @@
         # - Description 2.
 
   - title: Computer Skills
-      description:
+      type: list
+      contents:
         - "Programing Languages: Python, Java, C/C++, MATLAB"
         - "Frameworks: Tensorflow, PyTorch, NumPy, SciPy, Pandas" 
 
