@@ -29,11 +29,15 @@
         - "Thesis: Study on Deep-fake Speech Detection Based on Spectro-temporal Modulation Analysis" 
         # - Description 2.
 
-  - title: Computer Skills
+  # - title: Computer Skills
+  #     type: list
+  #     contents:
+  #       - "Programing Languages: Python, Java, C/C++, MATLAB"
+  #       - "Frameworks: Tensorflow, PyTorch, NumPy, SciPy, Pandas" 
+    - title: Other Interests
       type: list
       contents:
-        - "Programing Languages: Python, Java, C/C++, MATLAB"
-        - "Frameworks: Tensorflow, PyTorch, NumPy, SciPy, Pandas" 
+        - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
 
         # - title: Experience
 #   type: time_table
