@@ -11,22 +11,22 @@
 - title: Education
   type: time_table
   contents:
-    - title: PhD
-      institution: Waseda University
-      year: 2024
+    - title: Waseda University
+      institution: Ph.D. candidate
+      year: 2024.4-2027.3
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Federal teaching diploma
-      institution: Eidgenössische Technische Hochschule, Zurich, Switzerland
-      year: 1900
+        - Supervised by Prof. [Washizaki Hironori](http://www.washi.cs.waseda.ac.jp/washizaki/)
+        #- Description 2.
+        # - title: Description 3.
+        #   contents:
+        #     - Sub-description 1.
+        #     - Sub-description 2.
+    - title: Japan Advanced Institute of Science and Technology (JAIST)
+      institution: Master's degree
+      year: 2021.10-2023.9
       description:
-        - Description 1.
-        - Description 2.
+        - Supervised by Prof. [Masashi Unoki](https://fp.jaist.ac.jp/public/Default2.aspx?id=293&l=1)
+        # - Description 2.
 
 - title: Experience
   type: time_table
