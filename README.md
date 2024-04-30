@@ -1,4 +1,4 @@
-# Otilia Stretcu's personal webpage
+# Haowei Cheng's personal webpage
 
 This is the personal website of Otilia Stretcu, which can be visualized at [https://otiliastr.github.io/](https://otiliastr.github.io/).
 
