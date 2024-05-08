@@ -1,6 +1,6 @@
 # Haowei Cheng's personal webpage
 
-This is the personal website of Otilia Stretcu, which can be visualized at [https://haowei614.github.io/](https://haowei614.github.io/).
+This is the personal website of Haowei Cheng, which can be visualized at [https://haowei614.github.io/](https://haowei614.github.io/).
 
 ## How to use this template for your website
 
