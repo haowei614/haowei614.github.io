@@ -1,0 +1,79 @@
+backend:
+  name: github
+  repo: haowei614/haowei614.github.io
+  branch: master
+
+media_folder: "assets/img/uploads"
+public_folder: "/assets/img/uploads"
+
+site_url: "https://haowei614.github.io"
+display_url: "https://haowei614.github.io"
+
+collections:
+  - name: "publications_data"
+    label: "Publications"
+    files:
+      - name: "publications"
+        label: "Publications Items"
+        file: "data/publications.json"
+        fields:
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.title}} ({{fields.year}})"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Authors", name: "authors", widget: "text", required: false }
+              - { label: "Venue", name: "venue", widget: "string", required: false }
+              - { label: "Year", name: "year", widget: "number", value_type: "int" }
+              - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+              - { label: "Tags", name: "tags", widget: "list", required: false }
+              - { label: "Abstract", name: "abstract", widget: "text", required: false }
+              - { label: "PDF URL", name: "pdf", widget: "string", required: false }
+              - { label: "Poster URL", name: "poster", widget: "string", required: false }
+              - { label: "Code URL", name: "code", widget: "string", required: false }
+              - { label: "Project URL", name: "project", widget: "string", required: false }
+              - { label: "Featured", name: "featured", widget: "boolean", default: false }
+              - label: "Status"
+                name: "status"
+                widget: "select"
+                options: ["draft", "published"]
+                default: "published"
+
+  - name: "updates_data"
+    label: "Updates"
+    files:
+      - name: "updates"
+        label: "Updates Items"
+        file: "data/updates.json"
+        fields:
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.title}} ({{fields.date}})"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+              - { label: "Summary", name: "summary", widget: "text", required: false }
+              - { label: "Content", name: "content", widget: "text", required: false }
+              - label: "Links"
+                name: "links"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "URL", name: "url", widget: "string" }
+              - { label: "Images", name: "images", widget: "list", required: false }
+              - label: "Category"
+                name: "category"
+                widget: "select"
+                options: ["event", "talk", "award", "paper", "job", "other"]
+                default: "event"
+              - { label: "Pinned", name: "pinned", widget: "boolean", default: false }
+              - label: "Status"
+                name: "status"
+                widget: "select"
+                options: ["draft", "published"]
+                default: "published"

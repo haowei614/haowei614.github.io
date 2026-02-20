@@ -613,7 +613,7 @@
         <div class="badge">
           <span class="badge-dot"></span>
           Open to collaborate
-        </div>
+    </div>
         <div class="badge">Shinjuku, Tokyo, Japan</div>
       </div>
     </div>
@@ -649,49 +649,7 @@
   <section id="publications">
     <p class="section-label reveal">// 02. publications</p>
     <h2 class="section-title reveal">Selected Papers</h2>
-    <div class="pub-list">
-      <a class="pub-item reveal" href="/assets/pdf/D2/IEEE_HTC.pdf" target="_blank" rel="noopener">
-        <span class="pub-year">2025</span>
-        <div>
-          <p class="pub-title">Translating Requirements into CARLA Executable Scripts: an LLM-Driven Automated Scenario Realization</p>
-          <p class="pub-venue">IEEE R10 HTC 2025</p>
-          <div class="pub-tags">
-            <span class="tag">LLM</span>
-            <span class="tag">Requirements</span>
-            <span class="tag">CARLA</span>
-            <span class="tag">PDF</span>
-          </div>
-        </div>
-      </a>
-
-      <a class="pub-item reveal" href="/assets/pdf/D1/SLR.pdf" target="_blank" rel="noopener">
-        <span class="pub-year">2024</span>
-        <div>
-          <p class="pub-title">Generative AI for Requirements Engineering: A Systematic Literature Review</p>
-          <p class="pub-venue">arXiv</p>
-          <div class="pub-tags">
-            <span class="tag">GenAI</span>
-            <span class="tag">SLR</span>
-            <span class="tag">RE</span>
-            <span class="tag">PDF</span>
-          </div>
-        </div>
-      </a>
-
-      <a class="pub-item reveal" href="/assets/pdf/deepfakes/Analysis_of_Spectro-Temporal_Modulation_Representation_for_Deep-Fake_Speech_Detection.pdf" target="_blank" rel="noopener">
-        <span class="pub-year">2023</span>
-        <div>
-          <p class="pub-title">Analysis of Spectro-Temporal Modulation Representation for Deep-Fake Speech Detection</p>
-          <p class="pub-venue">APSIPA ASC 2023, Taipei, Taiwan</p>
-          <div class="pub-tags">
-            <span class="tag">DeepFake</span>
-            <span class="tag">Speech</span>
-            <span class="tag">Audio</span>
-            <span class="tag">PDF</span>
-          </div>
-        </div>
-      </a>
-    </div>
+    <div class="pub-list" id="home-publications"></div>
   </section>
 
   <section id="projects">
@@ -710,8 +668,8 @@
         <h3 class="project-title">Deepfake Speech</h3>
         <p class="project-desc">Research and resources related to deepfake speech generation and detection, including demos and publications.</p>
         <a href="/projects/df/" class="project-link">View project page -></a>
-      </div>
-
+    </div>
+  
       <div class="project-card reveal">
         <div class="project-icon">ALL</div>
         <h3 class="project-title">All Projects</h3>
@@ -724,33 +682,12 @@
   <section id="news">
     <p class="section-label reveal">// 04. news</p>
     <h2 class="section-title reveal">Latest Updates</h2>
-    <div class="news-list">
-      <div class="news-item">
-        <span class="news-date">Jul 2025</span>
-        <p class="news-text">Presented <strong>Automating Multi-view Requirements Engineering with Collaborative LLM Agents</strong> at the <a href="https://sites.google.com/view/sig-mlse/%E6%B4%BB%E5%8B%95%E4%BA%88%E5%AE%9A/%E5%A4%8F%E5%90%88%E5%AE%BF2025" target="_blank" rel="noopener">Machine Learning Software Engineering Workshop</a> in Hakone, Japan.</p>
-      </div>
-      <div class="news-item">
-        <span class="news-date">Apr 2025</span>
-        <p class="news-text">Attended the <a href="https://corporate-awards.ieee.org/event/2025-ieee-vic-summit-honors-ceremony-gala/" target="_blank" rel="noopener">IEEE VIC Summit and Honors Ceremony</a> in Tokyo, Japan.</p>
-      </div>
-      <div class="news-item">
-        <span class="news-date">Dec 2024</span>
-        <p class="news-text">Presented at <a href="https://wireds2024.github.io/" target="_blank" rel="noopener">WIREDS 2024</a> in Osaka and received the distinguished presentation award.</p>
-      </div>
-      <div class="news-item">
-        <span class="news-date">Sep 2024</span>
-        <p class="news-text">Selected for the <a href="https://www.waseda.jp/inst/scholarship/en/doctoral/" target="_blank" rel="noopener">Scholarship for Fostering Researchers in Doctoral Programs</a>.</p>
-      </div>
-      <div class="news-item">
-        <span class="news-date">More</span>
-        <p class="news-text">See the full news archive at <a href="/news/" target="_blank" rel="noopener">/news/</a>.</p>
-      </div>
-    </div>
+    <div class="news-list" id="home-updates"></div>
   </section>
 </main>
 
 <footer>
-  &copy; 2026 Haowei Cheng · Built on GitHub Pages
+  &copy; 2026 Haowei Cheng · Built on GitHub Pages · <a href="/admin/">Content Admin</a>
 </footer>
 
 <script>
@@ -841,10 +778,16 @@ const observer = new IntersectionObserver(function (entries) {
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
-document.querySelectorAll('.reveal, .news-item').forEach(function (el, i) {
-  el.style.transitionDelay = (i % 4) * 0.08 + 's';
-  observer.observe(el);
-});
-</script>
+function observeRevealElements() {
+  document.querySelectorAll('.reveal, .news-item').forEach(function (el, i) {
+    el.style.transitionDelay = (i % 4) * 0.08 + 's';
+    observer.observe(el);
+  });
+}
+
+observeRevealElements();
+document.addEventListener('content-rendered', observeRevealElements);
+  </script>
+<script src="/assets/js/content-render.js"></script>
 </body>
 </html>

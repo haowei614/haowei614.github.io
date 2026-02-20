@@ -1,0 +1,186 @@
+{
+  "items": [
+    {
+      "id": "upd-2025-001",
+      "title": "Presented at MLSE Workshop in Hakone",
+      "date": "2025-07-12",
+      "summary": "Presented 'Automating Multi-view Requirements Engineering with Collaborative LLM Agents'.",
+      "content": "A valuable opportunity to discuss preliminary findings with researchers in software engineering and machine learning.",
+      "links": [
+        { "label": "Workshop", "url": "https://sites.google.com/view/sig-mlse/%E6%B4%BB%E5%8B%95%E4%BA%88%E5%AE%9A/%E5%A4%8F%E5%90%88%E5%AE%BF2025" }
+      ],
+      "images": ["/assets/img/news/MLSE1.JPG", "/assets/img/news/MLSE2.JPG", "/assets/img/news/MLSE3.JPG", "/assets/img/news/MLSE4.jpg"],
+      "category": "event",
+      "pinned": true,
+      "status": "published"
+    },
+    {
+      "id": "upd-2025-002",
+      "title": "Attended IEEE VIC Summit and Honors Ceremony",
+      "date": "2025-04-24",
+      "summary": "Connected with researchers and innovators at the IEEE VIC Summit in Tokyo.",
+      "content": "Great discussions and potential collaborations across innovation and impact-oriented projects.",
+      "links": [
+        { "label": "Event", "url": "https://corporate-awards.ieee.org/event/2025-ieee-vic-summit-honors-ceremony-gala/" }
+      ],
+      "images": ["/assets/img/news/VIC1.jpg", "/assets/img/news/VIC2.jpeg", "/assets/img/news/VIC3.jpeg", "/assets/img/news/VIC4.jpg", "/assets/img/news/VIC5.jpg", "/assets/img/news/VIC6.jpg"],
+      "category": "event",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2024-001",
+      "title": "Presented at WIREDS 2024",
+      "date": "2024-12-08",
+      "summary": "Presented SLR work on GenAI in Requirements Engineering and received a distinguished presentation award.",
+      "content": "Presented at the First International Workshop on Intertwining Research & Education on Software (WIREDS) in Osaka.",
+      "links": [
+        { "label": "WIREDS", "url": "https://wireds2024.github.io/" }
+      ],
+      "images": ["/assets/img/news/WIREDS1.jpg", "/assets/img/news/WIREDS2.jpg"],
+      "category": "paper",
+      "pinned": true,
+      "status": "published"
+    },
+    {
+      "id": "upd-2024-002",
+      "title": "Participated in Rakuten Technology Conference",
+      "date": "2024-11-12",
+      "summary": "Joined talks and panels featuring AI and cloud computing experts.",
+      "content": "Participated in technical sessions with practitioners and leaders in Tokyo.",
+      "links": [
+        { "label": "Rakuten Tech Conference", "url": "https://tech.rakuten.co.jp/" }
+      ],
+      "images": [],
+      "category": "event",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2024-003",
+      "title": "Participated in FATTW 2024",
+      "date": "2024-11-02",
+      "summary": "Discussed practical LLM applications in software testing technologies.",
+      "content": "Engaged with experts and researchers at Future Advanced Testing Technology Workshop in Makuhari.",
+      "links": [
+        { "label": "FATTW", "url": "https://fattw2024.github.io/#/" }
+      ],
+      "images": ["/assets/img/news/FATT.jpg"],
+      "category": "event",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2024-004",
+      "title": "Selected for Doctoral Scholarship",
+      "date": "2024-09-02",
+      "summary": "Selected for Scholarship for Fostering Researchers in Doctoral Programs.",
+      "content": "Awarded by Waseda University scholarship program.",
+      "links": [
+        { "label": "Scholarship", "url": "https://www.waseda.jp/inst/scholarship/en/doctoral/" }
+      ],
+      "images": [],
+      "category": "award",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2024-005",
+      "title": "Joined QAML as Part-time ML Engineer",
+      "date": "2024-08-05",
+      "summary": "Started part-time role at QAML.",
+      "content": "Working as a part-time machine learning engineer.",
+      "links": [
+        { "label": "QAML", "url": "https://qaml.co.jp/" }
+      ],
+      "images": [],
+      "category": "job",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2024-006",
+      "title": "Served as IEEE HKN Co-Chair",
+      "date": "2024-04-08",
+      "summary": "Served as Co-Chair of IEEE Eta Kappa Nu Waseda Mu Tau Chapter.",
+      "content": "Contributed to chapter activities and student initiatives.",
+      "links": [
+        { "label": "IEEE HKN Waseda", "url": "https://hkn.ieee.org/hkn-chapters/all-chapters/waseda-university-mu-tau" }
+      ],
+      "images": [],
+      "category": "event",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2024-007",
+      "title": "Joined Reliable Software Engineering Lab",
+      "date": "2024-04-01",
+      "summary": "Joined the Reliable Software Engineering Laboratory at Waseda as a Ph.D candidate.",
+      "content": "Started doctoral research under Prof. Hironori Washizaki.",
+      "links": [
+        { "label": "Lab", "url": "http://www.washi.cs.waseda.ac.jp/" }
+      ],
+      "images": [],
+      "category": "event",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2024-008",
+      "title": "Selected for W-SPRING Fellowship",
+      "date": "2024-03-15",
+      "summary": "Selected for W-SPRING fellowship.",
+      "content": "Received doctoral fellowship support.",
+      "links": [
+        { "label": "W-SPRING", "url": "https://dpt-wspring.w.waseda.jp/en/" }
+      ],
+      "images": [],
+      "category": "award",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2023-001",
+      "title": "Passed Entrance Exam at Waseda",
+      "date": "2023-12-15",
+      "summary": "Passed Ph.D. entrance examination at Waseda University.",
+      "content": "Officially qualified for doctoral enrollment.",
+      "links": [
+        { "label": "Waseda", "url": "https://www.waseda.jp/top/en/" }
+      ],
+      "images": [],
+      "category": "event",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2023-002",
+      "title": "Presented at APSIPA 2023",
+      "date": "2023-10-31",
+      "summary": "Presented work at APSIPA in Taipei.",
+      "content": "Presented deep-fake speech detection research at APSIPA ASC 2023.",
+      "links": [
+        { "label": "APSIPA", "url": "https://www.apsipa2023.org/index.html" }
+      ],
+      "images": [],
+      "category": "paper",
+      "pinned": false,
+      "status": "published"
+    },
+    {
+      "id": "upd-2023-003",
+      "title": "Graduated from JAIST",
+      "date": "2023-09-22",
+      "summary": "Received M.S. degree from JAIST.",
+      "content": "Completed M.S. program and graduated from JAIST.",
+      "links": [
+        { "label": "JAIST", "url": "https://www.jaist.ac.jp/english/" }
+      ],
+      "images": [],
+      "category": "award",
+      "pinned": false,
+      "status": "published"
+    }
+  ]
+}
