@@ -1,104 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Haowei Cheng | Publications</title>
   <meta name="description" content="This is the personal website of Haowei Cheng">
-
-  <!-- Fonts and Icons -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons" />
-
-  <!-- CSS Files -->
-  <link rel="stylesheet" href="/assets/css/all.min.css">
-  <link rel="stylesheet" href="/assets/css/academicons.min.css">
-  <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="canonical" href="/publications/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"> 
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/site-v2.css">
+
 </head>
 <body>
-  <!-- Header -->
-  <nav id="navbar" class="navbar fixed-top navbar-expand-md grey lighten-5 z-depth-1 navbar-light">
-    <div class="container-fluid p-0">
-      
-        <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Haowei</span> Cheng</a>
-      
-      <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse text-right" id="navbarNav">
-        <ul class="navbar-nav ml-auto flex-nowrap">
-          <li class="nav-item ">
-            <a class="nav-link" href="/">
-              About     
-            </a>
-          </li>
+  <canvas id="bg-canvas"></canvas>
+  <div class="cursor-glow" id="cursorGlow"></div>
 
-              <li class="nav-item ">
-                  <a class="nav-link" href="/cv/">
-                    Curriculum Vitae      
-                  </a>
-              </li>
-
-              <li class="nav-item ">
-                  <a class="nav-link" href="/projects/">
-                    Projects
-                    
-                  </a>
-              </li>
-
-              <li class="nav-item navbar-active font-weight-bold">
-                  <a class="nav-link" href="/publications/">
-                    Publications
-                    
-                      <span class="sr-only">(current)</span>
-                  </a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link" href="/news/">
-                  News
-                </a>
-              </li>
- 
-        </ul>
-      </div>
-    </div>
+  <nav>
+    <a href="/" class="nav-logo">Haowei Cheng</a>
+    <ul class="nav-links">
+      <li><a href="/">About</a></li>
+<li><a href="/publications/" class="active">Publications</a></li>
+<li><a href="/projects/">Projects</a></li>
+<li><a href="/news/">News</a></li>
+    </ul>
   </nav>
 
-  <!-- Scrolling Progress Bar -->
-  <progress id="progress" value="0">
-    <div class="progress-container">
-      <span class="progress-bar"></span>
+  <main>
+    <div class="page-header">
+      <p class="section-label">// publications</p>
+      <h1 class="section-title">Research Papers & PDF Links</h1>
     </div>
-  </progress>
 
-  <!-- Content -->
-  <div class="content">
+    <div class="content">
     
   <h1>Publications</h1>
   <h6><nobr><em>*</em></nobr> denotes equal contribution and joint lead authorship.</h6>
-<p></p>
-
-
 
 <!-- ==============2025============= -->
 
-<div class="row m-0 p-0" style="border-top: 1px solid #ddd; flex-direction: row-reverse;">
-  <div class="col-sm-1 mt-2 p-0 pr-1">
-    <h3 class="bibliography-year">2025</h3>
+<section class="year-group" aria-labelledby="year-2025">
+<div class="year-divider">
+  <div>
+    <h3 class="bibliography-year" id="year-2025">2025</h3>
   </div>
-  <div class="col-sm-11 p-0">
+  <div>
     <!-- News items for 2025 -->
-    <ol class="bibliography"><li><div class="row m-0 mt-3 p-0">
-      <div class="col-sm-1 p-0 abbr">
-        <a class="badge font-weight-bold light-green darken-1 align-middle" style="width: 65px;" href="https://ieee-jp.org/section/tokyo/event/r10htc2025/" target="_blank">
+    <ol class="bibliography"><li><article class="paper-item">
+      <div class="abbr">
+        <a class="badge light-green darken-1" style="width: 65px;" href="https://ieee-jp.org/section/tokyo/event/r10htc2025/" target="_blank">
           IEEE R10 HTC2025
         </a>
       </div>
-      <div class="col-sm-11 mt-2 mt-sm-0 p-0 pl-xs-0 pl-sm-4 pr-xs-0 pr-sm-2">
+      <div>
     
-        <div id="Analysis_of_STM" class="col p-0">
-          <h5 class="title mb-0">Translating Requirements into CARLA Executable Scripts: an LLM-Driven Automated Scenario Realization</h5>
+        <div id="Analysis_of_STM">
+          <h5 class="title">Translating Requirements into CARLA Executable Scripts: an LLM-Driven Automated Scenario Realization</h5>
           <div class="author">
                     <nobr>Shiyang Guan,</nobr>
                   
@@ -121,16 +78,16 @@
             </p>
           </div>
         
-          <div class="col p-0">
+          <div>
             
-              <a class="badge grey waves-effect font-weight-light mr-1" data-toggle="collapse" href="#HTC-abstract" role="button" aria-expanded="false" aria-controls="HTC-abstract">Abstract</a>
-              <a class="badge grey waves-effect font-weight-light mr-1" href="/assets/pdf/D2/IEEE_HTC.pdf" target="_blank">PDF</a>
-              <a class="badge grey waves-effect font-weight-light mr-1" href="" target="_blank">Poster</a>
+              <a class="badge grey" data-toggle="collapse" href="#HTC-abstract" role="button" aria-expanded="false" aria-controls="HTC-abstract">Abstract</a>
+              <a class="badge grey" href="/assets/pdf/D2/IEEE_HTC.pdf" target="_blank">PDF</a>
+              <a class="badge grey" href="" target="_blank">Poster</a>
             </div>
 
-          <div class="col mt-2 p-0">
+          <div>
             <div id="HTC-abstract" class="collapse">
-              <div class="abstract card card-body font-weight-light mr-0 mr-sm-3 p-3">
+              <div class="abstract">
                 Scenario-based testing is critical for ensuring the safety and robustness of autonomous driving (AD) systems, 
                 particularly in extreme scenarios such as heavy rain, pedestrian-involved crashes, and nighttime conditions. 
                 Our previous work integrated the CARLA simulator with the Multi-view Modeling Framework for ML Systems (M3S), 
@@ -145,19 +102,19 @@
           
         </div>
       </div>
-      </div></li></ol>
+      </article></li></ol>
 
 
-    <ol class="bibliography"><li><div class="row m-0 mt-3 p-0">
-      <div class="col-sm-1 p-0 abbr">
-        <a class="badge font-weight-bold light-green darken-1 align-middle" style="width: 65px;" href="https://www.ipsj.or.jp/kenkyukai/event/se219.html" target="_blank">
+    <ol class="bibliography"><li><article class="paper-item">
+      <div class="abbr">
+        <a class="badge light-green darken-1" style="width: 65px;" href="https://www.ipsj.or.jp/kenkyukai/event/se219.html" target="_blank">
           IPSJ
         </a>
       </div>
-      <div class="col-sm-11 mt-2 mt-sm-0 p-0 pl-xs-0 pl-sm-4 pr-xs-0 pr-sm-2">
+      <div>
     
-        <div id="Analysis_of_STM" class="col p-0">
-          <h5 class="title mb-0">Enhancing Safety in Autonomous Driving: Integrating CARLA for Multi-Sensor Dataset Generation and Advanced Scenario Testing</h5>
+        <div id="Analysis_of_STM">
+          <h5 class="title">Enhancing Safety in Autonomous Driving: Integrating CARLA for Multi-Sensor Dataset Generation and Advanced Scenario Testing</h5>
           <div class="author">
                     <nobr>Shiyang Guan,</nobr>
                   
@@ -180,19 +137,19 @@
             </p>
           </div>
         
-          <div class="col p-0">
+          <div>
             
-              <a class="badge grey waves-effect font-weight-light mr-1" data-toggle="collapse" href="#IPSJ-abstract" role="button" aria-expanded="false" aria-controls="SLR-abstract">Abstract</a>
-              <a class="badge grey waves-effect font-weight-light mr-1" href="/assets/pdf/D1/IPSJ.pdf" target="_blank">PDF</a>
-              <a class="badge grey waves-effect font-weight-light mr-1" href="" target="_blank">Poster</a>
+              <a class="badge grey" data-toggle="collapse" href="#IPSJ-abstract" role="button" aria-expanded="false" aria-controls="SLR-abstract">Abstract</a>
+              <a class="badge grey" href="/assets/pdf/D1/IPSJ.pdf" target="_blank">PDF</a>
+              <a class="badge grey" href="" target="_blank">Poster</a>
             
          
             </div>
         
           
-          <div class="col mt-2 p-0">
+          <div>
             <div id="IPSJ-abstract" class="collapse">
-              <div class="abstract card card-body font-weight-light mr-0 mr-sm-3 p-3">
+              <div class="abstract">
                 Simulation environments are vital to autonomous driving research, enabling safe and 
                 cost- effective studies of dense traffic, adverse weather, and sidewalk navigation. 
                 Yet real-world data collection for these scenarios can be hazardous and expensive. 
@@ -210,19 +167,19 @@
           
         </div>
       </div>
-      </div></li></ol>
+      </article></li></ol>
 
     <!-- ------ -->
-    <ol class="bibliography"><li><div class="row m-0 mt-3 p-0">
-    <div class="col-sm-1 p-0 abbr">
-      <a class="badge font-weight-bold light-green darken-1 align-middle" style="width: 65px;" href="https://conf.researchr.org/home/chase-2025" target="_blank">
+    <ol class="bibliography"><li><article class="paper-item">
+    <div class="abbr">
+      <a class="badge light-green darken-1" style="width: 65px;" href="https://conf.researchr.org/home/chase-2025" target="_blank">
         CHASE
       </a>
     </div>
-    <div class="col-sm-11 mt-2 mt-sm-0 p-0 pl-xs-0 pl-sm-4 pr-xs-0 pr-sm-2">
+    <div>
   
-      <div id="Analysis_of_STM" class="col p-0">
-        <h5 class="title mb-0">VRTopic: Advancing Topic Modeling in Virtual Reality User Reviews with Large Language Models</h5>
+      <div id="Analysis_of_STM">
+        <h5 class="title">VRTopic: Advancing Topic Modeling in Virtual Reality User Reviews with Large Language Models</h5>
         <div class="author">
                   <nobr>Yijun Lu,</nobr>
                 
@@ -243,19 +200,19 @@
           </p>
         </div>
       
-        <div class="col p-0">
+        <div>
           
-            <a class="badge grey waves-effect font-weight-light mr-1" data-toggle="collapse" href="#VRTopic-abstract" role="button" aria-expanded="false" aria-controls="SLR-abstract">Abstract</a>
-            <a class="badge grey waves-effect font-weight-light mr-1" href="/assets/pdf/D1/CHASE_DECS.pdf" target="_blank">PDF</a>
-            <a class="badge grey waves-effect font-weight-light mr-1" href="" target="_blank">Poster</a>
+            <a class="badge grey" data-toggle="collapse" href="#VRTopic-abstract" role="button" aria-expanded="false" aria-controls="SLR-abstract">Abstract</a>
+            <a class="badge grey" href="/assets/pdf/D1/CHASE_DECS.pdf" target="_blank">PDF</a>
+            <a class="badge grey" href="" target="_blank">Poster</a>
           
        
           </div>
       
         
-        <div class="col mt-2 p-0">
+        <div>
           <div id="VRTopic-abstract" class="collapse">
-            <div class="abstract card card-body font-weight-light mr-0 mr-sm-3 p-3">
+            <div class="abstract">
               With the rapid development of Virtual Reality (VR) technology, effectively understanding user 
               feedback has become a core task for improving user experience and optimizing system functionality. 
               However, extracting meaningful insights from VR user reviews remains challenging. Traditional topic 
@@ -272,31 +229,34 @@
         
       </div>
     </div>
-    </div></li></ol>
+    </article></li></ol>
   </div>
 </div>
 
 
 
 
+</section>
+
 <!-- ==============2024============= -->
 
-<div class="row m-0 p-0" style="border-top: 1px solid #ddd; flex-direction: row-reverse;">
-  <div class="col-sm-1 mt-2 p-0 pr-1">
-    <h3 class="bibliography-year">2024</h3>
+<section class="year-group" aria-labelledby="year-2024">
+<div class="year-divider">
+  <div>
+    <h3 class="bibliography-year" id="year-2024">2024</h3>
   </div>
-  <div class="col-sm-11 p-0">
+  <div>
     <!-- News items for 2024 -->
-    <ol class="bibliography"><li><div class="row m-0 mt-3 p-0">
-    <div class="col-sm-1 p-0 abbr">
-      <a class="badge font-weight-bold light-green darken-1 align-middle" style="width: 65px;" href="https://arxiv.org/abs/2409.06741" target="_blank">
+    <ol class="bibliography"><li><article class="paper-item">
+    <div class="abbr">
+      <a class="badge light-green darken-1" style="width: 65px;" href="https://arxiv.org/abs/2409.06741" target="_blank">
         arXiv
       </a>
     </div>
-    <div class="col-sm-11 mt-2 mt-sm-0 p-0 pl-xs-0 pl-sm-4 pr-xs-0 pr-sm-2">
+    <div>
   
-      <div id="Analysis_of_STM" class="col p-0">
-        <h5 class="title mb-0">Generative AI for Requirements Engineering: A Systematic Literature Review.</h5>
+      <div id="Analysis_of_STM">
+        <h5 class="title">Generative AI for Requirements Engineering: A Systematic Literature Review.</h5>
         <div class="author">
                   <nobr><em>Haowei Cheng<nobr><em>*</em></nobr></em>,</nobr>
                 
@@ -319,19 +279,19 @@
           </p>
         </div>
       
-        <div class="col p-0">
+        <div>
           
-            <a class="badge grey waves-effect font-weight-light mr-1" data-toggle="collapse" href="#SLR-abstract" role="button" aria-expanded="false" aria-controls="SLR-abstract">Abstract</a>
-            <a class="badge grey waves-effect font-weight-light mr-1" href="/assets/pdf/D1/SLR.pdf" target="_blank">PDF</a>
-            <a class="badge grey waves-effect font-weight-light mr-1" href="/assets/pdf/D1/SLR_Poster.pdf" target="_blank">Poster</a>
+            <a class="badge grey" data-toggle="collapse" href="#SLR-abstract" role="button" aria-expanded="false" aria-controls="SLR-abstract">Abstract</a>
+            <a class="badge grey" href="/assets/pdf/D1/SLR.pdf" target="_blank">PDF</a>
+            <a class="badge grey" href="/assets/pdf/D1/SLR_Poster.pdf" target="_blank">Poster</a>
           
        
           </div>
       
         
-        <div class="col mt-2 p-0">
+        <div>
           <div id="SLR-abstract" class="collapse">
-            <div class="abstract card card-body font-weight-light mr-0 mr-sm-3 p-3">
+            <div class="abstract">
               Context: Generative AI (GenAI) has emerged as a transformative tool in software engineering, with requirements engineering (RE) actively exploring its potential to revolutionize processes and outcomes. The integration of GenAI into RE presents both promising opportunities and significant challenges that necessitate systematic analysis and evaluation.
 
               Objective: This paper presents a comprehensive systematic literature review (SLR) analyzing state-of-the-art applications and innovative proposals leveraging GenAI in RE. It surveys studies focusing on the utilization of GenAI to enhance RE processes while identifying key challenges and opportunities in this rapidly evolving field. 
@@ -348,32 +308,34 @@
         
       </div>
     </div>
-    </div></li></ol>
+    </article></li></ol>
   </div>
 </div>
+</section>
 
 
 
 <!-- ==============2023============= -->
 
 
-<div class="row m-0 p-0" style="border-top: 1px solid #ddd; flex-direction: row-reverse;">
-  <div class="col-sm-1 mt-2 p-0 pr-1">
-    <h3 class="bibliography-year">2023</h3>
+<section class="year-group" aria-labelledby="year-2023">
+<div class="year-divider">
+  <div>
+    <h3 class="bibliography-year" id="year-2023">2023</h3>
   </div>
-  <div class="col-sm-11 p-0">
+  <div>
     <ol class="bibliography">
       <li>
-        <div class="row m-0 mt-3 p-0">
-          <div class="col-sm-1 p-0 abbr">
-            <a class="badge font-weight-bold light-green darken-1 align-middle" style="width: 65px;" href="http://www.apsipa.org/asc_web/apsipa2023/" target="_blank">
+        <div>
+          <div class="abbr">
+            <a class="badge light-green darken-1" style="width: 65px;" href="http://www.apsipa.org/asc_web/apsipa2023/" target="_blank">
               APSIPA
             </a>
           </div>
           
-          <div class="col-sm-11 mt-2 mt-sm-0 p-0 pl-xs-0 pl-sm-4 pr-xs-0 pr-sm-2">
-            <div id="Analysis_of_STM" class="col p-0">
-              <h5 class="title mb-0">Analysis of Spectro-Temporal Modulation Representation for Deep-Fake Speech Detection.</h5>
+          <div>
+            <div id="Analysis_of_STM">
+              <h5 class="title">Analysis of Spectro-Temporal Modulation Representation for Deep-Fake Speech Detection.</h5>
               <div class="author">
                 <nobr><em>Haowei Cheng<nobr><em>*</em></nobr></em>,</nobr>
                 <nobr>Candy Olivia Mawalim,</nobr>
@@ -389,15 +351,15 @@
                 </p>
               </div>
             
-              <div class="col p-0">
-                <a class="badge grey waves-effect font-weight-light mr-1" data-toggle="collapse" href="#deepfake-abstract" role="button" aria-expanded="false" aria-controls="deepfake-abstract">Abstract</a>
-                <a class="badge grey waves-effect font-weight-light mr-1" href="/assets/pdf/deepfakes/Analysis_of_Spectro-Temporal_Modulation_Representation_for_Deep-Fake_Speech_Detection.pdf" target="_blank">PDF</a>
-                <a class="badge grey waves-effect font-weight-light mr-1" href="/assets/pdf/deepfakes/deepfake_detection.pdf" target="_blank">Poster</a>
+              <div>
+                <a class="badge grey" data-toggle="collapse" href="#deepfake-abstract" role="button" aria-expanded="false" aria-controls="deepfake-abstract">Abstract</a>
+                <a class="badge grey" href="/assets/pdf/deepfakes/Analysis_of_Spectro-Temporal_Modulation_Representation_for_Deep-Fake_Speech_Detection.pdf" target="_blank">PDF</a>
+                <a class="badge grey" href="/assets/pdf/deepfakes/deepfake_detection.pdf" target="_blank">Poster</a>
               </div>
             
-              <div class="col mt-2 p-0">
+              <div>
                 <div id="deepfake-abstract" class="collapse">
-                  <div class="abstract card card-body font-weight-light mr-0 mr-sm-3 p-3">
+                  <div class="abstract">
                     Deep-fake speech detection aims to develop effective techniques for identifying fake speech generated using advanced deep-learning methods. 
                     It can reduce the negative impact of malicious production or dissemination of fake speech in real-life scenarios. Although humans can relatively easy to distinguish between genuine and fake speech due to 
                     human auditory mechanisms, it is difficult for machines to distinguish them correctly. One major reason for this challenge is that machines struggle to effectively separate speech content from human vocal system information. 
@@ -415,16 +377,16 @@
       </li>
 
       <li>
-        <div class="row m-0 mt-3 p-0">
-          <div class="col-sm-1 p-0 abbr">
-            <a class="badge font-weight-bold light-green darken-1 align-middle" style="width: 65px;" href="https://www.ieice.org/hokuriku/" target="_blank">
+        <div>
+          <div class="abbr">
+            <a class="badge light-green darken-1" style="width: 65px;" href="https://www.ieice.org/hokuriku/" target="_blank">
               JHES
             </a>
           </div>
           
-          <div class="col-sm-11 mt-2 mt-sm-0 p-0 pl-xs-0 pl-sm-4 pr-xs-0 pr-sm-2">
-            <div id="deep-fake" class="col p-0">
-              <h5 class="title mb-0">Study on Deep-Fake Speech Detection Based on Spectro-Temporal Modulation Representation.</h5>
+          <div>
+            <div id="deep-fake">
+              <h5 class="title">Study on Deep-Fake Speech Detection Based on Spectro-Temporal Modulation Representation.</h5>
               <div class="author">
                 <nobr><em>Haowei Cheng<nobr><em>*</em></nobr></em>, Candy Olivia Mawalim, Kai Li, and Masashi Unoki</nobr>
               </div>
@@ -435,14 +397,14 @@
                 </p>
               </div>
             
-              <div class="col p-0">
-                <a class="badge grey waves-effect font-weight-light mr-1" href="/assets/pdf/deepfakes/jhes2023_Haowei_Final.pdf" target="_blank">PDF</a>
-                <a class="badge grey waves-effect font-weight-light mr-1" href="/assets/pdf/deepfakes/JHES_Haowei_Slide.pdf" target="_blank">Slide</a>
+              <div>
+                <a class="badge grey" href="/assets/pdf/deepfakes/jhes2023_Haowei_Final.pdf" target="_blank">PDF</a>
+                <a class="badge grey" href="/assets/pdf/deepfakes/JHES_Haowei_Slide.pdf" target="_blank">Slide</a>
               </div>
             
-              <div class="col mt-2 p-0">
+              <div>
                 <div id="agile_modeling-abstract" class="collapse">
-                  <div class="abstract card card-body font-weight-light mr-0 mr-sm-3 p-3">
+                  <div class="abstract">
                     [摘要内容保持不变]
                   </div>
                 </div>
@@ -454,129 +416,13 @@
     </ol>
   </div>
 </div>
+</section>
+  </main>
 
-
-
-
-  <!-- Footer -->
   <footer>
-    &copy; Copyright 2024 Haowei Cheng.
-    
-    
+    &copy; 2026 Haowei Cheng · Built on GitHub Pages
   </footer>
+  <script src="/assets/js/site-v2.js"></script>
 
-  <!-- Core JavaScript Files -->
-  <script src="/assets/js/jquery.min.js" type="text/javascript"></script>
-  <script src="/assets/js/popper.min.js" type="text/javascript"></script>
-  <script src="/assets/js/bootstrap.min.js" type="text/javascript"></script>
-  <script src="/assets/js/mdb.min.js" type="text/javascript"></script>
-  <script async="" src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
-  <script src="/assets/js/common.js"></script>
-
-  <!-- Scrolling Progress Bar -->
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var navbarHeight = $('#navbar').outerHeight(true);
-      $('body').css({ 'padding-top': navbarHeight });
-      $('progress-container').css({ 'padding-top': navbarHeight });
-      var progressBar = $('#progress');
-      progressBar.css({ 'top': navbarHeight });
-      var getMax = function() { return $(document).height() - $(window).height(); }
-      var getValue = function() { return $(window).scrollTop(); }   
-      // Check if the browser supports the progress element.
-      if ('max' in document.createElement('progress')) {
-        // Set the 'max' attribute for the first time.
-        progressBar.attr({ max: getMax() });
-        progressBar.attr({ value: getValue() });
-    
-        $(document).on('scroll', function() {
-          // On scroll only the 'value' attribute needs to be calculated.
-          progressBar.attr({ value: getValue() });
-        });
-
-        $(window).resize(function() {
-          var navbarHeight = $('#navbar').outerHeight(true);
-          $('body').css({ 'padding-top': navbarHeight });
-          $('progress-container').css({ 'padding-top': navbarHeight });
-          progressBar.css({ 'top': navbarHeight });
-          // On resize, both the 'max' and 'value' attributes need to be calculated.
-          progressBar.attr({ max: getMax(), value: getValue() });
-        });
-      } else {
-        var max = getMax(), value, width;
-        var getWidth = function() {
-          // Calculate the window width as a percentage.
-          value = getValue();
-          width = (value/max) * 100;
-          width = width + '%';
-          return width;
-        }
-        var setWidth = function() { progressBar.css({ width: getWidth() }); };
-        setWidth();
-        $(document).on('scroll', setWidth);
-        $(window).on('resize', function() {
-          // Need to reset the 'max' attribute.
-          max = getMax();
-          setWidth();
-        });
-      }
-    });
-  </script>
-
-  <!-- Code Syntax Highlighting -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
-  <script src="/assets/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-  <!-- Script Used for Randomizing the Projects Order -->
-  <!-- <script type="text/javascript">
-    $.fn.shuffleChildren = function() {
-      $.each(this.get(), function(index, el) {
-        var $el = $(el);
-        var $find = $el.children();
-
-        $find.sort(function() {
-          return 0.5 - Math.random();
-        });
-
-        $el.empty();
-        $find.appendTo($el);
-      });
-    };
-    $("#projects").shuffleChildren();
-  </script> -->
-
-  <!-- Project Cards Layout -->
-  <script type="text/javascript">
-    var $grid = $('#projects');
-
-    // $grid.masonry({ percentPosition: true });
-    // $grid.masonry('layout');
-
-    // Trigger after images load.
-    $grid.imagesLoaded().progress(function() {
-      $grid.masonry({ percentPosition: true });
-      $grid.masonry('layout');
-    });
-  </script>
-
-  <!-- Enable Tooltips -->
-  <script type="text/javascript">
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
-  </script>
-
-  <!-- Google Analytics -->
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', '', 'auto');
-    ga('send', 'pageview');
-  </script>
 </body>
 </html>

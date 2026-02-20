@@ -1,436 +1,850 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Haowei Cheng - Academic Portfolio</title>
+  <meta name="description" content="This is the personal website of Haowei Cheng" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: rgba(255,255,255,0.07);
+      --text: #e8e8f0;
+      --muted: #7a7a9a;
+      --accent: #7c6af7;
+      --accent2: #4fd1c5;
+      --accent3: #f6ad55;
+      --glow: rgba(124,106,247,0.15);
+    }
 
-  <title>Haowei Cheng</title>
-  <meta name="description" content="This is the personal website of Haowei Cheng">
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <!-- Fonts and Icons -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons" />
+    html { scroll-behavior: smooth; }
 
-  <!-- CSS Files -->
-  <link rel="stylesheet" href="/assets/css/all.min.css">
-  <link rel="stylesheet" href="/assets/css/academicons.min.css">
-  <link rel="stylesheet" href="/assets/css/main.css">
-  <link rel="stylesheet" href="/assets/css/fluid-background.css">
-  <link rel="canonical" href="/">
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,15,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    nav.scrolled {
+      padding: 0.9rem 3rem;
+      background: rgba(10,10,15,0.9);
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.25s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+
+    main { position: relative; z-index: 2; }
+
+    section {
+      min-height: 100vh;
+      padding: 8rem 3rem 5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    #hero {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 4rem;
+      align-items: center;
+      min-height: 100vh;
+      padding-top: 10rem;
+    }
+
+    .hero-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-desc strong { color: var(--text); font-weight: 500; }
+    .hero-desc a { color: var(--accent2); text-decoration: none; border-bottom: 1px solid rgba(79,209,197,0.3); transition: border-color 0.2s; }
+    .hero-desc a:hover { border-color: var(--accent2); }
+
+    .hero-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      transition: all 0.25s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #9585f8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(124,106,247,0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: rgba(255,255,255,0.25);
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .hero-photo-wrap {
+      position: relative;
+      opacity: 0;
+      animation: fadeIn 1s 0.5s forwards;
+    }
+
+    .photo-ring {
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      border: 1px solid rgba(124,106,247,0.2);
+      animation: spin 20s linear infinite;
+    }
+
+    .photo-ring::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      top: 50%;
+      left: -4px;
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .hero-photo {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--surface);
+      box-shadow: 0 0 60px rgba(124,106,247,0.2), 0 20px 80px rgba(0,0,0,0.6);
+      display: block;
+    }
+
+    .hero-badges {
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      display: flex;
+      gap: 0.5rem;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.8rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--muted);
+      backdrop-filter: blur(10px);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent2);
+      box-shadow: 0 0 6px var(--accent2);
+      animation: pulse 2s infinite;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      margin-bottom: 3rem;
+      letter-spacing: -0.02em;
+    }
+
+    #about { padding-top: 6rem; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+
+    .about-card:hover {
+      border-color: rgba(124,106,247,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .about-card:hover::before { transform: scaleX(1); }
+
+    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .card-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 0.8rem; }
+    .card-body { color: var(--muted); font-size: 0.92rem; line-height: 1.8; }
+
+    #publications { border-top: 1px solid var(--border); }
+
+    .pub-list { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .pub-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.8rem 2rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .pub-item:hover {
+      border-color: rgba(124,106,247,0.35);
+      background: rgba(124,106,247,0.04);
+      transform: translateX(6px);
+    }
+
+    .pub-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent3);
+      padding: 0.3rem 0.7rem;
+      background: rgba(246,173,85,0.1);
+      border: 1px solid rgba(246,173,85,0.2);
+      border-radius: 6px;
+      white-space: nowrap;
+      align-self: start;
+      margin-top: 0.2rem;
+    }
+
+    .pub-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+      line-height: 1.4;
+    }
+
+    .pub-venue {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .pub-tags { display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
+
+    .tag {
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      background: rgba(79,209,197,0.1);
+      border: 1px solid rgba(79,209,197,0.2);
+      color: var(--accent2);
+    }
+
+    #projects { border-top: 1px solid var(--border); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.8rem;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .project-card:hover {
+      border-color: rgba(124,106,247,0.35);
+      transform: translateY(-6px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4), 0 0 30px rgba(124,106,247,0.08);
+    }
+
+    .project-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--glow);
+      border: 1px solid rgba(124,106,247,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .project-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+    .project-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; flex: 1; }
+
+    .project-link {
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: gap 0.2s;
+    }
+
+    .project-link:hover { gap: 0.6rem; }
+
+    #news { border-top: 1px solid var(--border); }
+
+    .news-list { display: flex; flex-direction: column; }
+
+    .news-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 2rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      align-items: baseline;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.5s;
+    }
+
+    .news-item.visible { opacity: 1; transform: translateX(0); }
+
+    .news-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .news-text { font-size: 0.92rem; color: var(--text); }
+    .news-text a { color: var(--accent2); text-decoration: none; border-bottom: 1px solid rgba(79,209,197,0.3); }
+
+    footer {
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid var(--border);
+      padding: 3rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .float { animation: float 6s ease-in-out infinite; }
+
+    .cursor-glow {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,106,247,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+      transform: translate(-50%, -50%);
+      transition: left 0.3s ease, top 0.3s ease;
+    }
+
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-photo-wrap { width: 220px; margin: 0 auto; }
+      .about-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr 1fr; }
+      nav { padding: 1rem 1.5rem; }
+      section { padding: 6rem 1.5rem 4rem; }
+    }
+
+    @media (max-width: 600px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 1.2rem; }
+    }
+  </style>
 </head>
 <body>
-  <!-- Header -->
-  <nav id="navbar" class="navbar fixed-top navbar-expand-md grey lighten-5 z-depth-1 navbar-light">
-    <div class="container-fluid p-0">
-      
-        <div class="row ml-1 ml-sm-0">
-          <span class="contact-icon text-center" style="line-height: 1em;">
-            <a href="mailto:haowei.cheng@fuji.waseda.jp"><i class="fa fa-envelope-square gm-icon"></i></a>
-            <!-- <a href="https://scholar.google.com/citations?userid=UcT4CXoAAAAJ&user=UcT4CXoAAAAJ" target="_blank" title="Google Scholar"><i class="ai ai-google-scholar-square gs-icon"></i></a> -->
-            <a href="https://www.github.com/haowei614" target="_blank" title="GitHub"><i class="fab fa-github-square gh-icon"></i></a>
-            <a href="https://www.linkedin.com/in/haowei-c-030891194/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin li-icon"></i></a>
-            <!-- <a href="https://www.facebook.com/otilia.stretcu" target="_blank" title="Facebook"><i class="fab fa-facebook-square fb-icon"></i></a> -->
-            <!-- <a href="https://twitter.com/otilia_stretcu" target="_blank" title="Twitter"><i class="fab fa-twitter-square tw-icon"></i></a> -->
-          </span>
+
+<canvas id="bg-canvas"></canvas>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Haowei Cheng</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#news">News</a></li>
+  </ul>
+</nav>
+
+<main>
+  <section id="hero">
+    <div class="hero-content">
+      <p class="hero-meta">// Ph.D. Candidate · Software Engineering & AI</p>
+      <h1 class="hero-name">
+        Haowei <em>Cheng</em>
+      </h1>
+      <p class="hero-desc">
+        I am a <strong>Ph.D. student</strong> at the Department of Computer Science and Communications Engineering,
+        <a href="https://www.waseda.jp/" target="_blank" rel="noopener">Waseda University</a>.
+        I am supervised by Prof. <a href="http://www.washi.cs.waseda.ac.jp/washizaki/" target="_blank" rel="noopener">Hironori Washizaki</a>.
+        My research focuses on <strong>software engineering and AI</strong>, especially reliability in smart software systems through Generative AI-driven requirements engineering.
+      </p>
+      <div class="hero-links">
+        <a href="mailto:haowei.cheng@fuji.waseda.jp" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contact
+        </a>
+        <a href="/assets/pdf/CV-Haowei%20CHENG.pdf" class="btn btn-outline" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          CV / Resume
+        </a>
+        <a href="https://www.github.com/haowei614" class="btn btn-outline" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-photo-wrap float">
+      <div class="photo-ring"></div>
+      <img src="/assets/img/prof_pic.jpg" alt="Haowei Cheng" class="hero-photo">
+      <div class="hero-badges">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          Open to collaborate
         </div>
-      
-      <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse text-right" id="navbarNav">
-        <ul class="navbar-nav ml-auto flex-nowrap">
-          <li class="nav-item navbar-active font-weight-bold">
-            <a class="nav-link" href="/">
-              About
-              
-                <span class="sr-only">(current)</span>
-              
-            </a>
-          </li>
-          
-            
-          
-            
-              <li class="nav-item ">
-                  <a class="nav-link" href="/cv/">
-                    Curriculum Vitae
-                    
-                  </a>
-              </li>
-   
-              <li class="nav-item ">
-                  <a class="nav-link" href="/projects/">
-                    Projects
-                    
-                  </a>
-              </li>
-            
-       
-              <li class="nav-item ">
-                  <a class="nav-link" href="/publications/">
-                    Publications
-                    
-                  </a>
-              </li>
-
-              <li class="nav-item ">
-                <a class="nav-link" href="/news/">
-                  News
-                </a>
-              </li>
-   
-        </ul>
+        <div class="badge">Shinjuku, Tokyo, Japan</div>
       </div>
     </div>
-  </nav>
+  </section>
 
-  <!-- Scrolling Progress Bar -->
-  <progress id="progress" value="0">
-    <div class="progress-container">
-      <span class="progress-bar"></span>
+  <section id="about">
+    <p class="section-label reveal">// 01. research interests</p>
+    <h2 class="section-title reveal">What I Work On</h2>
+    <div class="about-grid">
+      <div class="about-card reveal">
+        <div class="card-icon">AI</div>
+        <h3 class="card-title">Generative AI for Requirements Engineering</h3>
+        <p class="card-body">Applying large language models to support requirements engineering workflows, including specification analysis, consistency checking, and structured scenario generation.</p>
+      </div>
+      <div class="about-card reveal">
+        <div class="card-icon">SE</div>
+        <h3 class="card-title">Software Reliability</h3>
+        <p class="card-body">Enhancing reliability in smart software and systems through AI-assisted requirements engineering and practical validation methods.</p>
+      </div>
+      <div class="about-card reveal">
+        <div class="card-icon">SP</div>
+        <h3 class="card-title">Deep-Fake Speech Detection</h3>
+        <p class="card-body">Studying deep-fake speech detection with features inspired by the human auditory system and robust modeling for realistic spoofing scenarios.</p>
+      </div>
+      <div class="about-card reveal">
+        <div class="card-icon">KG</div>
+        <h3 class="card-title">Knowledge Graphs & ML</h3>
+        <p class="card-body">Exploring knowledge graph and machine learning methods as a complementary line of research, building on prior work from JAIST collaborations.</p>
+      </div>
     </div>
-  </progress>
+  </section>
 
-  <!-- WebGL Fluid Background Canvas -->
-  <canvas id="fluid-canvas"></canvas>
-
-  <!-- Content -->
-  <div class="content">
-    
-
-<div class="col p-0 pt-4 pb-4">
-  <h1 class="pb-3 title text-left font-weight-bold">Haowei Cheng</h1>
-  <h6 class="m-0 mb-2" style="font-size: 0.83em;"></h6>
-  
-      <h6 class="m-0 mb-2" style="font-size: 0.83em;"><a href="https://www.google.com/maps/search/waseda university/@35.7061246,139.7044941,16z/data=!3m1!4b1?hl=ja&entry=ttu" class="page-description" target="_blank">Shinjuku, Tokyo, Japan </a></h6>
-  
-</div>
-
-<!-- Introduction -->
-
-<div style="display: flex; flex-wrap: wrap;">
-    <div class="text-justify p-0">
-        <div class="col-xs-12 col-sm-6 p-0 pt-2 pb-sm-2 pb-4 pl-sm-4 text-center" style="float: right;">
-          <img class="profile-img img-responsive" src="/assets/img/prof_pic.jpg" />
+  <section id="publications">
+    <p class="section-label reveal">// 02. publications</p>
+    <h2 class="section-title reveal">Selected Papers</h2>
+    <div class="pub-list">
+      <a class="pub-item reveal" href="/assets/pdf/D2/IEEE_HTC.pdf" target="_blank" rel="noopener">
+        <span class="pub-year">2025</span>
+        <div>
+          <p class="pub-title">Translating Requirements into CARLA Executable Scripts: an LLM-Driven Automated Scenario Realization</p>
+          <p class="pub-venue">IEEE R10 HTC 2025</p>
+          <div class="pub-tags">
+            <span class="tag">LLM</span>
+            <span class="tag">Requirements</span>
+            <span class="tag">CARLA</span>
+            <span class="tag">PDF</span>
+          </div>
         </div>
+      </a>
 
-        <p>
-            I am a Ph.D. student at the Department of Computer Science and Communications Engineering, 
-            <a href="https://www.waseda.jp/" target="_blank">Waseda University</a> in Tokyo, Japan. 
-            I am supervised by Prof. <a href="http://www.washi.cs.waseda.ac.jp/washizaki/" target="_blank">Hironori Washizaki</a>. 
-            My Ph.D. study focuses on software engineering and AI, specifically on enhancing reliability in smart software and systems through Generative AI-Driven requirements engineering.
-        </p>
-        
-        <p>
-          I obtained my M.S. degree from <a href="https://www.jaist.ac.jp/english/" target="_blank">Japan Advanced Institute of Science and Technology(JAIST)</a>, under the guidance of Prof.<a href="https://fp.jaist.ac.jp/public/Default2.aspx?id=293&l=1" target="_blank">Masashi Unoki</a>. 
-          My research topic was deep-fake speech detection with a focus on leveraging insights from the human auditory system. 
-          Additionally, under the guidance of Junior Associate Professor <a href="https://sites.google.com/view/teeradaj" target="_blank">Teeradaj Racharak</a>, 
-          I completed minor research related to knowledge graphs and machine learning.
+      <a class="pub-item reveal" href="/assets/pdf/D1/SLR.pdf" target="_blank" rel="noopener">
+        <span class="pub-year">2024</span>
+        <div>
+          <p class="pub-title">Generative AI for Requirements Engineering: A Systematic Literature Review</p>
+          <p class="pub-venue">arXiv</p>
+          <div class="pub-tags">
+            <span class="tag">GenAI</span>
+            <span class="tag">SLR</span>
+            <span class="tag">RE</span>
+            <span class="tag">PDF</span>
+          </div>
+        </div>
+      </a>
 
-        </p>
-    </div>
-</div>
-
-<div class="col text-justify p-0">
-    <p>
-        
-    </p>
-</div>
-
-<!-- News -->
-<div class="news mt-3 p-0">
-  <h1 class="title mb-4 p-0">News</h1>
-
-  <div class="row p-0">
-    <div class="col-sm-2 p-0">
-      <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-        Dec 6-8
-      </span>
-    </div>
-    <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-      <p>Our work <strong>A Systematic Literature Review of Generative Al in Requirements Engineering</strong> has been presented by me at <a href="https://wireds2024.github.io/" target="_blank">The First International Workshop on Intertwining Research & Education on Software (WIREDS)</a> in Osaka, Japan. 
-        I received distinguished presentation award, thanks so much for valuable comments on my work.</p>
-            
-      </div>
-  </div>
-
-  <div class="row p-0">
-    <div class="col-sm-2 p-0">
-      <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-        Nov 12
-      </span>
-    </div>
-    <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-      <p>I participated in the <a href="https://tech.rakuten.co.jp/" target="_blank">Rakuten Technology Conference</a> in Tokyo, Japan. 
-        I joined talks and panels featuring tech leaders and experts from various fields, including AI and cloud computing.</p>
-          
-      </div>
-    
-      </div>
-
-  </div>
-
-  <div class="row p-0">
-    <div class="col-sm-2 p-0">
-      <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-        Nov 1−2
-      </span>
-    </div>
-    <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-      <p>I participated in the <a href="https://fattw2024.github.io/#/" target="_blank">Future Advanced Testing Technology Workshop(FATTW 2024)</a> in Makuhari, Japan, where I engaged with many experts and researchers. 
-        We discussed cutting-edge advancements and practical applications in testing technologies within software engineering, particularly focusing on LLM.</p>
-        <div class="row mt-3">
-          
-          
-      </div>
-    
-      </div>
-
-  </div>
-
-  <div class="row p-0">
-    <div class="col-sm-2 p-0">
-      <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-        Sep 2, 2024
-      </span>
-    </div>
-    <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-      <p>I was selected <a href="https://www.waseda.jp/inst/scholarship/en/doctoral/" target="_blank"> Scholarship for Fostering Researchers in Doctoral Programs </a>.</p>
-    </div>
-  </div>
-
-  <div class="row p-0">
-    <div class="col-sm-2 p-0">
-      <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-        Aug 5, 2024
-      </span>
-    </div>
-    <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-      <p>I joined <a href="https://qaml.co.jp/" target="_blank"> QAML </a> as a part-time Machine Learning engineer.</p>
-    </div>
-  </div>
-
-
-  
-  <div class="row p-0">
-    <div class="col-sm-2 p-0">
-      <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-        Apr 8, 2024
-      </span>
-    </div>
-    <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-      <p>I served as the Co-Chair of the <a href="https://hkn.ieee.org/hkn-chapters/all-chapters/waseda-university-mu-tau" target="_blank"> IEEE Eta Kappa Nu - Waseda University Mu Tau Chapter</a>.</p>
-    </div>
-  </div>
-
-
-
-
-    <div class="row p-0">
-      <div class="col-sm-2 p-0">
-        <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-          Apr 1, 2024
-        </span>
-      </div>
-      <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-        <p>I joined the <a href="http://www.washi.cs.waseda.ac.jp/" target="_blank">reliable software engineering laboratory </a>  in Waseda University as a Ph.D candidate.</p>
-      </div>
-    </div>
-  
-    <div class="row p-0">
-      <div class="col-sm-2 p-0">
-        <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-          Mar 15, 2024
-        </span>
-      </div>
-      <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-        <p>I have been selected for the <a href="https://dpt-wspring.w.waseda.jp/en/">W-SPRING </a>fellowship.
-</p>
-      </div>
-    </div>
-
-    <div class="row p-0">
-      <div class="col-sm-2 p-0">
-        <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-          Dec 15, 2023
-        </span>
-      </div>
-      <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-        <p>I passed the entrance exam in <a href="https://www.waseda.jp/top/en/">Waseda university</a>.
-</p>
-      </div>
-    </div>
-  
-    <div class="row p-0">
-      <div class="col-sm-2 p-0">
-        <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-          Oct 31, 2023
-        </span>
-      </div>
-      <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-        <p>We present our work in <a href="https://www.apsipa2023.org/index.html">APSIPA</a> in Taipei, Taiwan.
-</p>
-      </div>
-    </div>
-  
-    <div class="row p-0">
-      <div class="col-sm-2 p-0">
-        <span class="badge light-green darken-1 font-weight-bold text-uppercase align-middle date ml-3">
-          Sep 22, 2023
-        </span>
-      </div>
-      <div class="col-sm-10 mt-2 mt-sm-0 ml-3 ml-md-0 p-0 font-weight-light text">
-        <p>I got master's degree from <a href="https://www.jaist.ac.jp/english/"> JAIST</a>.
-</p>
-      </div>
-    </div>
-  
-    
-  
-    
-    <div class="mt-4">
-      <a href="https://haowei614.github.io/news/" 
-         class="btn btn-outline light-green darken-1">
-          Click here to find more news
-          <i class="fas fa-arrow-right ml-2"></i>
+      <a class="pub-item reveal" href="/assets/pdf/deepfakes/Analysis_of_Spectro-Temporal_Modulation_Representation_for_Deep-Fake_Speech_Detection.pdf" target="_blank" rel="noopener">
+        <span class="pub-year">2023</span>
+        <div>
+          <p class="pub-title">Analysis of Spectro-Temporal Modulation Representation for Deep-Fake Speech Detection</p>
+          <p class="pub-venue">APSIPA ASC 2023, Taipei, Taiwan</p>
+          <div class="pub-tags">
+            <span class="tag">DeepFake</span>
+            <span class="tag">Speech</span>
+            <span class="tag">Audio</span>
+            <span class="tag">PDF</span>
+          </div>
+        </div>
       </a>
     </div>
-    <style>
-      .btn.btn-outline.light-green {
-          border: 2px solid #7cb342;  /* 使用与网页相同的绿色 */
-          color: #7cb342;
+  </section>
+
+  <section id="projects">
+    <p class="section-label reveal">// 03. projects</p>
+    <h2 class="section-title reveal">Open Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-icon">RE</div>
+        <h3 class="project-title">Requirements Engineering</h3>
+        <p class="project-desc">A focused project page on requirements engineering methods and practices for software development.</p>
+        <a href="/projects/re/" class="project-link">View project page -></a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-icon">DF</div>
+        <h3 class="project-title">Deepfake Speech</h3>
+        <p class="project-desc">Research and resources related to deepfake speech generation and detection, including demos and publications.</p>
+        <a href="/projects/df/" class="project-link">View project page -></a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-icon">ALL</div>
+        <h3 class="project-title">All Projects</h3>
+        <p class="project-desc">Browse the complete project collection and archived entries on your projects index page.</p>
+        <a href="/projects/" class="project-link">Browse all projects -></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <p class="section-label reveal">// 04. news</p>
+    <h2 class="section-title reveal">Latest Updates</h2>
+    <div class="news-list">
+      <div class="news-item">
+        <span class="news-date">Jul 2025</span>
+        <p class="news-text">Presented <strong>Automating Multi-view Requirements Engineering with Collaborative LLM Agents</strong> at the <a href="https://sites.google.com/view/sig-mlse/%E6%B4%BB%E5%8B%95%E4%BA%88%E5%AE%9A/%E5%A4%8F%E5%90%88%E5%AE%BF2025" target="_blank" rel="noopener">Machine Learning Software Engineering Workshop</a> in Hakone, Japan.</p>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Apr 2025</span>
+        <p class="news-text">Attended the <a href="https://corporate-awards.ieee.org/event/2025-ieee-vic-summit-honors-ceremony-gala/" target="_blank" rel="noopener">IEEE VIC Summit and Honors Ceremony</a> in Tokyo, Japan.</p>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Dec 2024</span>
+        <p class="news-text">Presented at <a href="https://wireds2024.github.io/" target="_blank" rel="noopener">WIREDS 2024</a> in Osaka and received the distinguished presentation award.</p>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Sep 2024</span>
+        <p class="news-text">Selected for the <a href="https://www.waseda.jp/inst/scholarship/en/doctoral/" target="_blank" rel="noopener">Scholarship for Fostering Researchers in Doctoral Programs</a>.</p>
+      </div>
+      <div class="news-item">
+        <span class="news-date">More</span>
+        <p class="news-text">See the full news archive at <a href="/news/" target="_blank" rel="noopener">/news/</a>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  &copy; 2026 Haowei Cheng · Built on GitHub Pages
+</footer>
+
+<script>
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W;
+let H;
+let particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function makeParticle() {
+  return {
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 1.5 + 0.3,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    alpha: Math.random() * 0.5 + 0.1,
+    color: Math.random() > 0.5 ? '124,106,247' : '79,209,197'
+  };
+}
+
+function initParticles() {
+  particles = Array.from({ length: 120 }, makeParticle);
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(function (p) {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = W;
+    if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H;
+    if (p.y > H) p.y = 0;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(' + p.color + ', ' + p.alpha + ')';
+    ctx.fill();
+  });
+
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = 'rgba(124,106,247,' + (0.06 * (1 - dist / 100)) + ')';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
       }
-      
-      .btn.btn-outline.light-green:hover {
-          background-color: #7cb342;
-          color: white;
-      }
-      </style>
-</div>
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
 
-  </div>
+window.addEventListener('resize', function () {
+  resize();
+  initParticles();
+});
+resize();
+initParticles();
+drawParticles();
 
-  <!-- Footer -->
-  <footer>
-    &copy; Copyright 2025 Haowei Cheng.
-    
-    
-  </footer>
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', function (e) {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
 
-  <!-- Core JavaScript Files -->
-  <script src="/assets/js/jquery.min.js" type="text/javascript"></script>
-  <script src="/assets/js/popper.min.js" type="text/javascript"></script>
-  <script src="/assets/js/bootstrap.min.js" type="text/javascript"></script>
-  <script src="/assets/js/mdb.min.js" type="text/javascript"></script>
-  <script async="" src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
-  <script src="/assets/js/common.js"></script>
+window.addEventListener('scroll', function () {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
 
-  <!-- WebGL Fluid Background -->
-  <script src="/assets/js/webgl-fluid.js"></script>
+const observer = new IntersectionObserver(function (entries) {
+  entries.forEach(function (entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
-  <!-- Scrolling Progress Bar -->
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var navbarHeight = $('#navbar').outerHeight(true);
-      $('body').css({ 'padding-top': navbarHeight });
-      $('progress-container').css({ 'padding-top': navbarHeight });
-      var progressBar = $('#progress');
-      progressBar.css({ 'top': navbarHeight });
-      var getMax = function() { return $(document).height() - $(window).height(); }
-      var getValue = function() { return $(window).scrollTop(); }   
-      // Check if the browser supports the progress element.
-      if ('max' in document.createElement('progress')) {
-        // Set the 'max' attribute for the first time.
-        progressBar.attr({ max: getMax() });
-        progressBar.attr({ value: getValue() });
-    
-        $(document).on('scroll', function() {
-          // On scroll only the 'value' attribute needs to be calculated.
-          progressBar.attr({ value: getValue() });
-        });
-
-        $(window).resize(function() {
-          var navbarHeight = $('#navbar').outerHeight(true);
-          $('body').css({ 'padding-top': navbarHeight });
-          $('progress-container').css({ 'padding-top': navbarHeight });
-          progressBar.css({ 'top': navbarHeight });
-          // On resize, both the 'max' and 'value' attributes need to be calculated.
-          progressBar.attr({ max: getMax(), value: getValue() });
-        });
-      } else {
-        var max = getMax(), value, width;
-        var getWidth = function() {
-          // Calculate the window width as a percentage.
-          value = getValue();
-          width = (value/max) * 100;
-          width = width + '%';
-          return width;
-        }
-        var setWidth = function() { progressBar.css({ width: getWidth() }); };
-        setWidth();
-        $(document).on('scroll', setWidth);
-        $(window).on('resize', function() {
-          // Need to reset the 'max' attribute.
-          max = getMax();
-          setWidth();
-        });
-      }
-    });
-  </script>
-
-  <!-- Code Syntax Highlighting -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
-  <script src="/assets/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-  <!-- Script Used for Randomizing the Projects Order -->
-  <!-- <script type="text/javascript">
-    $.fn.shuffleChildren = function() {
-      $.each(this.get(), function(index, el) {
-        var $el = $(el);
-        var $find = $el.children();
-
-        $find.sort(function() {
-          return 0.5 - Math.random();
-        });
-
-        $el.empty();
-        $find.appendTo($el);
-      });
-    };
-    $("#projects").shuffleChildren();
-  </script> -->
-
-  <!-- Project Cards Layout -->
-  <script type="text/javascript">
-    var $grid = $('#projects');
-
-    // $grid.masonry({ percentPosition: true });
-    // $grid.masonry('layout');
-
-    // Trigger after images load.
-    $grid.imagesLoaded().progress(function() {
-      $grid.masonry({ percentPosition: true });
-      $grid.masonry('layout');
-    });
-  </script>
-
-  <!-- Enable Tooltips -->
-  <script type="text/javascript">
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
-  </script>
-
-  <!-- Google Analytics -->
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', '', 'auto');
-    ga('send', 'pageview');
-  </script>
+document.querySelectorAll('.reveal, .news-item').forEach(function (el, i) {
+  el.style.transitionDelay = (i % 4) * 0.08 + 's';
+  observer.observe(el);
+});
+</script>
 </body>
 </html>
