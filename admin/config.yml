@@ -2,7 +2,7 @@ backend:
   name: github
   repo: haowei614/haowei614.github.io
   branch: master
-  auth_type: implicit
+  auth_type: pkce
   app_id: Ov23liNTROSthHV64s37
 
 media_folder: "assets/img/uploads"
