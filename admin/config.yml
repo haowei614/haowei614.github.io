@@ -4,6 +4,7 @@ backend:
   branch: master
   auth_type: pkce
   app_id: Ov23liNTROSthHV64s37
+  auth_scope: repo
 
 media_folder: "assets/img/uploads"
 public_folder: "/assets/img/uploads"
