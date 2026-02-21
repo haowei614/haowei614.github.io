@@ -19,6 +19,8 @@ collections:
       - name: "publications"
         label: "Publications Items"
         file: "data/publications.json"
+        media_folder: "assets/files/publications"
+        public_folder: "/assets/files/publications"
         fields:
           - label: "Items"
             name: "items"
@@ -33,8 +35,14 @@ collections:
               - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
               - { label: "Tags", name: "tags", widget: "list", required: false }
               - { label: "Abstract", name: "abstract", widget: "text", required: false }
-              - { label: "PDF URL", name: "pdf", widget: "string", required: false }
-              - { label: "Poster URL", name: "poster", widget: "string", required: false }
+              - label: "PDF (可本地上传)"
+                name: "pdf"
+                widget: "file"
+                required: false
+              - label: "Poster (可本地上传)"
+                name: "poster"
+                widget: "image"
+                required: false
               - { label: "Code URL", name: "code", widget: "string", required: false }
               - { label: "Project URL", name: "project", widget: "string", required: false }
               - { label: "Featured", name: "featured", widget: "boolean", default: false }
@@ -50,6 +58,8 @@ collections:
       - name: "updates"
         label: "Updates Items"
         file: "data/updates.json"
+        media_folder: "assets/img/news"
+        public_folder: "/assets/img/news"
         fields:
           - label: "Items"
             name: "items"
@@ -68,7 +78,14 @@ collections:
                 fields:
                   - { label: "Label", name: "label", widget: "string" }
                   - { label: "URL", name: "url", widget: "string" }
-              - { label: "Images", name: "images", widget: "list", required: false }
+              - label: "Images (可本地上传)"
+                name: "images"
+                widget: "list"
+                required: false
+                field:
+                  label: "Image"
+                  name: "image"
+                  widget: "image"
               - label: "Category"
                 name: "category"
                 widget: "select"
