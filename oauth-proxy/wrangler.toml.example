@@ -1,0 +1,8 @@
+name = "haowei614-decap-oauth"
+main = "worker.js"
+compatibility_date = "2026-02-21"
+
+# Optional: if your repo is private, set to "1".
+[vars]
+GITHUB_REPO_PRIVATE = "0"
+

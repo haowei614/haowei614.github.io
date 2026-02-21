@@ -2,9 +2,9 @@ backend:
   name: github
   repo: haowei614/haowei614.github.io
   branch: master
-  auth_type: pkce
-  app_id: Ov23liNTROSthHV64s37
-  auth_scope: repo
+  base_url: https://haowei614-decap-oauth.haowei614.workers.dev
+  auth_endpoint: auth
+  site_domain: haowei614.github.io
 
 media_folder: "assets/img/uploads"
 public_folder: "/assets/img/uploads"
