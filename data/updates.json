@@ -7,10 +7,30 @@
       "summary": "Presented 'Automating Multi-view Requirements Engineering with Collaborative LLM Agents'.",
       "content": "A valuable opportunity to discuss preliminary findings with researchers in software engineering and machine learning.",
       "links": [
-        { "label": "Workshop", "url": "https://sites.google.com/view/sig-mlse/%E6%B4%BB%E5%8B%95%E4%BA%88%E5%AE%9A/%E5%A4%8F%E5%90%88%E5%AE%BF2025" }
+        {
+          "label": "Workshop",
+          "url": "https://sites.google.com/view/sig-mlse/%E6%B4%BB%E5%8B%95%E4%BA%88%E5%AE%9A/%E5%A4%8F%E5%90%88%E5%AE%BF2025"
+        }
       ],
-      "images": ["/assets/img/news/MLSE1.JPG", "/assets/img/news/MLSE2.JPG", "/assets/img/news/MLSE3.JPG", "/assets/img/news/MLSE4.jpg"],
+      "images": [
+        "/assets/img/news/MLSE1.JPG",
+        "/assets/img/news/MLSE2.JPG",
+        "/assets/img/news/MLSE3.JPG",
+        "/assets/img/news/MLSE4.jpg"
+      ],
       "category": "event",
+      "pinned": true,
+      "status": "published"
+    },
+    {
+      "id": "upd-2025-003",
+      "title": "Automating Multi-view Requirements Engineering with Collaborative LLM Agents",
+      "date": "2025-07-12",
+      "summary": "Presented at the MLSE Workshop in Hakone.",
+      "content": "",
+      "links": [],
+      "images": [],
+      "category": "talk",
       "pinned": true,
       "status": "published"
     },
@@ -21,9 +41,19 @@
       "summary": "Connected with researchers and innovators at the IEEE VIC Summit in Tokyo.",
       "content": "Great discussions and potential collaborations across innovation and impact-oriented projects.",
       "links": [
-        { "label": "Event", "url": "https://corporate-awards.ieee.org/event/2025-ieee-vic-summit-honors-ceremony-gala/" }
+        {
+          "label": "Event",
+          "url": "https://corporate-awards.ieee.org/event/2025-ieee-vic-summit-honors-ceremony-gala/"
+        }
       ],
-      "images": ["/assets/img/news/VIC1.jpg", "/assets/img/news/VIC2.jpeg", "/assets/img/news/VIC3.jpeg", "/assets/img/news/VIC4.jpg", "/assets/img/news/VIC5.jpg", "/assets/img/news/VIC6.jpg"],
+      "images": [
+        "/assets/img/news/VIC1.jpg",
+        "/assets/img/news/VIC2.jpeg",
+        "/assets/img/news/VIC3.jpeg",
+        "/assets/img/news/VIC4.jpg",
+        "/assets/img/news/VIC5.jpg",
+        "/assets/img/news/VIC6.jpg"
+      ],
       "category": "event",
       "pinned": false,
       "status": "published"
@@ -35,9 +65,15 @@
       "summary": "Presented SLR work on GenAI in Requirements Engineering and received a distinguished presentation award.",
       "content": "Presented at the First International Workshop on Intertwining Research & Education on Software (WIREDS) in Osaka.",
       "links": [
-        { "label": "WIREDS", "url": "https://wireds2024.github.io/" }
+        {
+          "label": "WIREDS",
+          "url": "https://wireds2024.github.io/"
+        }
       ],
-      "images": ["/assets/img/news/WIREDS1.jpg", "/assets/img/news/WIREDS2.jpg"],
+      "images": [
+        "/assets/img/news/WIREDS1.jpg",
+        "/assets/img/news/WIREDS2.jpg"
+      ],
       "category": "paper",
       "pinned": true,
       "status": "published"
@@ -49,7 +85,10 @@
       "summary": "Joined talks and panels featuring AI and cloud computing experts.",
       "content": "Participated in technical sessions with practitioners and leaders in Tokyo.",
       "links": [
-        { "label": "Rakuten Tech Conference", "url": "https://tech.rakuten.co.jp/" }
+        {
+          "label": "Rakuten Tech Conference",
+          "url": "https://tech.rakuten.co.jp/"
+        }
       ],
       "images": [],
       "category": "event",
@@ -63,9 +102,14 @@
       "summary": "Discussed practical LLM applications in software testing technologies.",
       "content": "Engaged with experts and researchers at Future Advanced Testing Technology Workshop in Makuhari.",
       "links": [
-        { "label": "FATTW", "url": "https://fattw2024.github.io/#/" }
+        {
+          "label": "FATTW",
+          "url": "https://fattw2024.github.io/#/"
+        }
       ],
-      "images": ["/assets/img/news/FATT.jpg"],
+      "images": [
+        "/assets/img/news/FATT.jpg"
+      ],
       "category": "event",
       "pinned": false,
       "status": "published"
@@ -77,7 +121,10 @@
       "summary": "Selected for Scholarship for Fostering Researchers in Doctoral Programs.",
       "content": "Awarded by Waseda University scholarship program.",
       "links": [
-        { "label": "Scholarship", "url": "https://www.waseda.jp/inst/scholarship/en/doctoral/" }
+        {
+          "label": "Scholarship",
+          "url": "https://www.waseda.jp/inst/scholarship/en/doctoral/"
+        }
       ],
       "images": [],
       "category": "award",
@@ -91,7 +138,10 @@
       "summary": "Started part-time role at QAML.",
       "content": "Working as a part-time machine learning engineer.",
       "links": [
-        { "label": "QAML", "url": "https://qaml.co.jp/" }
+        {
+          "label": "QAML",
+          "url": "https://qaml.co.jp/"
+        }
       ],
       "images": [],
       "category": "job",
@@ -105,7 +155,10 @@
       "summary": "Served as Co-Chair of IEEE Eta Kappa Nu Waseda Mu Tau Chapter.",
       "content": "Contributed to chapter activities and student initiatives.",
       "links": [
-        { "label": "IEEE HKN Waseda", "url": "https://hkn.ieee.org/hkn-chapters/all-chapters/waseda-university-mu-tau" }
+        {
+          "label": "IEEE HKN Waseda",
+          "url": "https://hkn.ieee.org/hkn-chapters/all-chapters/waseda-university-mu-tau"
+        }
       ],
       "images": [],
       "category": "event",
@@ -119,7 +172,10 @@
       "summary": "Joined the Reliable Software Engineering Laboratory at Waseda as a Ph.D candidate.",
       "content": "Started doctoral research under Prof. Hironori Washizaki.",
       "links": [
-        { "label": "Lab", "url": "http://www.washi.cs.waseda.ac.jp/" }
+        {
+          "label": "Lab",
+          "url": "http://www.washi.cs.waseda.ac.jp/"
+        }
       ],
       "images": [],
       "category": "event",
@@ -133,7 +189,10 @@
       "summary": "Selected for W-SPRING fellowship.",
       "content": "Received doctoral fellowship support.",
       "links": [
-        { "label": "W-SPRING", "url": "https://dpt-wspring.w.waseda.jp/en/" }
+        {
+          "label": "W-SPRING",
+          "url": "https://dpt-wspring.w.waseda.jp/en/"
+        }
       ],
       "images": [],
       "category": "award",
@@ -147,7 +206,10 @@
       "summary": "Passed Ph.D. entrance examination at Waseda University.",
       "content": "Officially qualified for doctoral enrollment.",
       "links": [
-        { "label": "Waseda", "url": "https://www.waseda.jp/top/en/" }
+        {
+          "label": "Waseda",
+          "url": "https://www.waseda.jp/top/en/"
+        }
       ],
       "images": [],
       "category": "event",
@@ -161,7 +223,10 @@
       "summary": "Presented work at APSIPA in Taipei.",
       "content": "Presented deep-fake speech detection research at APSIPA ASC 2023.",
       "links": [
-        { "label": "APSIPA", "url": "https://www.apsipa2023.org/index.html" }
+        {
+          "label": "APSIPA",
+          "url": "https://www.apsipa2023.org/index.html"
+        }
       ],
       "images": [],
       "category": "paper",
@@ -175,7 +240,10 @@
       "summary": "Received M.S. degree from JAIST.",
       "content": "Completed M.S. program and graduated from JAIST.",
       "links": [
-        { "label": "JAIST", "url": "https://www.jaist.ac.jp/english/" }
+        {
+          "label": "JAIST",
+          "url": "https://www.jaist.ac.jp/english/"
+        }
       ],
       "images": [],
       "category": "award",
