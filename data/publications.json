@@ -1,13 +1,39 @@
 {
   "items": [
     {
+      "id": "pub-2025-004",
+      "title": "Automating Multi-view Requirements Engineering with Collaborative LLM Agents",
+      "authors": "Haowei Cheng,Jati H. Husen,Hironori Washizaki",
+      "venue": "MLSE Workshop 2025",
+      "year": 2025,
+      "date": "2025-07-12",
+      "tags": [
+        "LLM",
+        "Requirements",
+        "Agents"
+      ],
+      "abstract": "",
+      "pdf": "",
+      "poster": "",
+      "code": "",
+      "project": "",
+      "doi": "",
+      "externalUrl": "",
+      "featured": true,
+      "status": "published"
+    },
+    {
       "id": "pub-2025-001",
       "title": "Translating Requirements into CARLA Executable Scripts: an LLM-Driven Automated Scenario Realization",
       "authors": "Shiyang Guan, Yijun Lu, Jati H. Husen, Haowei Cheng, Hironori Washizaki, Naoyasu Ubayashi, Nobukazu Yoshioka",
       "venue": "IEEE R10 HTC 2025",
       "year": 2025,
       "date": "2025-07-01",
-      "tags": ["LLM", "Requirements", "CARLA"],
+      "tags": [
+        "LLM",
+        "Requirements",
+        "CARLA"
+      ],
       "abstract": "Scenario-based testing is critical for ensuring safety and robustness of autonomous driving systems. This work integrates LLMs with M3S descriptions to automatically generate CARLA executable scripts with higher efficiency and lower manual effort.",
       "pdf": "/assets/pdf/D2/IEEE_HTC.pdf",
       "poster": "",
@@ -23,7 +49,11 @@
       "venue": "IPSJ",
       "year": 2025,
       "date": "2025-05-01",
-      "tags": ["CARLA", "Safety", "Dataset"],
+      "tags": [
+        "CARLA",
+        "Safety",
+        "Dataset"
+      ],
       "abstract": "This study uses CARLA for scenario construction and multi-sensor data generation under diverse traffic and weather settings, supporting robust autonomous driving evaluations.",
       "pdf": "/assets/pdf/D1/IPSJ.pdf",
       "poster": "",
@@ -39,7 +69,11 @@
       "venue": "CHASE 2025",
       "year": 2025,
       "date": "2025-03-20",
-      "tags": ["LLM", "Topic Modeling", "VR"],
+      "tags": [
+        "LLM",
+        "Topic Modeling",
+        "VR"
+      ],
       "abstract": "This work applies LLMs to extract and summarize key topics from VR user reviews, reducing manual labeling effort and improving interpretability for VR developers.",
       "pdf": "/assets/pdf/D1/CHASE_DECS.pdf",
       "poster": "",
@@ -55,7 +89,11 @@
       "venue": "arXiv",
       "year": 2024,
       "date": "2024-09-14",
-      "tags": ["GenAI", "SLR", "Requirements"],
+      "tags": [
+        "GenAI",
+        "SLR",
+        "Requirements"
+      ],
       "abstract": "A systematic literature review analyzing applications, challenges, and opportunities of GenAI in requirements engineering across the lifecycle.",
       "pdf": "/assets/pdf/D1/SLR.pdf",
       "poster": "/assets/pdf/D1/SLR_Poster.pdf",
@@ -71,7 +109,11 @@
       "venue": "APSIPA ASC 2023",
       "year": 2023,
       "date": "2023-10-31",
-      "tags": ["DeepFake", "Speech", "Audio"],
+      "tags": [
+        "DeepFake",
+        "Speech",
+        "Audio"
+      ],
       "abstract": "This paper investigates spectro-temporal modulation features inspired by human auditory processing for deep-fake speech detection.",
       "pdf": "/assets/pdf/deepfakes/Analysis_of_Spectro-Temporal_Modulation_Representation_for_Deep-Fake_Speech_Detection.pdf",
       "poster": "/assets/pdf/deepfakes/deepfake_detection.pdf",
@@ -87,7 +129,10 @@
       "venue": "JHES 2023",
       "year": 2023,
       "date": "2023-06-15",
-      "tags": ["DeepFake", "Speech"],
+      "tags": [
+        "DeepFake",
+        "Speech"
+      ],
       "abstract": "A study on spectro-temporal modulation representation for deep-fake speech detection in Japanese research forum settings.",
       "pdf": "/assets/pdf/deepfakes/jhes2023_Haowei_Final.pdf",
       "poster": "/assets/pdf/deepfakes/JHES_Haowei_Slide.pdf",
