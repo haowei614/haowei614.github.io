@@ -45,6 +45,28 @@
       "status": "published"
     },
     {
+      "id": "pub-2025-006",
+      "title": "Automating Multi-view Requirements Engineering with Collaborative LLM Agents",
+      "authors": "Haowei Cheng,Jati H. Husen,Hironori Washizaki",
+      "venue": "MLSE Workshop 2025",
+      "year": 2025,
+      "date": "2025-07-12",
+      "tags": [
+        "LLM",
+        "Requirements",
+        "Agents"
+      ],
+      "abstract": "",
+      "pdf": "",
+      "poster": "",
+      "code": "",
+      "project": "",
+      "doi": "",
+      "externalUrl": "",
+      "featured": true,
+      "status": "published"
+    },
+    {
       "id": "pub-2025-001",
       "title": "Translating Requirements into CARLA Executable Scripts: an LLM-Driven Automated Scenario Realization",
       "authors": "Shiyang Guan, Yijun Lu, Jati H. Husen, Haowei Cheng, Hironori Washizaki, Naoyasu Ubayashi, Nobukazu Yoshioka",
