@@ -23,8 +23,14 @@ export default {
       if (url.pathname === "/parse" && request.method === "POST") {
         return jsonResponse(await handleParse(request, env), request, env);
       }
-      if (url.pathname === "/publish" && request.method === "POST") {
-        return jsonResponse(await handlePublish(request, env), request, env);
+      if (url.pathname === "/items" && request.method === "GET") {
+        return jsonResponse(await handleListItems(url, request, env), request, env);
+      }
+      if ((url.pathname === "/save" || url.pathname === "/publish") && request.method === "POST") {
+        return jsonResponse(await handleSave(request, env), request, env);
+      }
+      if (url.pathname === "/delete" && request.method === "POST") {
+        return jsonResponse(await handleDelete(request, env), request, env);
       }
       if (url.pathname === "/health") {
         return jsonResponse({ ok: true }, request, env);
@@ -225,7 +231,21 @@ async function handleParse(request, env) {
   return parsed;
 }
 
-async function handlePublish(request, env) {
+async function handleListItems(url, request, env) {
+  await requireAuthorizedUser(request, env);
+  const kind = url.searchParams.get("kind") === "update" ? "update" : "publication";
+  const cfg = repoConfig(env);
+  const dataPath = kind === "publication" ? "data/publications.json" : "data/updates.json";
+  const dataFile = await getRepositoryFile({ token: bearerToken(request), cfg, path: dataPath });
+  const data = JSON.parse(dataFile.text || "{\"items\":[]}");
+  const items = Array.isArray(data.items) ? data.items : [];
+  return {
+    kind,
+    items: items.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0)),
+  };
+}
+
+async function handleSave(request, env) {
   const { token, user } = await requireAuthorizedUser(request, env);
   const body = await request.json();
   const kind = normalizeKind(body.kind);
@@ -233,7 +253,10 @@ async function handlePublish(request, env) {
 
   const cfg = repoConfig(env);
   const files = Array.isArray(body.files) ? body.files : [];
-  let item = kind === "publication" ? normalizePublication(body.item || {}) : normalizeUpdate(body.item || {});
+  const item = kind === "publication" ? normalizePublication(body.item || {}) : normalizeUpdate(body.item || {});
+  const existing = await loadItemsForKind({ token, cfg, kind });
+  const foundIndex = existing.findIndex((entry) => entry.id === item.id);
+  const previous = foundIndex >= 0 ? existing[foundIndex] : null;
 
   const uploadChanges = [];
   const uploadedPaths = [];
@@ -252,13 +275,9 @@ async function handlePublish(request, env) {
   });
 
   const dataPath = kind === "publication" ? "data/publications.json" : "data/updates.json";
-  const dataFile = await getRepositoryFile({ token, cfg, path: dataPath });
-  const data = JSON.parse(dataFile.text || "{\"items\":[]}");
-  const items = Array.isArray(data.items) ? data.items : [];
-
-  item.id = ensureUniqueId(kind, item, items);
-  items.push(item);
-  data.items = items.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+  const nextItems = previous ? existing.map((entry) => (entry.id === item.id ? item : entry)) : [...existing, withGeneratedId(kind, item, existing)];
+  const finalizedItem = previous ? item : nextItems[nextItems.length - 1];
+  const data = { items: sortItems(nextItems, kind) };
 
   const jsonChange = {
     path: dataPath,
@@ -270,15 +289,60 @@ async function handlePublish(request, env) {
     token,
     cfg,
     changes: [...uploadChanges, jsonChange],
-    message: commitMessage(kind, item, user.login),
+    message: commitMessage(previous ? "updated" : "added", finalizedItem, user.login),
   });
 
   return {
     ok: true,
     kind,
-    id: item.id,
-    item,
+    mode: previous ? "updated" : "added",
+    id: finalizedItem.id,
+    item: finalizedItem,
     uploadedPaths,
+    commitUrl: commit.html_url,
+    commitSha: commit.sha,
+  };
+}
+
+async function handleDelete(request, env) {
+  const { token, user } = await requireAuthorizedUser(request, env);
+  const body = await request.json();
+  const kind = normalizeKind(body.kind);
+  if (kind === "auto") throw new HttpError(400, "Delete requires kind=publication or kind=update.");
+
+  const cfg = repoConfig(env);
+  const targetId = String(body.id || "").trim();
+  if (!targetId) throw new HttpError(400, "Missing item id.");
+
+  const dataPath = kind === "publication" ? "data/publications.json" : "data/updates.json";
+  const dataFile = await getRepositoryFile({ token, cfg, path: dataPath });
+  const data = JSON.parse(dataFile.text || "{\"items\":[]}");
+  const items = Array.isArray(data.items) ? data.items : [];
+  const item = items.find((entry) => entry.id === targetId);
+  if (!item) throw new HttpError(404, `Item ${targetId} not found.`);
+
+  const remaining = items.filter((entry) => entry.id !== targetId);
+  const changes = [{
+    path: dataPath,
+    content: JSON.stringify({ items: sortItems(remaining, kind) }, null, 2) + "\n",
+    encoding: "utf-8",
+  }];
+
+  for (const path of attachmentPathsForItem(item, kind)) {
+    changes.push({ path, delete: true });
+  }
+
+  const commit = await commitChanges({
+    token,
+    cfg,
+    changes,
+    message: commitMessage("deleted", item, user.login),
+  });
+
+  return {
+    ok: true,
+    kind,
+    id: targetId,
     commitUrl: commit.html_url,
     commitSha: commit.sha,
   };
@@ -401,6 +465,12 @@ function parseHeuristically(text, requestedKind) {
 function normalizeKind(kind) {
   if (kind === "publication" || kind === "update" || kind === "auto") return kind;
   throw new HttpError(400, "Invalid kind. Use auto, publication, or update.");
+}
+
+function itemKind(item) {
+  return item && (item.year !== undefined || item.tags !== undefined || item.abstract !== undefined)
+    ? "publication"
+    : "update";
 }
 
 function guessKind(text) {
@@ -535,9 +605,35 @@ function ensureUniqueId(kind, item, items) {
   return `${prefix}-${year}-${String(max + 1).padStart(3, "0")}`;
 }
 
-function commitMessage(kind, item, login) {
-  const label = kind === "publication" ? "publication" : "update";
-  return `Add ${label}: ${item.title || item.id}\n\nSubmitted by ${login} via Smart Update.`;
+function withGeneratedId(kind, item, items) {
+  return { ...item, id: ensureUniqueId(kind, item, items) };
+}
+
+function sortItems(items, kind) {
+  return [...items].map((item) => kind === "publication" ? normalizePublication(item) : normalizeUpdate(item))
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+}
+
+function attachmentPathsForItem(item, kind) {
+  if (kind === "publication") {
+    return [item.pdf, item.poster].filter(isRepoAttachmentPath);
+  }
+  return normalizeStringArray(item.images).filter(isRepoAttachmentPath);
+}
+
+function isRepoAttachmentPath(path) {
+  return typeof path === "string" && path.startsWith("/assets/");
+}
+
+function commitMessage(action, item, login) {
+  return `${action === "deleted" ? "Delete" : action === "updated" ? "Update" : "Add"} ${itemKind(item)}: ${item.title || item.id}\n\nSubmitted by ${login} via Smart Update.`;
+}
+
+async function loadItemsForKind({ token, cfg, kind }) {
+  const dataPath = kind === "publication" ? "data/publications.json" : "data/updates.json";
+  const dataFile = await getRepositoryFile({ token, cfg, path: dataPath });
+  const data = JSON.parse(dataFile.text || "{\"items\":[]}");
+  return Array.isArray(data.items) ? data.items : [];
 }
 
 async function getRepositoryFile({ token, cfg, path }) {
@@ -559,6 +655,16 @@ async function commitChanges({ token, cfg, changes, message }) {
 
   const treeEntries = [];
   for (const change of changes) {
+    if (change.delete) {
+      treeEntries.push({
+        path: change.path,
+        mode: "100644",
+        type: "blob",
+        sha: null,
+      });
+      continue;
+    }
+
     const blob = await githubApi(`/repos/${cfg.owner}/${cfg.repo}/git/blobs`, token, {
       method: "POST",
       body: JSON.stringify({

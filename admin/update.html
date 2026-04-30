@@ -70,6 +70,7 @@
 
       <div class="actions">
         <button id="publishBtn" class="button button-primary" type="button">Publish to GitHub</button>
+        <button id="deleteBtn" class="button button-danger hidden" type="button">Delete entry</button>
         <button id="copyJsonBtn" class="button button-ghost" type="button">Copy JSON</button>
       </div>
     </section>
@@ -82,6 +83,26 @@
         </div>
       </div>
       <pre id="resultBox"></pre>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="step">04</p>
+          <h2>Manage existing items</h2>
+        </div>
+        <button id="refreshBtn" class="button button-ghost" type="button">Refresh list</button>
+      </div>
+
+      <div class="manage-bar">
+        <select id="manageKind" aria-label="Manage content kind">
+          <option value="publication">Publications</option>
+          <option value="update">Updates</option>
+        </select>
+        <input id="manageSearch" type="search" placeholder="Search by title" />
+      </div>
+
+      <div id="itemList" class="item-list"></div>
     </section>
   </main>
 

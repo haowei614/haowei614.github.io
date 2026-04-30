@@ -5,7 +5,11 @@ const state = {
   token: localStorage.getItem(TOKEN_KEY) || '',
   kind: '',
   item: null,
-  files: []
+  files: [],
+  mode: 'new',
+  manageKind: 'publication',
+  manageSearch: '',
+  items: []
 };
 
 const els = {
@@ -23,14 +27,20 @@ const els = {
   previewKind: document.getElementById('previewKind'),
   previewForm: document.getElementById('previewForm'),
   publishBtn: document.getElementById('publishBtn'),
+  deleteBtn: document.getElementById('deleteBtn'),
   copyJsonBtn: document.getElementById('copyJsonBtn'),
   resultPanel: document.getElementById('resultPanel'),
-  resultBox: document.getElementById('resultBox')
+  resultBox: document.getElementById('resultBox'),
+  refreshBtn: document.getElementById('refreshBtn'),
+  manageKind: document.getElementById('manageKind'),
+  manageSearch: document.getElementById('manageSearch'),
+  itemList: document.getElementById('itemList')
 };
 
 function setBusy(button, busy, label) {
+  if (!button.dataset.label) button.dataset.label = button.textContent;
   button.disabled = busy;
-  if (label) button.textContent = busy ? label : button.dataset.label;
+  button.textContent = busy ? label : button.dataset.label;
 }
 
 function setResult(value, isError) {
@@ -44,10 +54,13 @@ function updateAuthUi() {
     els.authState.textContent = 'Signed in with GitHub';
     els.loginBtn.classList.add('hidden');
     els.logoutBtn.classList.remove('hidden');
+    loadItems().catch((err) => setResult(err.message, true));
   } else {
     els.authState.textContent = 'Not signed in';
     els.loginBtn.classList.remove('hidden');
     els.logoutBtn.classList.add('hidden');
+    state.items = [];
+    els.itemList.innerHTML = '<div class="item-empty">Sign in to load existing items.</div>';
   }
 }
 
@@ -85,6 +98,99 @@ function renderFiles() {
   els.fileList.innerHTML = state.files.map((file) => (
     `<div title="${escapeHtml(file.name)}">${escapeHtml(file.name)} · ${Math.ceil(file.size / 1024)} KB</div>`
   )).join('');
+}
+
+function kindLabel(kind) {
+  return kind === 'publication' ? 'Publication' : 'Update';
+}
+
+function itemSummary(item, kind) {
+  if (kind === 'publication') {
+    return [item.venue, item.year, (item.tags || []).slice(0, 3).join(', ')].filter(Boolean).join(' · ');
+  }
+  return [item.category, item.date, item.pinned ? 'pinned' : ''].filter(Boolean).join(' · ');
+}
+
+function renderItemList() {
+  const kind = state.manageKind;
+  const search = state.manageSearch.trim().toLowerCase();
+  const items = state.items.filter((item) => {
+    const title = String(item.title || '').toLowerCase();
+    return !search || title.includes(search);
+  });
+
+  if (!items.length) {
+    els.itemList.innerHTML = '<div class="item-empty">No items found.</div>';
+    return;
+  }
+
+  els.itemList.innerHTML = items.map((item) => `
+    <article class="item-card" data-id="${escapeHtml(item.id)}">
+      <div>
+        <p class="item-title">${escapeHtml(item.title || item.id)}</p>
+        <p class="item-meta">${escapeHtml(item.id)} · ${escapeHtml(itemSummary(item, kind))}</p>
+      </div>
+      <div class="item-actions">
+        <button class="button button-ghost" type="button" data-action="edit" data-id="${escapeHtml(item.id)}">Edit</button>
+        <button class="button button-danger" type="button" data-action="delete" data-id="${escapeHtml(item.id)}">Delete</button>
+      </div>
+    </article>
+  `).join('');
+}
+
+async function loadItems(kind = state.manageKind) {
+  if (!state.token) return;
+  const data = await api(`/items?kind=${encodeURIComponent(kind)}`);
+  state.manageKind = data.kind || kind;
+  state.items = Array.isArray(data.items) ? data.items : [];
+  els.manageKind.value = state.manageKind;
+  renderItemList();
+}
+
+function openExistingItem(item) {
+  const kind = item.year !== undefined || item.tags !== undefined || item.abstract !== undefined ? 'publication' : 'update';
+  state.kind = kind;
+  state.item = normalizeParsed(kind, item);
+  state.mode = 'edit';
+  state.files = [];
+  els.fileInput.value = '';
+  renderFiles();
+  els.kindSelect.value = kind;
+  renderPreview(kind, state.item);
+  setPreviewMode('edit');
+  els.resultPanel.classList.remove('hidden');
+  setResult(`Loaded ${kindLabel(kind).toLowerCase()} ${item.id} for editing.`);
+}
+
+async function deleteExistingItem() {
+  if (!state.token) throw new Error('Please login with GitHub first.');
+  if (!state.item || !state.item.id || !state.kind) throw new Error('Please load an existing entry first.');
+  const label = `${kindLabel(state.kind).toLowerCase()} ${state.item.id}`;
+  if (!window.confirm(`Delete ${label}? This will remove the entry from the site.`)) return;
+  const data = await api('/delete', {
+    method: 'POST',
+    body: JSON.stringify({
+      kind: state.kind,
+      id: state.item.id
+    })
+  });
+  setResult(data);
+  state.item = null;
+  state.kind = '';
+  state.mode = 'new';
+  state.files = [];
+  els.fileInput.value = '';
+  renderFiles();
+  els.previewPanel.classList.add('hidden');
+  await loadItems();
+}
+
+function setPreviewMode(mode) {
+  state.mode = mode;
+  const publishLabel = mode === 'edit' ? 'Save changes to GitHub' : 'Publish to GitHub';
+  els.publishBtn.textContent = publishLabel;
+  els.publishBtn.dataset.label = publishLabel;
+  els.deleteBtn.classList.toggle('hidden', mode !== 'edit');
 }
 
 function escapeHtml(str) {
@@ -169,7 +275,8 @@ function fieldHtml(name, label, value, options = {}) {
     const choices = options.choices || [];
     return `<div class="field${wide}"><label for="${name}">${label}</label><select id="${name}" name="${name}">${choices.map((choice) => `<option value="${escapeHtml(choice)}" ${choice === value ? 'selected' : ''}>${escapeHtml(choice)}</option>`).join('')}</select></div>`;
   }
-  return `<div class="field${wide}"><label for="${name}">${label}</label><input id="${name}" name="${name}" type="${options.type || 'text'}" value="${escapeHtml(value)}"></div>`;
+  const readonly = options.readonly ? ' readonly' : '';
+  return `<div class="field${wide}"><label for="${name}">${label}</label><input id="${name}" name="${name}" type="${options.type || 'text'}" value="${escapeHtml(value)}"${readonly}></div>`;
 }
 
 function renderPreview(kind, item) {
@@ -179,6 +286,7 @@ function renderPreview(kind, item) {
 
   if (kind === 'publication') {
     els.previewForm.innerHTML = [
+      fieldHtml('id', 'ID', state.item.id, { wide: true, readonly: true }),
       fieldHtml('title', 'Title', state.item.title, { wide: true }),
       fieldHtml('authors', 'Authors', state.item.authors, { wide: true, type: 'textarea', rows: 3 }),
       fieldHtml('venue', 'Venue', state.item.venue),
@@ -197,6 +305,7 @@ function renderPreview(kind, item) {
     ].join('');
   } else {
     els.previewForm.innerHTML = [
+      fieldHtml('id', 'ID', state.item.id, { wide: true, readonly: true }),
       fieldHtml('title', 'Title', state.item.title, { wide: true }),
       fieldHtml('date', 'Date', state.item.date, { type: 'date' }),
       fieldHtml('category', 'Category', state.item.category, { type: 'select', choices: ['event', 'talk', 'award', 'paper', 'job', 'other'] }),
@@ -209,6 +318,7 @@ function renderPreview(kind, item) {
   }
 
   els.previewPanel.classList.remove('hidden');
+  setPreviewMode(state.mode === 'edit' ? 'edit' : 'new');
   els.previewPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -277,6 +387,7 @@ async function parseSource() {
       text
     })
   });
+  state.mode = 'new';
   renderPreview(data.kind, data.item);
   if (data.warnings && data.warnings.length) setResult({ warnings: data.warnings });
 }
@@ -303,7 +414,7 @@ async function publishEntry() {
   if (!state.kind || !state.item) throw new Error('Please parse and review the entry first.');
   const item = collectPreview();
   const files = await Promise.all(state.files.map(fileToPayload));
-  const data = await api('/publish', {
+  const data = await api('/save', {
     method: 'POST',
     body: JSON.stringify({
       kind: state.kind,
@@ -312,6 +423,14 @@ async function publishEntry() {
     })
   });
   setResult(data);
+  state.item = data.item || item;
+  state.mode = 'edit';
+  renderPreview(state.kind, state.item);
+  setPreviewMode('edit');
+  state.files = [];
+  els.fileInput.value = '';
+  renderFiles();
+  await loadItems();
 }
 
 function copyJson() {
@@ -321,6 +440,7 @@ function copyJson() {
 }
 
 function fillSample(type) {
+  state.mode = 'new';
   if (type === 'publication') {
     els.kindSelect.value = 'publication';
     els.sourceText.value = 'Add a publication: title is "Automating Multi-view Requirements Engineering with Collaborative LLM Agents". Authors are Haowei Cheng, Jati H. Husen, Hironori Washizaki. Venue is MLSE Workshop 2025. Date is 2025-07-12. Tags are LLM, Requirements, Agents. Mark it as featured.';
@@ -342,6 +462,7 @@ els.fileInput.addEventListener('change', () => {
 });
 els.parseBtn.dataset.label = els.parseBtn.textContent;
 els.publishBtn.dataset.label = els.publishBtn.textContent;
+els.deleteBtn.dataset.label = els.deleteBtn.textContent;
 els.parseBtn.addEventListener('click', async () => {
   try {
     setBusy(els.parseBtn, true, 'Parsing...');
@@ -362,10 +483,57 @@ els.publishBtn.addEventListener('click', async () => {
     setBusy(els.publishBtn, false);
   }
 });
+els.deleteBtn.addEventListener('click', async () => {
+  try {
+    setBusy(els.deleteBtn, true, 'Deleting...');
+    await deleteExistingItem();
+  } catch (err) {
+    setResult(err.message, true);
+  } finally {
+    setBusy(els.deleteBtn, false);
+  }
+});
 els.copyJsonBtn.addEventListener('click', copyJson);
 els.samplePubBtn.addEventListener('click', () => fillSample('publication'));
 els.sampleNewsBtn.addEventListener('click', () => fillSample('update'));
+els.refreshBtn.addEventListener('click', async () => {
+  try {
+    setBusy(els.refreshBtn, true, 'Refreshing...');
+    await loadItems();
+    setResult('Refreshed item list.');
+  } catch (err) {
+    setResult(err.message, true);
+  } finally {
+    setBusy(els.refreshBtn, false);
+  }
+});
+els.manageKind.addEventListener('change', async () => {
+  state.manageKind = els.manageKind.value;
+  await loadItems();
+});
+els.manageSearch.addEventListener('input', () => {
+  state.manageSearch = els.manageSearch.value;
+  renderItemList();
+});
+els.itemList.addEventListener('click', async (event) => {
+  const action = event.target && event.target.dataset && event.target.dataset.action;
+  const id = event.target && event.target.dataset && event.target.dataset.id;
+  if (!action || !id) return;
+  const item = state.items.find((entry) => entry.id === id);
+  if (!item) return;
+  if (action === 'edit') {
+    openExistingItem(item);
+  } else if (action === 'delete') {
+    state.kind = item.year !== undefined || item.tags !== undefined || item.abstract !== undefined ? 'publication' : 'update';
+    state.item = normalizeParsed(state.kind, item);
+    state.mode = 'edit';
+    renderPreview(state.kind, state.item);
+    setPreviewMode('edit');
+    await deleteExistingItem();
+  }
+});
 window.addEventListener('message', handleAuthMessage);
 
 updateAuthUi();
 renderFiles();
+loadItems().catch((err) => setResult(err.message, true));

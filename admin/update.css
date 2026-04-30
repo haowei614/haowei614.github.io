@@ -244,6 +244,12 @@ select:focus {
   color: #21180a;
 }
 
+.button-danger {
+  border-color: rgba(240, 141, 141, 0.55);
+  background: rgba(240, 141, 141, 0.12);
+  color: #ffc0c0;
+}
+
 .button-ghost {
   background: rgba(238, 232, 216, 0.04);
   color: var(--text);
@@ -269,6 +275,59 @@ select:focus {
   color: #8ddcc4;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.74rem;
+}
+
+.manage-bar {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.item-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.item-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(238, 232, 216, 0.035);
+}
+
+.item-card:hover {
+  border-color: var(--line-strong);
+}
+
+.item-title {
+  margin: 0 0 0.25rem;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem;
+}
+
+.item-meta {
+  margin: 0;
+  color: var(--subtle);
+  font-size: 0.86rem;
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.item-actions .button {
+  min-height: 36px;
+}
+
+.item-empty {
+  color: var(--subtle);
+  padding: 0.5rem 0;
 }
 
 .form-grid {
@@ -327,7 +386,12 @@ pre {
 @media (max-width: 820px) {
   .hero,
   .upload-row,
-  .form-grid {
+  .form-grid,
+  .manage-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .item-card {
     grid-template-columns: 1fr;
   }
 

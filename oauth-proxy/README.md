@@ -6,6 +6,7 @@ This folder contains a Cloudflare Worker used by:
 - Smart Update at `/admin/update.html`
 
 Smart Update lets you paste a natural-language publication/activity update, optionally upload PDFs or images, preview normalized JSON, and publish it to GitHub Pages without editing code manually.
+It also supports loading existing entries, editing them in place, and deleting them from the site.
 
 ## 1) Create GitHub OAuth App
 
@@ -80,6 +81,12 @@ Secrets:
 
 If `OPENAI_API_KEY` is missing, Smart Update still works with a simple fallback parser, but you should review the preview carefully.
 
+If you want the backend editor to access existing items, update them, and delete them, the Worker also exposes:
+
+- `GET /items?kind=publication|update`
+- `POST /save`
+- `POST /delete`
+
 If you change the Worker URL, update `WORKER_BASE` in:
 
 ```text
@@ -94,6 +101,8 @@ Open:
 ```text
 https://haowei614.github.io/admin/update.html
 ```
+
+You can also add a shortcut button on the homepage to this path, which is already wired in the latest site version.
 
 Workflow:
 

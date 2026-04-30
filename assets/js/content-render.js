@@ -100,7 +100,7 @@
     const homeEl = document.getElementById('home-publications');
     if (homeEl) {
       const featured = items.filter(function (x) { return x.featured; });
-      const pick = (featured.length >= 3 ? featured : items).slice(0, 3);
+      const pick = (featured.length ? featured : items).slice(0, 3);
       homeEl.innerHTML = pick.map(function (x) { return publicationCard(x, true); }).join('');
     }
 
@@ -127,8 +127,8 @@
     const homeEl = document.getElementById('home-updates');
     if (homeEl) {
       const pinned = items.filter(function (x) { return x.pinned; });
-      const combined = pinned.concat(items.filter(function (x) { return !x.pinned; }));
-      homeEl.innerHTML = combined.slice(0, 5).map(function (x) { return updateCard(x, true); }).join('');
+      const pick = (pinned.length ? pinned : items).slice(0, 4);
+      homeEl.innerHTML = pick.map(function (x) { return updateCard(x, true); }).join('');
     }
 
     const fullEl = document.getElementById('updates-listing');
