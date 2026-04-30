@@ -1,28 +1,6 @@
 {
   "items": [
     {
-      "id": "pub-2025-004",
-      "title": "Automating Multi-view Requirements Engineering with Collaborative LLM Agents",
-      "authors": "Haowei Cheng,Jati H. Husen,Hironori Washizaki",
-      "venue": "MLSE Workshop 2025",
-      "year": 2025,
-      "date": "2025-07-12",
-      "tags": [
-        "LLM",
-        "Requirements",
-        "Agents"
-      ],
-      "abstract": "",
-      "pdf": "",
-      "poster": "",
-      "code": "",
-      "project": "",
-      "doi": "",
-      "externalUrl": "",
-      "featured": true,
-      "status": "published"
-    },
-    {
       "id": "pub-2025-005",
       "title": "Automating Multi-view Requirements Engineering with Collaborative LLM Agents",
       "authors": "Haowei Cheng,Jati H. Husen,Hironori Washizaki",
@@ -83,6 +61,8 @@
       "poster": "",
       "code": "",
       "project": "",
+      "doi": "",
+      "externalUrl": "",
       "featured": true,
       "status": "published"
     },
@@ -103,6 +83,8 @@
       "poster": "",
       "code": "",
       "project": "",
+      "doi": "",
+      "externalUrl": "",
       "featured": false,
       "status": "published"
     },
@@ -123,6 +105,8 @@
       "poster": "",
       "code": "",
       "project": "",
+      "doi": "",
+      "externalUrl": "",
       "featured": false,
       "status": "published"
     },
@@ -143,6 +127,8 @@
       "poster": "/assets/pdf/D1/SLR_Poster.pdf",
       "code": "",
       "project": "",
+      "doi": "",
+      "externalUrl": "",
       "featured": true,
       "status": "published"
     },
@@ -163,6 +149,8 @@
       "poster": "/assets/pdf/deepfakes/deepfake_detection.pdf",
       "code": "",
       "project": "",
+      "doi": "",
+      "externalUrl": "",
       "featured": true,
       "status": "published"
     },
@@ -182,6 +170,8 @@
       "poster": "/assets/pdf/deepfakes/JHES_Haowei_Slide.pdf",
       "code": "",
       "project": "",
+      "doi": "",
+      "externalUrl": "",
       "featured": false,
       "status": "published"
     }
