@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Site Update | Haowei Cheng</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./update.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Smart Update Module</p>
+        <h1>Update papers and activities without editing code.</h1>
+        <p class="lede">
+          Paste a plain-language note, optionally attach PDFs or images, review the normalized entry, then publish it to GitHub Pages.
+        </p>
+      </div>
+      <div class="auth-card">
+        <p id="authState">Not signed in</p>
+        <button id="loginBtn" class="button button-primary" type="button">Login with GitHub</button>
+        <button id="logoutBtn" class="button button-ghost hidden" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="step">01</p>
+          <h2>Describe the update</h2>
+        </div>
+        <select id="kindSelect" aria-label="Update type">
+          <option value="auto">Auto detect</option>
+          <option value="publication">Publication</option>
+          <option value="update">Activity / News</option>
+        </select>
+      </div>
+
+      <textarea id="sourceText" rows="8" placeholder="Example: Add a paper accepted by ICSE 2026. Title: ..., authors: ..., venue: ..., date: 2026-04-30, tags: LLM, Requirements, Reliability."></textarea>
+
+      <div class="upload-row">
+        <label class="file-drop">
+          <input id="fileInput" type="file" multiple accept=".pdf,image/*" />
+          <span>Attach PDF or images</span>
+          <small>Publication: PDF becomes the paper link; image becomes poster. Activity: images become news photos.</small>
+        </label>
+        <div id="fileList" class="file-list"></div>
+      </div>
+
+      <div class="actions">
+        <button id="parseBtn" class="button button-primary" type="button">Parse & Preview</button>
+        <button id="samplePubBtn" class="button button-ghost" type="button">Sample paper</button>
+        <button id="sampleNewsBtn" class="button button-ghost" type="button">Sample activity</button>
+      </div>
+    </section>
+
+    <section id="previewPanel" class="panel hidden">
+      <div class="panel-head">
+        <div>
+          <p class="step">02</p>
+          <h2>Review normalized entry</h2>
+        </div>
+        <span id="previewKind" class="pill"></span>
+      </div>
+
+      <form id="previewForm" class="form-grid"></form>
+
+      <div class="actions">
+        <button id="publishBtn" class="button button-primary" type="button">Publish to GitHub</button>
+        <button id="copyJsonBtn" class="button button-ghost" type="button">Copy JSON</button>
+      </div>
+    </section>
+
+    <section id="resultPanel" class="panel hidden">
+      <div class="panel-head">
+        <div>
+          <p class="step">03</p>
+          <h2>Result</h2>
+        </div>
+      </div>
+      <pre id="resultBox"></pre>
+    </section>
+  </main>
+
+  <script src="./update.js"></script>
+</body>
+</html>

@@ -2,55 +2,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Haowei Cheng - Academic Portfolio</title>
-  <meta name="description" content="This is the personal website of Haowei Cheng" />
+  <meta name="description" content="Academic portfolio of Haowei Cheng, Ph.D. candidate at Waseda University working on software engineering, AI, and reliable smart software systems." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0f;
-      --surface: #111118;
-      --border: rgba(255,255,255,0.07);
-      --text: #e8e8f0;
-      --muted: #7a7a9a;
-      --accent: #7c6af7;
-      --accent2: #4fd1c5;
-      --accent3: #f6ad55;
-      --glow: rgba(124,106,247,0.15);
+      --bg: #0b0d10;
+      --bg-soft: #10151a;
+      --surface: #15191f;
+      --surface-elev: #1a1f26;
+      --line: rgba(238, 232, 216, 0.12);
+      --line-strong: rgba(238, 232, 216, 0.22);
+      --text: #f1eee7;
+      --muted: #a8adb3;
+      --subtle: #747d86;
+      --accent: #d7a84d;
+      --accent-ink: #20180a;
+      --accent2: #66c2a5;
+      --accent3: #8fa8ff;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
 
     body {
-      background: var(--bg);
+      background:
+        linear-gradient(180deg, #0b0d10 0%, #10151a 46%, #0b0d10 100%);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
       line-height: 1.7;
       overflow-x: hidden;
-    }
-
-    #bg-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
+      text-rendering: optimizeLegibility;
     }
 
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-      pointer-events: none;
       z-index: 1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(238, 232, 216, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238, 232, 216, 0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.18) 72%, transparent);
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.18) 72%, transparent);
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.2;
+    }
+
+    .cursor-glow {
+      display: none;
     }
 
     nav {
@@ -62,445 +98,614 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.2rem 3rem;
-      background: rgba(10,10,15,0.7);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      transition: all 0.3s ease;
+      padding: 1rem 3rem;
+      background: rgba(11, 13, 16, 0.78);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+      transition: background 0.25s ease, padding 0.25s ease, border-color 0.25s ease;
     }
 
     nav.scrolled {
-      padding: 0.9rem 3rem;
-      background: rgba(10,10,15,0.9);
+      padding-top: 0.78rem;
+      padding-bottom: 0.78rem;
+      background: rgba(11, 13, 16, 0.92);
+      border-color: var(--line-strong);
     }
 
     .nav-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.72rem;
       color: var(--text);
       text-decoration: none;
-      letter-spacing: 0.02em;
+      font-weight: 500;
+    }
+
+    .logo-mark {
+      display: inline-grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border: 1px solid rgba(215, 168, 77, 0.38);
+      border-radius: 8px;
+      background: rgba(215, 168, 77, 0.08);
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+    }
+
+    .logo-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      line-height: 1;
     }
 
     .nav-links {
       display: flex;
-      gap: 2.5rem;
+      gap: 0.35rem;
+      align-items: center;
       list-style: none;
     }
 
     .nav-links a {
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 0.9rem;
+      border-radius: 8px;
       color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 500;
       text-decoration: none;
-      transition: color 0.25s;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(238, 232, 216, 0.06);
+    }
+
+    .nav-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(238, 232, 216, 0.04);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .nav-toggle span,
+    .nav-toggle span::before,
+    .nav-toggle span::after {
+      display: block;
+      width: 18px;
+      height: 2px;
+      border-radius: 999px;
+      background: currentColor;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .nav-toggle span {
       position: relative;
     }
 
-    .nav-links a::after {
+    .nav-toggle span::before,
+    .nav-toggle span::after {
       content: '';
       position: absolute;
-      bottom: -4px;
       left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--accent);
-      transition: width 0.3s ease;
     }
 
-    .nav-links a:hover { color: var(--text); }
-    .nav-links a:hover::after { width: 100%; }
+    .nav-toggle span::before { top: -6px; }
+    .nav-toggle span::after { top: 6px; }
 
-    main { position: relative; z-index: 2; }
+    .nav-open .nav-toggle span { background: transparent; }
+    .nav-open .nav-toggle span::before { transform: translateY(6px) rotate(45deg); }
+    .nav-open .nav-toggle span::after { transform: translateY(-6px) rotate(-45deg); }
+
+    main {
+      position: relative;
+      z-index: 2;
+    }
 
     section {
-      min-height: 100vh;
-      padding: 8rem 3rem 5rem;
-      max-width: 1100px;
+      width: min(1180px, calc(100% - 3rem));
       margin: 0 auto;
+      padding: 6.4rem 0;
+      scroll-margin-top: 92px;
     }
 
     #hero {
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 4rem;
-      align-items: center;
+      width: min(1240px, calc(100% - 3rem));
       min-height: 100vh;
-      padding-top: 10rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+      gap: 5rem;
+      align-items: center;
+      padding-top: 8.8rem;
+      padding-bottom: 5.2rem;
+    }
+
+    .hero-content {
+      max-width: 700px;
     }
 
     .hero-meta {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 1.3rem;
       color: var(--accent);
-      letter-spacing: 0.15em;
-      margin-bottom: 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
       opacity: 0;
-      animation: fadeUp 0.8s 0.2s forwards;
+      animation: fadeUp 0.7s 0.1s forwards;
+    }
+
+    .hero-meta::before {
+      content: '';
+      width: 34px;
+      height: 1px;
+      background: var(--accent);
     }
 
     .hero-name {
+      max-width: 720px;
+      margin-bottom: 1.45rem;
       font-family: 'DM Serif Display', serif;
-      font-size: clamp(3rem, 6vw, 5.5rem);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.5rem;
+      font-size: 5.45rem;
+      line-height: 0.98;
+      font-weight: 400;
       opacity: 0;
-      animation: fadeUp 0.8s 0.4s forwards;
+      animation: fadeUp 0.7s 0.2s forwards;
     }
 
     .hero-name em {
-      font-style: italic;
       color: var(--accent);
+      font-style: italic;
     }
 
     .hero-desc {
-      font-size: 1.05rem;
+      max-width: 650px;
+      margin-bottom: 2rem;
       color: var(--muted);
-      max-width: 520px;
-      margin-bottom: 2.5rem;
+      font-size: 1.06rem;
       opacity: 0;
-      animation: fadeUp 0.8s 0.6s forwards;
+      animation: fadeUp 0.7s 0.3s forwards;
     }
 
-    .hero-desc strong { color: var(--text); font-weight: 500; }
-    .hero-desc a { color: var(--accent2); text-decoration: none; border-bottom: 1px solid rgba(79,209,197,0.3); transition: border-color 0.2s; }
-    .hero-desc a:hover { border-color: var(--accent2); }
+    .hero-desc strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .hero-desc a,
+    .news-text a,
+    footer a {
+      color: var(--accent2);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(102, 194, 165, 0.35);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .hero-desc a:hover,
+    .news-text a:hover,
+    footer a:hover {
+      color: #85d8bf;
+      border-color: currentColor;
+    }
+
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-bottom: 2.2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.4s forwards;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(238, 232, 216, 0.045);
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 500;
+    }
 
     .hero-links {
       display: flex;
-      gap: 1rem;
+      gap: 0.85rem;
       flex-wrap: wrap;
       opacity: 0;
-      animation: fadeUp 0.8s 0.8s forwards;
+      animation: fadeUp 0.7s 0.5s forwards;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 0.5rem;
-      padding: 0.7rem 1.5rem;
-      border-radius: 6px;
-      font-size: 0.83rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
+      min-height: 44px;
+      padding: 0 1.1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
       text-decoration: none;
-      transition: all 0.25s;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
       cursor: pointer;
-      border: none;
     }
 
     .btn-primary {
+      border: 1px solid rgba(215, 168, 77, 0.65);
       background: var(--accent);
-      color: #fff;
+      color: var(--accent-ink);
+      box-shadow: 0 14px 36px rgba(215, 168, 77, 0.16);
     }
 
     .btn-primary:hover {
-      background: #9585f8;
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(124,106,247,0.4);
+      box-shadow: 0 18px 44px rgba(215, 168, 77, 0.24);
+      background: #e1b864;
     }
 
     .btn-outline {
-      background: transparent;
+      border: 1px solid var(--line-strong);
+      background: rgba(238, 232, 216, 0.035);
       color: var(--text);
-      border: 1px solid var(--border);
     }
 
     .btn-outline:hover {
-      border-color: rgba(255,255,255,0.25);
       transform: translateY(-2px);
-      background: rgba(255,255,255,0.04);
+      border-color: rgba(238, 232, 216, 0.36);
+      background: rgba(238, 232, 216, 0.075);
     }
 
     .hero-photo-wrap {
       position: relative;
+      padding: 0.85rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(238, 232, 216, 0.08), rgba(238, 232, 216, 0.02));
+      box-shadow: var(--shadow);
       opacity: 0;
-      animation: fadeIn 1s 0.5s forwards;
+      animation: fadeIn 0.8s 0.35s forwards;
     }
 
     .photo-ring {
       position: absolute;
-      inset: -20px;
-      border-radius: 50%;
-      border: 1px solid rgba(124,106,247,0.2);
-      animation: spin 20s linear infinite;
-    }
-
-    .photo-ring::before {
-      content: '';
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      top: 50%;
-      left: -4px;
-      box-shadow: 0 0 12px var(--accent);
+      inset: 1.35rem;
+      border: 1px solid rgba(215, 168, 77, 0.28);
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: 2;
     }
 
     .hero-photo {
-      width: 100%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--surface);
-      box-shadow: 0 0 60px rgba(124,106,247,0.2), 0 20px 80px rgba(0,0,0,0.6);
+      position: relative;
+      z-index: 1;
       display: block;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      object-position: center 18%;
+      border-radius: 6px;
+      filter: saturate(0.92) contrast(1.03);
     }
 
     .hero-badges {
-      position: absolute;
-      bottom: -10px;
-      right: -10px;
-      display: flex;
-      gap: 0.5rem;
-      flex-direction: column;
-      align-items: flex-end;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.55rem;
+      margin-top: 0.8rem;
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.35rem 0.8rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 0.72rem;
-      font-family: 'JetBrains Mono', monospace;
+      justify-content: space-between;
+      gap: 0.55rem;
+      min-height: 36px;
+      padding: 0 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(11, 13, 16, 0.62);
       color: var(--muted);
-      backdrop-filter: blur(10px);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.73rem;
     }
 
     .badge-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
       border-radius: 50%;
       background: var(--accent2);
-      box-shadow: 0 0 6px var(--accent2);
-      animation: pulse 2s infinite;
+      box-shadow: 0 0 0 4px rgba(102, 194, 165, 0.12);
     }
 
     .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
+      margin-bottom: 0.75rem;
       color: var(--accent);
-      letter-spacing: 0.2em;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 500;
       text-transform: uppercase;
-      margin-bottom: 0.8rem;
     }
 
     .section-title {
+      max-width: 680px;
+      margin-bottom: 2.2rem;
       font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1.1;
-      margin-bottom: 3rem;
-      letter-spacing: -0.02em;
+      font-size: 3rem;
+      line-height: 1.08;
+      font-weight: 400;
     }
 
-    #about { padding-top: 6rem; }
+    .section-intro {
+      max-width: 720px;
+      margin-top: -1.35rem;
+      margin-bottom: 2.35rem;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    #about,
+    #publications,
+    #projects,
+    #news {
+      border-top: 1px solid var(--line);
+    }
 
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
     }
 
-    .about-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-      transition: all 0.35s ease;
+    .about-card,
+    .project-card,
+    .pub-item {
       position: relative;
       overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(21, 25, 31, 0.78);
+      box-shadow: 0 14px 48px rgba(0, 0, 0, 0.18);
+      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
     }
 
-    .about-card::before {
+    .about-card::before,
+    .project-card::before,
+    .pub-item::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.35s ease;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      opacity: 0.72;
     }
 
-    .about-card:hover {
-      border-color: rgba(124,106,247,0.3);
+    .about-card {
+      padding: 1.35rem;
+    }
+
+    .about-card:hover,
+    .project-card:hover,
+    .pub-item:hover {
       transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border-color: rgba(238, 232, 216, 0.28);
+      background: rgba(26, 31, 38, 0.92);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
     }
 
-    .about-card:hover::before { transform: scaleX(1); }
+    .card-icon,
+    .project-icon {
+      display: inline-grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(215, 168, 77, 0.28);
+      border-radius: 8px;
+      background: rgba(215, 168, 77, 0.08);
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
 
-    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
-    .card-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 0.8rem; }
-    .card-body { color: var(--muted); font-size: 0.92rem; line-height: 1.8; }
+    .card-title,
+    .project-title {
+      margin-bottom: 0.7rem;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      line-height: 1.2;
+      font-weight: 400;
+    }
 
-    #publications { border-top: 1px solid var(--border); }
+    .card-body,
+    .project-desc {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.75;
+    }
 
-    .pub-list { display: flex; flex-direction: column; gap: 1.5rem; }
+    .pub-list {
+      display: grid;
+      gap: 1rem;
+    }
 
     .pub-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.8rem 2rem;
       display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 1.5rem;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 1.25rem;
       align-items: start;
-      transition: all 0.3s;
-      text-decoration: none;
+      padding: 1.35rem;
       color: inherit;
-      cursor: pointer;
+      text-decoration: none;
     }
 
     .pub-item:hover {
-      border-color: rgba(124,106,247,0.35);
-      background: rgba(124,106,247,0.04);
-      transform: translateX(6px);
+      transform: translateX(4px);
     }
 
     .pub-year {
+      display: inline-flex;
+      justify-content: center;
+      min-width: 72px;
+      padding: 0.28rem 0.62rem;
+      border: 1px solid rgba(215, 168, 77, 0.28);
+      border-radius: 8px;
+      background: rgba(215, 168, 77, 0.08);
+      color: var(--accent);
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--accent3);
-      padding: 0.3rem 0.7rem;
-      background: rgba(246,173,85,0.1);
-      border: 1px solid rgba(246,173,85,0.2);
-      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 500;
       white-space: nowrap;
-      align-self: start;
-      margin-top: 0.2rem;
     }
 
     .pub-title {
+      margin-bottom: 0.35rem;
       font-family: 'DM Serif Display', serif;
-      font-size: 1.05rem;
-      margin-bottom: 0.4rem;
-      line-height: 1.4;
+      font-size: 1.15rem;
+      line-height: 1.35;
+      font-weight: 400;
     }
 
     .pub-venue {
-      font-size: 0.82rem;
       color: var(--muted);
+      font-size: 0.86rem;
       font-style: italic;
     }
 
-    .pub-tags { display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
-
-    .tag {
-      font-size: 0.7rem;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      background: rgba(79,209,197,0.1);
-      border: 1px solid rgba(79,209,197,0.2);
-      color: var(--accent2);
+    .pub-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.85rem;
     }
 
-    #projects { border-top: 1px solid var(--border); }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 0.55rem;
+      border: 1px solid rgba(102, 194, 165, 0.25);
+      border-radius: 999px;
+      background: rgba(102, 194, 165, 0.08);
+      color: #8ddcc4;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+    }
 
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
     }
 
     .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.8rem;
-      transition: all 0.3s;
       display: flex;
+      min-height: 250px;
       flex-direction: column;
-      gap: 0.8rem;
+      padding: 1.35rem;
     }
 
-    .project-card:hover {
-      border-color: rgba(124,106,247,0.35);
-      transform: translateY(-6px);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4), 0 0 30px rgba(124,106,247,0.08);
+    .project-desc {
+      flex: 1;
+      margin-bottom: 1.2rem;
     }
-
-    .project-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background: var(--glow);
-      border: 1px solid rgba(124,106,247,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-    }
-
-    .project-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
-    .project-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; flex: 1; }
 
     .project-link {
-      font-size: 0.78rem;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--accent);
-      text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
-      transition: gap 0.2s;
+      gap: 0.35rem;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-decoration: none;
     }
 
-    .project-link:hover { gap: 0.6rem; }
+    .project-link::after {
+      content: '->';
+      transition: transform 0.2s ease;
+    }
 
-    #news { border-top: 1px solid var(--border); }
+    .project-link:hover::after {
+      transform: translateX(4px);
+    }
 
-    .news-list { display: flex; flex-direction: column; }
+    .news-list {
+      position: relative;
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--line);
+    }
 
     .news-item {
+      position: relative;
       display: grid;
-      grid-template-columns: 140px 1fr;
-      gap: 2rem;
-      padding: 1.5rem 0;
-      border-bottom: 1px solid var(--border);
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 1.6rem;
+      padding: 1.35rem 0;
+      border-bottom: 1px solid var(--line);
       align-items: baseline;
       opacity: 0;
-      transform: translateX(-20px);
-      transition: all 0.5s;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
-    .news-item.visible { opacity: 1; transform: translateX(0); }
+    .news-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     .news-date {
+      color: var(--subtle);
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--muted);
+      font-size: 0.76rem;
+      white-space: nowrap;
     }
 
-    .news-text { font-size: 0.92rem; color: var(--text); }
-    .news-text a { color: var(--accent2); text-decoration: none; border-bottom: 1px solid rgba(79,209,197,0.3); }
+    .news-text {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .news-text strong {
+      color: var(--text);
+      font-weight: 600;
+    }
 
     footer {
       position: relative;
       z-index: 2;
-      border-top: 1px solid var(--border);
-      padding: 3rem;
+      border-top: 1px solid var(--line);
+      padding: 2.5rem 1.5rem;
       text-align: center;
-      color: var(--muted);
-      font-size: 0.82rem;
+      color: var(--subtle);
       font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
     }
 
     .reveal {
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
     }
 
     .reveal.visible {
@@ -509,66 +714,172 @@
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
+    @media (max-width: 1040px) {
+      #hero {
+        grid-template-columns: 1fr 340px;
+        gap: 3rem;
+      }
+
+      .hero-name {
+        font-size: 4.5rem;
+      }
+
+      .about-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+    @media (max-width: 820px) {
+      nav {
+        padding: 0.85rem 1rem;
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: calc(100% + 1px);
+        left: 1rem;
+        right: 1rem;
+        display: none;
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+        padding: 0.5rem;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(11, 13, 16, 0.96);
+        box-shadow: var(--shadow);
+      }
+
+      .nav-open .nav-links {
+        display: grid;
+      }
+
+      .nav-links a {
+        justify-content: flex-start;
+        width: 100%;
+        padding: 0 0.85rem;
+      }
+
+      section,
+      #hero {
+        width: min(100% - 2rem, 680px);
+      }
+
+      #hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        padding-top: 7rem;
+      }
+
+      .hero-photo-wrap {
+        max-width: 360px;
+      }
+
+      .hero-name {
+        font-size: 3.6rem;
+      }
+
+      .section-title {
+        font-size: 2.35rem;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+    @media (max-width: 560px) {
+      .logo-mark {
+        width: 30px;
+        height: 30px;
+      }
+
+      .logo-text {
+        font-size: 1.12rem;
+      }
+
+      section {
+        padding: 4.8rem 0;
+      }
+
+      .hero-name {
+        font-size: 3rem;
+      }
+
+      .hero-desc {
+        font-size: 1rem;
+      }
+
+      .hero-links {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .about-grid,
+      .pub-item,
+      .news-item {
+        grid-template-columns: 1fr;
+      }
+
+      .pub-item,
+      .news-item {
+        gap: 0.8rem;
+      }
+
+      .photo-ring {
+        inset: 1rem;
+      }
     }
 
-    .float { animation: float 6s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
 
-    .cursor-glow {
-      position: fixed;
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(124,106,247,0.06) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 1;
-      transform: translate(-50%, -50%);
-      transition: left 0.3s ease, top 0.3s ease;
-    }
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
 
-    @media (max-width: 900px) {
-      #hero { grid-template-columns: 1fr; gap: 3rem; }
-      .hero-photo-wrap { width: 220px; margin: 0 auto; }
-      .about-grid { grid-template-columns: 1fr; }
-      .projects-grid { grid-template-columns: 1fr 1fr; }
-      nav { padding: 1rem 1.5rem; }
-      section { padding: 6rem 1.5rem 4rem; }
-    }
-
-    @media (max-width: 600px) {
-      .projects-grid { grid-template-columns: 1fr; }
-      .nav-links { gap: 1.2rem; }
+      #bg-canvas {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
-<div class="cursor-glow" id="cursorGlow"></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
 <nav id="navbar">
-  <a href="#hero" class="nav-logo">Haowei Cheng</a>
+  <a href="#hero" class="nav-logo" aria-label="Haowei Cheng home">
+    <span class="logo-mark">HC</span>
+    <span class="logo-text">Haowei Cheng</span>
+  </a>
+  <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+    <span aria-hidden="true"></span>
+  </button>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#publications">Publications</a></li>
@@ -580,40 +891,45 @@
 <main>
   <section id="hero">
     <div class="hero-content">
-      <p class="hero-meta">// Ph.D. Candidate · Software Engineering & AI</p>
+      <p class="hero-meta">Ph.D. Candidate / Software Engineering &amp; AI</p>
       <h1 class="hero-name">
         Haowei <em>Cheng</em>
       </h1>
       <p class="hero-desc">
         I am a <strong>Ph.D. student</strong> at the Department of Computer Science and Communications Engineering,
-        <a href="https://www.waseda.jp/" target="_blank" rel="noopener">Waseda University</a>.
-        I am supervised by Prof. <a href="http://www.washi.cs.waseda.ac.jp/washizaki/" target="_blank" rel="noopener">Hironori Washizaki</a>.
+        <a href="https://www.waseda.jp/" target="_blank" rel="noopener">Waseda University</a>,
+        supervised by Prof. <a href="http://www.washi.cs.waseda.ac.jp/washizaki/" target="_blank" rel="noopener">Hironori Washizaki</a>.
         My research focuses on <strong>software engineering and AI</strong>, especially reliability in smart software systems through Generative AI-driven requirements engineering.
       </p>
+      <div class="hero-chips" aria-label="Research focus areas">
+        <span class="chip">GenAI for Requirements Engineering</span>
+        <span class="chip">Reliable Software Systems</span>
+        <span class="chip">Deep-Fake Speech Detection</span>
+      </div>
       <div class="hero-links">
         <a href="mailto:haowei.cheng@fuji.waseda.jp" class="btn btn-primary">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           Contact
         </a>
         <a href="/assets/pdf/CV-Haowei%20CHENG.pdf" class="btn btn-outline" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           CV / Resume
         </a>
         <a href="https://www.github.com/haowei614" class="btn btn-outline" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
         </a>
       </div>
     </div>
 
-    <div class="hero-photo-wrap float">
+    <div class="hero-photo-wrap">
       <div class="photo-ring"></div>
       <img src="/assets/img/prof_pic.jpg" alt="Haowei Cheng" class="hero-photo">
       <div class="hero-badges">
         <div class="badge">
+          <span>Open to collaborate</span>
           <span class="badge-dot"></span>
-          Open to collaborate
-    </div>
+        </div>
         <div class="badge">Shinjuku, Tokyo, Japan</div>
       </div>
     </div>
@@ -622,6 +938,7 @@
   <section id="about">
     <p class="section-label reveal">// 01. research interests</p>
     <h2 class="section-title reveal">What I Work On</h2>
+    <p class="section-intro reveal">My work connects requirements engineering, software reliability, and applied AI methods for practical smart software systems.</p>
     <div class="about-grid">
       <div class="about-card reveal">
         <div class="card-icon">AI</div>
@@ -640,7 +957,7 @@
       </div>
       <div class="about-card reveal">
         <div class="card-icon">KG</div>
-        <h3 class="card-title">Knowledge Graphs & ML</h3>
+        <h3 class="card-title">Knowledge Graphs &amp; ML</h3>
         <p class="card-body">Exploring knowledge graph and machine learning methods as a complementary line of research, building on prior work from JAIST collaborations.</p>
       </div>
     </div>
@@ -649,32 +966,59 @@
   <section id="publications">
     <p class="section-label reveal">// 02. publications</p>
     <h2 class="section-title reveal">Selected Papers</h2>
-    <div class="pub-list" id="home-publications"></div>
+    <p class="section-intro reveal">A short list of recent and representative work. The full publication page keeps PDF links and additional metadata.</p>
+    <div class="pub-list" id="home-publications">
+      <a class="pub-item reveal" href="/assets/pdf/D2/IEEE_HTC.pdf" target="_blank" rel="noopener">
+        <span class="pub-year">2025</span>
+        <div>
+          <p class="pub-title">Translating Requirements into CARLA Executable Scripts: an LLM-Driven Automated Scenario Realization</p>
+          <p class="pub-venue">IEEE R10 HTC 2025</p>
+          <div class="pub-tags"><span class="tag">LLM</span><span class="tag">Requirements</span><span class="tag">CARLA</span></div>
+        </div>
+      </a>
+      <a class="pub-item reveal" href="/assets/pdf/D1/SLR.pdf" target="_blank" rel="noopener">
+        <span class="pub-year">2024</span>
+        <div>
+          <p class="pub-title">Generative AI for Requirements Engineering: A Systematic Literature Review</p>
+          <p class="pub-venue">arXiv</p>
+          <div class="pub-tags"><span class="tag">GenAI</span><span class="tag">SLR</span><span class="tag">Requirements</span></div>
+        </div>
+      </a>
+      <a class="pub-item reveal" href="/assets/pdf/deepfakes/Analysis_of_Spectro-Temporal_Modulation_Representation_for_Deep-Fake_Speech_Detection.pdf" target="_blank" rel="noopener">
+        <span class="pub-year">2023</span>
+        <div>
+          <p class="pub-title">Analysis of Spectro-Temporal Modulation Representation for Deep-Fake Speech Detection</p>
+          <p class="pub-venue">APSIPA ASC 2023</p>
+          <div class="pub-tags"><span class="tag">DeepFake</span><span class="tag">Speech</span><span class="tag">Audio</span></div>
+        </div>
+      </a>
+    </div>
   </section>
 
   <section id="projects">
     <p class="section-label reveal">// 03. projects</p>
     <h2 class="section-title reveal">Open Projects</h2>
+    <p class="section-intro reveal">Project pages collect work-in-progress notes, resources, and demos around the main research threads.</p>
     <div class="projects-grid">
       <div class="project-card reveal">
         <div class="project-icon">RE</div>
         <h3 class="project-title">Requirements Engineering</h3>
         <p class="project-desc">A focused project page on requirements engineering methods and practices for software development.</p>
-        <a href="/projects/re/" class="project-link">View project page -></a>
+        <a href="/projects/re/" class="project-link">View project page</a>
       </div>
 
       <div class="project-card reveal">
         <div class="project-icon">DF</div>
         <h3 class="project-title">Deepfake Speech</h3>
         <p class="project-desc">Research and resources related to deepfake speech generation and detection, including demos and publications.</p>
-        <a href="/projects/df/" class="project-link">View project page -></a>
-    </div>
-  
+        <a href="/projects/df/" class="project-link">View project page</a>
+      </div>
+
       <div class="project-card reveal">
         <div class="project-icon">ALL</div>
         <h3 class="project-title">All Projects</h3>
         <p class="project-desc">Browse the complete project collection and archived entries on your projects index page.</p>
-        <a href="/projects/" class="project-link">Browse all projects -></a>
+        <a href="/projects/" class="project-link">Browse all projects</a>
       </div>
     </div>
   </section>
@@ -682,19 +1026,34 @@
   <section id="news">
     <p class="section-label reveal">// 04. news</p>
     <h2 class="section-title reveal">Latest Updates</h2>
-    <div class="news-list" id="home-updates"></div>
+    <p class="section-intro reveal">Recent presentations, visits, awards, and research activities.</p>
+    <div class="news-list" id="home-updates">
+      <div class="news-item">
+        <span class="news-date">Jul 12, 2025</span>
+        <p class="news-text"><strong>Presented at MLSE Workshop in Hakone</strong> - Presented "Automating Multi-view Requirements Engineering with Collaborative LLM Agents".</p>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Apr 24, 2025</span>
+        <p class="news-text"><strong>Attended IEEE VIC Summit and Honors Ceremony</strong> - Connected with researchers and innovators at the IEEE VIC Summit in Tokyo.</p>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Dec 8, 2024</span>
+        <p class="news-text"><strong>Presented at WIREDS 2024</strong> - Presented SLR work on GenAI in Requirements Engineering and received a distinguished presentation award.</p>
+      </div>
+    </div>
   </section>
 </main>
 
 <footer>
-  &copy; 2026 Haowei Cheng · Built on GitHub Pages · <a href="/admin/">Content Admin</a>
+  &copy; 2026 Haowei Cheng · Built on GitHub Pages
 </footer>
 
 <script>
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-let W;
-let H;
+const ctx = canvas && canvas.getContext('2d');
+let W = 0;
+let H = 0;
 let particles = [];
 
 function resize() {
@@ -706,16 +1065,17 @@ function makeParticle() {
   return {
     x: Math.random() * W,
     y: Math.random() * H,
-    r: Math.random() * 1.5 + 0.3,
-    vx: (Math.random() - 0.5) * 0.3,
-    vy: (Math.random() - 0.5) * 0.3,
-    alpha: Math.random() * 0.5 + 0.1,
-    color: Math.random() > 0.5 ? '124,106,247' : '79,209,197'
+    r: Math.random() * 1.35 + 0.25,
+    vx: (Math.random() - 0.5) * 0.18,
+    vy: (Math.random() - 0.5) * 0.18,
+    alpha: Math.random() * 0.35 + 0.08,
+    color: Math.random() > 0.45 ? '215,168,77' : '102,194,165'
   };
 }
 
 function initParticles() {
-  particles = Array.from({ length: 120 }, makeParticle);
+  const count = window.innerWidth < 700 ? 42 : 86;
+  particles = Array.from({ length: count }, makeParticle);
 }
 
 function drawParticles() {
@@ -739,11 +1099,11 @@ function drawParticles() {
       const dx = particles[i].x - particles[j].x;
       const dy = particles[i].y - particles[j].y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 100) {
+      if (dist < 92) {
         ctx.beginPath();
         ctx.moveTo(particles[i].x, particles[i].y);
         ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = 'rgba(124,106,247,' + (0.06 * (1 - dist / 100)) + ')';
+        ctx.strokeStyle = 'rgba(215,168,77,' + (0.035 * (1 - dist / 92)) + ')';
         ctx.lineWidth = 0.5;
         ctx.stroke();
       }
@@ -752,42 +1112,60 @@ function drawParticles() {
   requestAnimationFrame(drawParticles);
 }
 
-window.addEventListener('resize', function () {
+if (canvas && ctx && !reducedMotion) {
+  window.addEventListener('resize', function () {
+    resize();
+    initParticles();
+  });
   resize();
   initParticles();
-});
-resize();
-initParticles();
-drawParticles();
+  drawParticles();
+}
 
-const glow = document.getElementById('cursorGlow');
-document.addEventListener('mousemove', function (e) {
-  glow.style.left = e.clientX + 'px';
-  glow.style.top = e.clientY + 'px';
-});
+const navbar = document.getElementById('navbar');
+const navToggle = document.querySelector('.nav-toggle');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+if (navToggle && navbar) {
+  navToggle.addEventListener('click', function () {
+    const isOpen = navbar.classList.toggle('nav-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  navLinks.forEach(function (link) {
+    link.addEventListener('click', function () {
+      navbar.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
 
 window.addEventListener('scroll', function () {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  navbar.classList.toggle('scrolled', window.scrollY > 40);
 });
 
-const observer = new IntersectionObserver(function (entries) {
+const observer = reducedMotion ? null : new IntersectionObserver(function (entries) {
   entries.forEach(function (entry) {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+}, { threshold: 0.1, rootMargin: '0px 0px -70px 0px' });
 
 function observeRevealElements() {
   document.querySelectorAll('.reveal, .news-item').forEach(function (el, i) {
-    el.style.transitionDelay = (i % 4) * 0.08 + 's';
+    if (reducedMotion) {
+      el.classList.add('visible');
+      return;
+    }
+    el.style.transitionDelay = (i % 4) * 0.06 + 's';
     observer.observe(el);
   });
 }
 
 observeRevealElements();
 document.addEventListener('content-rendered', observeRevealElements);
-  </script>
+</script>
 <script src="/assets/js/content-render.js"></script>
 </body>
 </html>

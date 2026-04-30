@@ -33,7 +33,9 @@
       return '<span class="tag">' + escapeHtml(t) + '</span>';
     }).join('');
 
-    const link = item.pdf || item.project || '#';
+    const doi = String(item.doi || '').trim();
+    const doiUrl = doi ? 'https://doi.org/' + doi.replace(/^https?:\/\/(dx\.)?doi\.org\//, '') : '';
+    const link = item.pdf || item.externalUrl || doiUrl || item.project || '#';
     const title = escapeHtml(item.title);
     const venue = escapeHtml(item.venue || '');
     const year = escapeHtml(item.year || '');
@@ -49,6 +51,8 @@
     const actions = [];
     if (item.pdf) actions.push('<a class="btn-mini" href="' + escapeHtml(item.pdf) + '" target="_blank" rel="noopener">PDF</a>');
     if (item.poster) actions.push('<a class="btn-mini" href="' + escapeHtml(item.poster) + '" target="_blank" rel="noopener">Poster</a>');
+    if (item.doi) actions.push('<a class="btn-mini" href="' + escapeHtml(doiUrl) + '" target="_blank" rel="noopener">DOI</a>');
+    if (item.externalUrl) actions.push('<a class="btn-mini" href="' + escapeHtml(item.externalUrl) + '" target="_blank" rel="noopener">Link</a>');
     if (item.code) actions.push('<a class="btn-mini" href="' + escapeHtml(item.code) + '" target="_blank" rel="noopener">Code</a>');
     if (item.project) actions.push('<a class="btn-mini" href="' + escapeHtml(item.project) + '" target="_blank" rel="noopener">Project</a>');
 

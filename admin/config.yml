@@ -43,6 +43,8 @@ collections:
                 name: "poster"
                 widget: "image"
                 required: false
+              - { label: "DOI", name: "doi", widget: "string", required: false }
+              - { label: "External URL", name: "externalUrl", widget: "string", required: false }
               - { label: "Code URL", name: "code", widget: "string", required: false }
               - { label: "Project URL", name: "project", widget: "string", required: false }
               - { label: "Featured", name: "featured", widget: "boolean", default: false }

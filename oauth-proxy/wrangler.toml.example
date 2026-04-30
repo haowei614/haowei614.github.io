@@ -5,4 +5,9 @@ compatibility_date = "2026-02-21"
 # Optional: if your repo is private, set to "1".
 [vars]
 GITHUB_REPO_PRIVATE = "0"
-
+GITHUB_OWNER = "haowei614"
+GITHUB_REPO = "haowei614.github.io"
+GITHUB_BRANCH = "master"
+SITE_ORIGIN = "https://haowei614.github.io"
+ALLOWED_GITHUB_LOGINS = "haowei614"
+OPENAI_MODEL = "gpt-4o-mini"

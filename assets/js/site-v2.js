@@ -1,7 +1,7 @@
 const canvas = document.getElementById('bg-canvas');
-const glow = document.getElementById('cursorGlow');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-if (canvas) {
+if (canvas && !reducedMotion) {
   const ctx = canvas.getContext('2d');
   let W = 0;
   let H = 0;
@@ -17,15 +17,16 @@ if (canvas) {
       x: Math.random() * W,
       y: Math.random() * H,
       r: Math.random() * 1.4 + 0.3,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      alpha: Math.random() * 0.45 + 0.1,
-      color: Math.random() > 0.5 ? '124,106,247' : '79,209,197'
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      alpha: Math.random() * 0.35 + 0.08,
+      color: Math.random() > 0.45 ? '215,168,77' : '102,194,165'
     };
   }
 
   function initParticles() {
-    particles = Array.from({ length: 110 }, makeParticle);
+    const count = window.innerWidth < 700 ? 42 : 86;
+    particles = Array.from({ length: count }, makeParticle);
   }
 
   function drawParticles() {
@@ -53,11 +54,4 @@ if (canvas) {
   resizeCanvas();
   initParticles();
   drawParticles();
-}
-
-if (glow) {
-  document.addEventListener('mousemove', (e) => {
-    glow.style.left = `${e.clientX}px`;
-    glow.style.top = `${e.clientY}px`;
-  });
 }
