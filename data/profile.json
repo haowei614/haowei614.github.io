@@ -1,0 +1,16 @@
+{
+  "id": "site-profile",
+  "heroMeta": "Ph.D. Candidate / Software Engineering & AI",
+  "heroDescHtml": "I am a <strong>Ph.D. student</strong> at the Department of Computer Science and Communications Engineering, <a href=\"https://www.waseda.jp/\" target=\"_blank\" rel=\"noopener\">Waseda University</a>, supervised by Prof. <a href=\"http://www.washi.cs.waseda.ac.jp/washizaki/\" target=\"_blank\" rel=\"noopener\">Hironori Washizaki</a>. My research focuses on <strong>software engineering and AI</strong>, especially reliability in smart software systems through Generative AI-driven requirements engineering.",
+  "chips": [
+    "GenAI for Requirements Engineering",
+    "Reliable Software Systems",
+    "Deep-Fake Speech Detection"
+  ],
+  "cvUrl": "/assets/pdf/CV-Haowei%20CHENG.pdf",
+  "email": "haowei.cheng@fuji.waseda.jp",
+  "githubUrl": "https://www.github.com/haowei614",
+  "location": "Shinjuku, Tokyo, Japan",
+  "avatarUrl": "/assets/img/prof_pic.jpg",
+  "status": "published"
+}

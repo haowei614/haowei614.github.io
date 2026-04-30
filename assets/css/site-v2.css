@@ -227,6 +227,13 @@ main {
   background: rgba(238, 232, 216, 0.055);
 }
 
+.section-intro {
+  max-width: 760px;
+  margin: 0.35rem 0 1.65rem;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
 .content {
   position: relative;
   overflow: hidden;
@@ -335,6 +342,96 @@ main {
   padding: 1.15rem;
   margin-bottom: 1rem;
   background: rgba(238, 232, 216, 0.035);
+}
+
+.project-detail {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.project-detail-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.8fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.project-detail-kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 0.55rem;
+  border: 1px solid rgba(215, 168, 77, 0.28);
+  border-radius: 8px;
+  background: rgba(215, 168, 77, 0.08);
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.project-detail-title {
+  margin: 0.65rem 0 0.35rem;
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.4rem;
+  line-height: 1.12;
+  font-weight: 400;
+}
+
+.project-detail-subtitle {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.project-detail-panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem;
+  background: rgba(238, 232, 216, 0.035);
+}
+
+.project-image {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  aspect-ratio: 16 / 10;
+}
+
+.project-highlights {
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+.project-highlights ul {
+  margin: 0.6rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.8rem;
+}
+
+.project-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.project-links a:hover {
+  border-color: var(--line-strong);
+  background: rgba(238, 232, 216, 0.055);
 }
 
 .year-heading {
@@ -523,6 +620,10 @@ footer a {
   .section-head {
     align-items: start;
     flex-direction: column;
+  }
+
+  .project-detail-hero {
+    grid-template-columns: 1fr;
   }
 }
 

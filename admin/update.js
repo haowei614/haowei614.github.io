@@ -12,6 +12,14 @@ const state = {
   items: []
 };
 
+const MODULE_HINTS = {
+  auto: 'Let the parser choose the content type from the text you paste.',
+  publication: 'Use this for papers, PDFs, DOIs, and publication metadata.',
+  update: 'Use this for talks, awards, visits, events, and other news items.',
+  profile: 'Use this for the home resume section: bio, CV, photo, contact, and chips.',
+  project: 'Use this for open project cards and project detail pages.'
+};
+
 const els = {
   authState: document.getElementById('authState'),
   loginBtn: document.getElementById('loginBtn'),
@@ -23,6 +31,8 @@ const els = {
   parseBtn: document.getElementById('parseBtn'),
   samplePubBtn: document.getElementById('samplePubBtn'),
   sampleNewsBtn: document.getElementById('sampleNewsBtn'),
+  sampleProfileBtn: document.getElementById('sampleProfileBtn'),
+  sampleProjectBtn: document.getElementById('sampleProjectBtn'),
   previewPanel: document.getElementById('previewPanel'),
   previewKind: document.getElementById('previewKind'),
   previewForm: document.getElementById('previewForm'),
@@ -34,13 +44,19 @@ const els = {
   refreshBtn: document.getElementById('refreshBtn'),
   manageKind: document.getElementById('manageKind'),
   manageSearch: document.getElementById('manageSearch'),
-  itemList: document.getElementById('itemList')
+  itemList: document.getElementById('itemList'),
+  moduleHint: document.getElementById('moduleHint')
 };
 
 function setBusy(button, busy, label) {
   if (!button.dataset.label) button.dataset.label = button.textContent;
   button.disabled = busy;
   button.textContent = busy ? label : button.dataset.label;
+}
+
+function updateModuleHint(kind) {
+  if (!els.moduleHint) return;
+  els.moduleHint.textContent = MODULE_HINTS[kind] || MODULE_HINTS.auto;
 }
 
 function setResult(value, isError) {
@@ -101,12 +117,22 @@ function renderFiles() {
 }
 
 function kindLabel(kind) {
-  return kind === 'publication' ? 'Publication' : 'Update';
+  if (kind === 'publication') return 'Publication';
+  if (kind === 'update') return 'Update';
+  if (kind === 'profile') return 'Profile';
+  if (kind === 'project') return 'Project';
+  return 'Auto';
 }
 
 function itemSummary(item, kind) {
   if (kind === 'publication') {
     return [item.venue, item.year, (item.tags || []).slice(0, 3).join(', ')].filter(Boolean).join(' · ');
+  }
+  if (kind === 'project') {
+    return [item.slug, item.featured ? 'featured' : '', item.summary].filter(Boolean).join(' · ');
+  }
+  if (kind === 'profile') {
+    return [item.heroMeta, item.location, item.cvUrl ? 'CV' : ''].filter(Boolean).join(' · ');
   }
   return [item.category, item.date, item.pinned ? 'pinned' : ''].filter(Boolean).join(' · ');
 }
@@ -115,8 +141,8 @@ function renderItemList() {
   const kind = state.manageKind;
   const search = state.manageSearch.trim().toLowerCase();
   const items = state.items.filter((item) => {
-    const title = String(item.title || '').toLowerCase();
-    return !search || title.includes(search);
+    const haystack = [item.title, item.slug, item.summary, item.heroMeta, item.location, item.venue].join(' ').toLowerCase();
+    return !search || haystack.includes(search);
   });
 
   if (!items.length) {
@@ -132,7 +158,7 @@ function renderItemList() {
       </div>
       <div class="item-actions">
         <button class="button button-ghost" type="button" data-action="edit" data-id="${escapeHtml(item.id)}">Edit</button>
-        <button class="button button-danger" type="button" data-action="delete" data-id="${escapeHtml(item.id)}">Delete</button>
+        ${kind === 'profile' ? '' : `<button class="button button-danger" type="button" data-action="delete" data-id="${escapeHtml(item.id)}">Delete</button>`}
       </div>
     </article>
   `).join('');
@@ -144,11 +170,11 @@ async function loadItems(kind = state.manageKind) {
   state.manageKind = data.kind || kind;
   state.items = Array.isArray(data.items) ? data.items : [];
   els.manageKind.value = state.manageKind;
+  updateModuleHint(state.manageKind);
   renderItemList();
 }
 
-function openExistingItem(item) {
-  const kind = item.year !== undefined || item.tags !== undefined || item.abstract !== undefined ? 'publication' : 'update';
+function openExistingItem(item, kind = state.manageKind) {
   state.kind = kind;
   state.item = normalizeParsed(kind, item);
   state.mode = 'edit';
@@ -165,6 +191,7 @@ function openExistingItem(item) {
 async function deleteExistingItem() {
   if (!state.token) throw new Error('Please login with GitHub first.');
   if (!state.item || !state.item.id || !state.kind) throw new Error('Please load an existing entry first.');
+  if (state.kind === 'profile') throw new Error('The home profile cannot be deleted.');
   const label = `${kindLabel(state.kind).toLowerCase()} ${state.item.id}`;
   if (!window.confirm(`Delete ${label}? This will remove the entry from the site.`)) return;
   const data = await api('/delete', {
@@ -190,7 +217,7 @@ function setPreviewMode(mode) {
   const publishLabel = mode === 'edit' ? 'Save changes to GitHub' : 'Publish to GitHub';
   els.publishBtn.textContent = publishLabel;
   els.publishBtn.dataset.label = publishLabel;
-  els.deleteBtn.classList.toggle('hidden', mode !== 'edit');
+  els.deleteBtn.classList.toggle('hidden', mode !== 'edit' || state.kind === 'profile');
 }
 
 function escapeHtml(str) {
@@ -249,6 +276,39 @@ function normalizeParsed(kind, item) {
     };
   }
 
+  if (kind === 'profile') {
+    return {
+      id: item.id || 'site-profile',
+      heroMeta: item.heroMeta || '',
+      heroDescHtml: item.heroDescHtml || '',
+      chips: Array.isArray(item.chips) ? item.chips : [],
+      cvUrl: item.cvUrl || '',
+      email: item.email || '',
+      githubUrl: item.githubUrl || '',
+      location: item.location || '',
+      avatarUrl: item.avatarUrl || '',
+      status: item.status || 'published'
+    };
+  }
+
+  if (kind === 'project') {
+    return {
+      id: item.id || '',
+      slug: item.slug || '',
+      title: item.title || '',
+      subtitle: item.subtitle || '',
+      summary: item.summary || '',
+      overview: item.overview || '',
+      bodyHtml: item.bodyHtml || '',
+      image: item.image || '',
+      demoUrl: item.demoUrl || '',
+      highlights: Array.isArray(item.highlights) ? item.highlights : [],
+      links: Array.isArray(item.links) ? item.links : [],
+      featured: Boolean(item.featured),
+      status: item.status || 'published'
+    };
+  }
+
   return {
     id: item.id || '',
     title: item.title || '',
@@ -282,7 +342,7 @@ function fieldHtml(name, label, value, options = {}) {
 function renderPreview(kind, item) {
   state.kind = kind;
   state.item = normalizeParsed(kind, item);
-  els.previewKind.textContent = kind;
+  els.previewKind.textContent = kindLabel(kind);
 
   if (kind === 'publication') {
     els.previewForm.innerHTML = [
@@ -300,6 +360,35 @@ function renderPreview(kind, item) {
       fieldHtml('project', 'Project URL', state.item.project),
       fieldHtml('doi', 'DOI', state.item.doi),
       fieldHtml('externalUrl', 'External URL', state.item.externalUrl),
+      fieldHtml('featured', 'Featured on home page', state.item.featured, { type: 'checkbox' }),
+      fieldHtml('status', 'Status', state.item.status, { type: 'select', choices: ['published', 'draft'] })
+    ].join('');
+  } else if (kind === 'profile') {
+    els.previewForm.innerHTML = [
+      fieldHtml('id', 'ID', state.item.id, { wide: true, readonly: true }),
+      fieldHtml('heroMeta', 'Hero meta', state.item.heroMeta, { wide: true }),
+      fieldHtml('heroDescHtml', 'Hero description HTML', state.item.heroDescHtml, { wide: true, type: 'textarea', rows: 8 }),
+      fieldHtml('chips', 'Chips (comma separated)', state.item.chips.join(', ')),
+      fieldHtml('cvUrl', 'CV URL', state.item.cvUrl),
+      fieldHtml('email', 'Email', state.item.email),
+      fieldHtml('githubUrl', 'GitHub URL', state.item.githubUrl),
+      fieldHtml('location', 'Location', state.item.location),
+      fieldHtml('avatarUrl', 'Avatar URL', state.item.avatarUrl),
+      fieldHtml('status', 'Status', state.item.status, { type: 'select', choices: ['published', 'draft'] })
+    ].join('');
+  } else if (kind === 'project') {
+    els.previewForm.innerHTML = [
+      fieldHtml('id', 'ID', state.item.id, { wide: true, readonly: true }),
+      fieldHtml('slug', 'Slug', state.item.slug),
+      fieldHtml('title', 'Title', state.item.title, { wide: true }),
+      fieldHtml('subtitle', 'Subtitle', state.item.subtitle, { wide: true }),
+      fieldHtml('summary', 'Summary', state.item.summary, { wide: true, type: 'textarea', rows: 3 }),
+      fieldHtml('overview', 'Overview', state.item.overview, { wide: true, type: 'textarea', rows: 5 }),
+      fieldHtml('bodyHtml', 'Body HTML', state.item.bodyHtml, { wide: true, type: 'textarea', rows: 8 }),
+      fieldHtml('image', 'Image URL', state.item.image),
+      fieldHtml('demoUrl', 'Demo / Video URL', state.item.demoUrl),
+      fieldHtml('highlights', 'Highlights (comma separated)', state.item.highlights.join(', ')),
+      fieldHtml('links', 'Links, one per line: Label | URL', linksToText(state.item.links), { wide: true, type: 'textarea', rows: 3 }),
       fieldHtml('featured', 'Featured on home page', state.item.featured, { type: 'checkbox' }),
       fieldHtml('status', 'Status', state.item.status, { type: 'select', choices: ['published', 'draft'] })
     ].join('');
@@ -356,6 +445,39 @@ function collectPreview() {
       project: form.get('project') || '',
       doi: form.get('doi') || '',
       externalUrl: form.get('externalUrl') || '',
+      featured: Boolean(form.get('featured')),
+      status: form.get('status') || 'published'
+    };
+  }
+
+  if (state.kind === 'profile') {
+    return {
+      id: form.get('id') || state.item.id || 'site-profile',
+      heroMeta: form.get('heroMeta') || '',
+      heroDescHtml: form.get('heroDescHtml') || '',
+      chips: String(form.get('chips') || '').split(',').map((x) => x.trim()).filter(Boolean),
+      cvUrl: form.get('cvUrl') || '',
+      email: form.get('email') || '',
+      githubUrl: form.get('githubUrl') || '',
+      location: form.get('location') || '',
+      avatarUrl: form.get('avatarUrl') || '',
+      status: form.get('status') || 'published'
+    };
+  }
+
+  if (state.kind === 'project') {
+    return {
+      id: form.get('id') || state.item.id || '',
+      slug: form.get('slug') || '',
+      title: form.get('title') || '',
+      subtitle: form.get('subtitle') || '',
+      summary: form.get('summary') || '',
+      overview: form.get('overview') || '',
+      bodyHtml: form.get('bodyHtml') || '',
+      image: form.get('image') || '',
+      demoUrl: form.get('demoUrl') || '',
+      highlights: String(form.get('highlights') || '').split(',').map((x) => x.trim()).filter(Boolean),
+      links: textToLinks(form.get('links')),
       featured: Boolean(form.get('featured')),
       status: form.get('status') || 'published'
     };
@@ -446,8 +568,18 @@ function fillSample(type) {
     els.sourceText.value = 'Add a publication: title is "Automating Multi-view Requirements Engineering with Collaborative LLM Agents". Authors are Haowei Cheng, Jati H. Husen, Hironori Washizaki. Venue is MLSE Workshop 2025. Date is 2025-07-12. Tags are LLM, Requirements, Agents. Mark it as featured.';
     return;
   }
-  els.kindSelect.value = 'update';
-  els.sourceText.value = 'Add an activity update: On 2025-07-12, I presented "Automating Multi-view Requirements Engineering with Collaborative LLM Agents" at the MLSE Workshop in Hakone. The workshop link is https://sites.google.com/view/sig-mlse/. Category is talk. Pin it to the home page.';
+  if (type === 'update') {
+    els.kindSelect.value = 'update';
+    els.sourceText.value = 'Add an activity update: On 2025-07-12, I presented "Automating Multi-view Requirements Engineering with Collaborative LLM Agents" at the MLSE Workshop in Hakone. The workshop link is https://sites.google.com/view/sig-mlse/. Category is talk. Pin it to the home page.';
+    return;
+  }
+  if (type === 'profile') {
+    els.kindSelect.value = 'profile';
+    els.sourceText.value = 'Update the home profile. Set hero meta to "Ph.D. Candidate / Software Engineering & AI". Rewrite the bio HTML to mention Waseda University and Generative AI-driven requirements engineering. Chips are GenAI for Requirements Engineering, Reliable Software Systems, and Deep-Fake Speech Detection. CV URL is /assets/pdf/CV-Haowei%20CHENG.pdf. Email is haowei.cheng@fuji.waseda.jp. GitHub URL is https://www.github.com/haowei614. Location is Shinjuku, Tokyo, Japan. Mark it as published.';
+    return;
+  }
+  els.kindSelect.value = 'project';
+  els.sourceText.value = 'Add an open project. Slug is re. Title is Requirements Engineering. Subtitle is GenAI-assisted requirements workflows and practical methods. Summary is a focused project page on requirements engineering methods and practices for software development. Overview explains the project focus and current materials. Demo URL is https://www.youtube.com/embed/_llqRnlrzWw?si=8tF5UQ6iDthMaJ8E. Highlights are LLM-assisted requirements analysis, Executable scenario realization in CARLA, and Collaborative workflows for software teams. Mark it as featured.';
 }
 
 els.loginBtn.addEventListener('click', loginWithGitHub);
@@ -496,6 +628,8 @@ els.deleteBtn.addEventListener('click', async () => {
 els.copyJsonBtn.addEventListener('click', copyJson);
 els.samplePubBtn.addEventListener('click', () => fillSample('publication'));
 els.sampleNewsBtn.addEventListener('click', () => fillSample('update'));
+els.sampleProfileBtn.addEventListener('click', () => fillSample('profile'));
+els.sampleProjectBtn.addEventListener('click', () => fillSample('project'));
 els.refreshBtn.addEventListener('click', async () => {
   try {
     setBusy(els.refreshBtn, true, 'Refreshing...');
@@ -507,6 +641,7 @@ els.refreshBtn.addEventListener('click', async () => {
     setBusy(els.refreshBtn, false);
   }
 });
+els.kindSelect.addEventListener('change', () => updateModuleHint(els.kindSelect.value));
 els.manageKind.addEventListener('change', async () => {
   state.manageKind = els.manageKind.value;
   await loadItems();
@@ -522,9 +657,9 @@ els.itemList.addEventListener('click', async (event) => {
   const item = state.items.find((entry) => entry.id === id);
   if (!item) return;
   if (action === 'edit') {
-    openExistingItem(item);
+    openExistingItem(item, state.manageKind);
   } else if (action === 'delete') {
-    state.kind = item.year !== undefined || item.tags !== undefined || item.abstract !== undefined ? 'publication' : 'update';
+    state.kind = state.manageKind;
     state.item = normalizeParsed(state.kind, item);
     state.mode = 'edit';
     renderPreview(state.kind, state.item);
@@ -534,6 +669,7 @@ els.itemList.addEventListener('click', async (event) => {
 });
 window.addEventListener('message', handleAuthMessage);
 
+updateModuleHint(els.kindSelect.value);
 updateAuthUi();
 renderFiles();
 loadItems().catch((err) => setResult(err.message, true));

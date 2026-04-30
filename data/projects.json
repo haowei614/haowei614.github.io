@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "id": "proj-re",
+      "slug": "re",
+      "title": "Requirements Engineering",
+      "subtitle": "GenAI-assisted requirements workflows and practical methods",
+      "summary": "A focused project page on requirements engineering methods and practices for software development.",
+      "overview": "Requirements engineering is the process of defining, documenting, and maintaining requirements in the engineering design process. It is a common role in systems engineering and software engineering. It aims to enhance software quality, reduce development costs and time, and improve communication and change management capabilities within the team.",
+      "bodyHtml": "<p>Requirements engineering is the process of defining, documenting, and maintaining requirements in the engineering design process. It is a common role in systems engineering and software engineering. It aims to enhance software quality, reduce development costs and time, and improve communication and change management capabilities within the team.</p><p>The project page collects demos, notes, and project-specific resources around GenAI-assisted requirements workflows.</p>",
+      "image": "/assets/img/re.jpeg",
+      "demoUrl": "https://www.youtube.com/embed/_llqRnlrzWw?si=8tF5UQ6iDthMaJ8E",
+      "highlights": [
+        "LLM-assisted requirements analysis",
+        "Executable scenario realization in CARLA",
+        "Collaborative workflows for software teams"
+      ],
+      "links": [
+        {
+          "label": "Publications",
+          "url": "/publications/"
+        }
+      ],
+      "featured": true,
+      "status": "published"
+    },
+    {
+      "id": "proj-df",
+      "slug": "df",
+      "title": "Deepfake Speech",
+      "subtitle": "Detection and analysis of synthetic speech signals",
+      "summary": "Research and resources related to deepfake speech generation and detection, including demos and publications.",
+      "overview": "Deepfake speech is a product of artificial intelligence used to create convincing speech sentences that sound like specific people saying things they did not say.",
+      "bodyHtml": "<p>Deepfake speech is a product of artificial intelligence used to create convincing speech sentences that sound like specific people saying things they did not say.</p><p>The project page brings together the detection work, supporting materials, and publication links in a more compact format.</p>",
+      "image": "/assets/img/df.png",
+      "demoUrl": "",
+      "highlights": [
+        "Spectro-temporal modulation features",
+        "Robust spoofing-aware detection",
+        "Audio forensics and analysis"
+      ],
+      "links": [
+        {
+          "label": "Publications",
+          "url": "/publications/"
+        }
+      ],
+      "featured": true,
+      "status": "published"
+    }
+  ]
+}

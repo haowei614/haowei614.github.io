@@ -233,15 +233,12 @@ async function handleParse(request, env) {
 
 async function handleListItems(url, request, env) {
   await requireAuthorizedUser(request, env);
-  const kind = url.searchParams.get("kind") === "update" ? "update" : "publication";
+  const kind = normalizeKind(url.searchParams.get("kind") || "publication");
   const cfg = repoConfig(env);
-  const dataPath = kind === "publication" ? "data/publications.json" : "data/updates.json";
-  const dataFile = await getRepositoryFile({ token: bearerToken(request), cfg, path: dataPath });
-  const data = JSON.parse(dataFile.text || "{\"items\":[]}");
-  const items = Array.isArray(data.items) ? data.items : [];
+  const items = await loadItemsForKind({ token: bearerToken(request), cfg, kind });
   return {
     kind,
-    items: items.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0)),
+    items: sortItems(items, kind),
   };
 }
 
@@ -249,14 +246,13 @@ async function handleSave(request, env) {
   const { token, user } = await requireAuthorizedUser(request, env);
   const body = await request.json();
   const kind = normalizeKind(body.kind);
-  if (kind === "auto") throw new HttpError(400, "Publish requires kind=publication or kind=update.");
+  if (kind === "auto") throw new HttpError(400, "Publish requires a concrete kind.");
 
   const cfg = repoConfig(env);
   const files = Array.isArray(body.files) ? body.files : [];
-  const item = kind === "publication" ? normalizePublication(body.item || {}) : normalizeUpdate(body.item || {});
+  const item = normalizeItem(kind, body.item || {});
   const existing = await loadItemsForKind({ token, cfg, kind });
-  const foundIndex = existing.findIndex((entry) => entry.id === item.id);
-  const previous = foundIndex >= 0 ? existing[foundIndex] : null;
+  const previous = findExistingItem(existing, item, kind);
 
   const uploadChanges = [];
   const uploadedPaths = [];
@@ -267,28 +263,24 @@ async function handleSave(request, env) {
     uploadedPaths.push(uploaded.publicPath);
 
     if (kind === "publication") {
-      if (uploaded.role === "pdf" && !item.pdf) item.pdf = uploaded.publicPath;
-      if (uploaded.role === "poster" && !item.poster) item.poster = uploaded.publicPath;
-    } else {
+      if (uploaded.role === "pdf") item.pdf = uploaded.publicPath;
+      if (uploaded.role === "poster") item.poster = uploaded.publicPath;
+    } else if (kind === "update") {
       item.images = [...(item.images || []), uploaded.publicPath];
+    } else if (kind === "profile") {
+      if (uploaded.role === "avatar") item.avatarUrl = uploaded.publicPath;
+      if (uploaded.role === "cv") item.cvUrl = uploaded.publicPath;
+    } else if (kind === "project") {
+      if (uploaded.role === "image") item.image = uploaded.publicPath;
     }
   });
 
-  const dataPath = kind === "publication" ? "data/publications.json" : "data/updates.json";
-  const nextItems = previous ? existing.map((entry) => (entry.id === item.id ? item : entry)) : [...existing, withGeneratedId(kind, item, existing)];
-  const finalizedItem = previous ? item : nextItems[nextItems.length - 1];
-  const data = { items: sortItems(nextItems, kind) };
-
-  const jsonChange = {
-    path: dataPath,
-    content: JSON.stringify(data, null, 2) + "\n",
-    encoding: "utf-8",
-  };
+  const { dataPath, payload, finalizedItem } = buildSavePayload(kind, existing, previous, item);
 
   const commit = await commitChanges({
     token,
     cfg,
-    changes: [...uploadChanges, jsonChange],
+    changes: [...uploadChanges, payload],
     message: commitMessage(previous ? "updated" : "added", finalizedItem, user.login),
   });
 
@@ -308,23 +300,22 @@ async function handleDelete(request, env) {
   const { token, user } = await requireAuthorizedUser(request, env);
   const body = await request.json();
   const kind = normalizeKind(body.kind);
-  if (kind === "auto") throw new HttpError(400, "Delete requires kind=publication or kind=update.");
+  if (kind === "auto") throw new HttpError(400, "Delete requires a concrete kind.");
+  if (kind === "profile") throw new HttpError(400, "The home profile is a single record and cannot be deleted.");
 
   const cfg = repoConfig(env);
   const targetId = String(body.id || "").trim();
   if (!targetId) throw new HttpError(400, "Missing item id.");
 
-  const dataPath = kind === "publication" ? "data/publications.json" : "data/updates.json";
-  const dataFile = await getRepositoryFile({ token, cfg, path: dataPath });
-  const data = JSON.parse(dataFile.text || "{\"items\":[]}");
-  const items = Array.isArray(data.items) ? data.items : [];
+  const items = await loadItemsForKind({ token, cfg, kind });
   const item = items.find((entry) => entry.id === targetId);
   if (!item) throw new HttpError(404, `Item ${targetId} not found.`);
 
   const remaining = items.filter((entry) => entry.id !== targetId);
+  const dataPath = dataPathForKind(kind);
   const changes = [{
     path: dataPath,
-    content: JSON.stringify({ items: sortItems(remaining, kind) }, null, 2) + "\n",
+    content: buildDataPayload(kind, remaining),
     encoding: "utf-8",
   }];
 
@@ -384,10 +375,12 @@ async function parseWithOpenAI({ text, requestedKind, env }) {
           content: [
             "You normalize academic website updates into strict JSON.",
             `Today is ${today}.`,
-            "Return only JSON with this top-level shape: {\"kind\":\"publication|update\",\"item\":{},\"warnings\":[]}.",
-            "If requested kind is auto, choose publication for papers, accepted manuscripts, DOI/arXiv/publisher links, journals, conferences, or workshops with paper metadata. Choose update for activities, talks, awards, visits, jobs, and general news.",
+            "Return only JSON with this top-level shape: {\"kind\":\"publication|update|profile|project\",\"item\":{},\"warnings\":[]}.",
+            "If requested kind is auto, choose publication for papers, accepted manuscripts, DOI/arXiv/publisher links, journals, conferences, or workshops with paper metadata. Choose update for activities, talks, awards, visits, jobs, and general news. Choose profile for homepage resume / bio / CV updates. Choose project for open project cards and project pages.",
             "Publication item fields: id, title, authors, venue, year, date, tags, abstract, pdf, poster, code, project, doi, externalUrl, featured, status.",
             "Update item fields: id, title, date, summary, content, links, images, category, pinned, status.",
+            "Profile item fields: id, heroMeta, heroDescHtml, chips, cvUrl, email, githubUrl, location, avatarUrl, status.",
+            "Project item fields: id, slug, title, subtitle, summary, overview, bodyHtml, image, demoUrl, highlights, links, featured, status.",
             "Use YYYY-MM-DD dates. Use arrays for tags, links, images. Use published status by default. Do not invent PDF paths, DOI, external URLs, or exact dates if they are absent.",
             "For missing fields, use empty strings, false booleans, or empty arrays. Put uncertainty in warnings.",
           ].join(" "),
@@ -416,7 +409,7 @@ async function parseWithOpenAI({ text, requestedKind, env }) {
 
   return {
     kind,
-    item: kind === "publication" ? normalizePublication(parsed.item || {}) : normalizeUpdate(parsed.item || {}),
+    item: normalizeItem(kind, parsed.item || {}),
     warnings: Array.isArray(parsed.warnings) ? parsed.warnings : [],
   };
 }
@@ -446,6 +439,46 @@ function parseHeuristically(text, requestedKind) {
     };
   }
 
+  if (kind === "profile") {
+    return {
+      kind,
+      item: normalizeProfile({
+        heroMeta: extractAfter(text, /(hero meta|headline|title)\s*(?:is|:)\s*([^.\n]+)/i) || "",
+        heroDescHtml: text,
+        chips: extractTags(text),
+        cvUrl: links[0]?.url || "",
+        email: extractAfter(text, /email\s*(?:is|:)\s*([^\s,;]+)/i) || "",
+        githubUrl: extractAfter(text, /github\s*(?:is|:)\s*([^\s,;]+)/i) || "",
+        location: extractAfter(text, /location\s*(?:is|:)\s*([^.\n]+)/i) || "",
+        avatarUrl: "",
+        status: "published",
+      }),
+      warnings: ["Fallback parser used; please review all fields before publishing."],
+    };
+  }
+
+  if (kind === "project") {
+    const slug = slugify(extractAfter(text, /slug\s*(?:is|:)\s*([^.\n]+)/i) || title);
+    return {
+      kind,
+      item: normalizeProject({
+        slug,
+        title,
+        subtitle: extractAfter(text, /subtitle\s*(?:is|:)\s*([^.\n]+)/i) || "",
+        summary: firstSentence(text),
+        overview: text,
+        bodyHtml: splitTextToHtml(text),
+        image: "",
+        demoUrl: links[0]?.url || "",
+        highlights: extractTags(text),
+        links,
+        featured: /featured|pin|首页|主页/.test(text),
+        status: "published",
+      }),
+      warnings: ["Fallback parser used; please review all fields before publishing."],
+    };
+  }
+
   return {
     kind,
     item: normalizeUpdate({
@@ -463,18 +496,30 @@ function parseHeuristically(text, requestedKind) {
 }
 
 function normalizeKind(kind) {
-  if (kind === "publication" || kind === "update" || kind === "auto") return kind;
-  throw new HttpError(400, "Invalid kind. Use auto, publication, or update.");
+  if (kind === "publication" || kind === "update" || kind === "profile" || kind === "project" || kind === "auto") return kind;
+  throw new HttpError(400, "Invalid kind. Use auto, publication, update, profile, or project.");
 }
 
 function itemKind(item) {
-  return item && (item.year !== undefined || item.tags !== undefined || item.abstract !== undefined)
-    ? "publication"
-    : "update";
+  if (!item) return "item";
+  if (item.slug !== undefined || item.overview !== undefined || item.highlights !== undefined || item.image !== undefined) return "project";
+  if (item.heroMeta !== undefined || item.heroDescHtml !== undefined || item.cvUrl !== undefined || item.avatarUrl !== undefined) return "profile";
+  if (item.year !== undefined || item.tags !== undefined || item.abstract !== undefined) return "publication";
+  return "update";
 }
 
 function guessKind(text) {
+  if (/resume|cv|profile|简历|主页简介|about me|hero/i.test(text)) return "profile";
+  if (/project|projects|项目|open projects/i.test(text)) return "project";
   return /paper|publication|accepted|journal|conference|doi|arxiv|论文|发表|接收/i.test(text) ? "publication" : "update";
+}
+
+function normalizeItem(kind, input) {
+  if (kind === "publication") return normalizePublication(input);
+  if (kind === "update") return normalizeUpdate(input);
+  if (kind === "profile") return normalizeProfile(input);
+  if (kind === "project") return normalizeProject(input);
+  throw new HttpError(400, `Unsupported kind: ${kind}`);
 }
 
 function normalizePublication(input) {
@@ -500,6 +545,40 @@ function normalizePublication(input) {
   };
 }
 
+function normalizeProfile(input) {
+  return {
+    id: String(input.id || "site-profile"),
+    heroMeta: String(input.heroMeta || "").trim(),
+    heroDescHtml: String(input.heroDescHtml || "").trim(),
+    chips: normalizeStringArray(input.chips),
+    cvUrl: String(input.cvUrl || "").trim(),
+    email: String(input.email || "").trim(),
+    githubUrl: String(input.githubUrl || "").trim(),
+    location: String(input.location || "").trim(),
+    avatarUrl: String(input.avatarUrl || "").trim(),
+    status: input.status === "draft" ? "draft" : "published",
+  };
+}
+
+function normalizeProject(input) {
+  const slug = String(input.slug || "").trim() || slugify(input.title || input.id || "project");
+  return {
+    id: String(input.id || `proj-${slug}`),
+    slug,
+    title: String(input.title || "").trim(),
+    subtitle: String(input.subtitle || "").trim(),
+    summary: String(input.summary || "").trim(),
+    overview: String(input.overview || "").trim(),
+    bodyHtml: String(input.bodyHtml || "").trim(),
+    image: String(input.image || "").trim(),
+    demoUrl: String(input.demoUrl || "").trim(),
+    highlights: normalizeStringArray(input.highlights),
+    links: normalizeLinks(input.links),
+    featured: Boolean(input.featured),
+    status: input.status === "draft" ? "draft" : "published",
+  };
+}
+
 function normalizeUpdate(input) {
   return {
     id: String(input.id || ""),
@@ -512,6 +591,73 @@ function normalizeUpdate(input) {
     category: ["event", "talk", "award", "paper", "job", "other"].includes(input.category) ? input.category : "event",
     pinned: Boolean(input.pinned),
     status: input.status === "draft" ? "draft" : "published",
+  };
+}
+
+function splitTextToHtml(text) {
+  return String(text || "")
+    .trim()
+    .split(/\n{2,}/)
+    .filter(Boolean)
+    .map((block) => `<p>${escapeHtml(block).replace(/\n/g, "<br>")}</p>`)
+    .join("");
+}
+
+function sortProfile(items) {
+  return (items || []).map((item) => normalizeProfile(item));
+}
+
+function matchesItem(entry, item, kind) {
+  if (kind === "profile") return true;
+  if (kind === "project") return entry.id === item.id || entry.slug === item.slug;
+  return entry.id === item.id;
+}
+
+function findExistingItem(items, item, kind) {
+  if (kind === "profile") return items[0] || null;
+  return items.find((entry) => matchesItem(entry, item, kind)) || null;
+}
+
+function dataPathForKind(kind) {
+  if (kind === "publication") return "data/publications.json";
+  if (kind === "update") return "data/updates.json";
+  if (kind === "profile") return "data/profile.json";
+  if (kind === "project") return "data/projects.json";
+  throw new HttpError(400, `Unsupported kind: ${kind}`);
+}
+
+function buildDataPayload(kind, items) {
+  if (kind === "profile") {
+    return JSON.stringify(sortProfile(items)[0] || normalizeProfile({}), null, 2) + "\n";
+  }
+  return JSON.stringify({ items: sortItems(items, kind) }, null, 2) + "\n";
+}
+
+function buildSavePayload(kind, existing, previous, item) {
+  const dataPath = dataPathForKind(kind);
+  if (kind === "profile") {
+    const nextItem = normalizeProfile({ ...(previous || {}), ...item, id: "site-profile" });
+    return {
+      dataPath,
+      finalizedItem: nextItem,
+      payload: {
+        path: dataPath,
+        content: JSON.stringify(nextItem, null, 2) + "\n",
+        encoding: "utf-8",
+      },
+    };
+  }
+
+  const nextItems = previous ? existing.map((entry) => (matchesItem(entry, item, kind) ? item : entry)) : [...existing, withGeneratedId(kind, item, existing)];
+  const finalizedItem = previous ? item : nextItems[nextItems.length - 1];
+  return {
+    dataPath,
+    finalizedItem,
+    payload: {
+      path: dataPath,
+      content: JSON.stringify({ items: sortItems(nextItems, kind) }, null, 2) + "\n",
+      encoding: "utf-8",
+    },
   };
 }
 
@@ -560,6 +706,15 @@ function prepareUploadChange(kind, item, file, index) {
   } else if (kind === "update" && isImage) {
     path = `assets/img/news/${date}-${titleSlug}-${index + 1}-${stamp}${ext}`;
     role = "image";
+  } else if (kind === "profile" && isPdf) {
+    path = `assets/pdf/profile/${titleSlug}-${stamp}${ext}`;
+    role = "cv";
+  } else if (kind === "profile" && isImage) {
+    path = `assets/img/profile/${titleSlug}-${index + 1}-${stamp}${ext}`;
+    role = "avatar";
+  } else if (kind === "project" && isImage) {
+    path = `assets/img/projects/${titleSlug}-${index + 1}-${stamp}${ext}`;
+    role = "image";
   } else {
     throw new HttpError(400, `Unsupported file for ${kind}: ${file.name}`);
   }
@@ -594,6 +749,16 @@ function ensureUniqueId(kind, item, items) {
   const existing = new Set(items.map((x) => x.id).filter(Boolean));
   if (item.id && !existing.has(item.id)) return item.id;
 
+  if (kind === "profile") return "site-profile";
+  if (kind === "project") {
+    const slug = slugify(item.slug || item.title || "project");
+    const base = `proj-${slug}`;
+    if (!existing.has(base)) return base;
+    let suffix = 2;
+    while (existing.has(`${base}-${suffix}`)) suffix += 1;
+    return `${base}-${suffix}`;
+  }
+
   const prefix = kind === "publication" ? "pub" : "upd";
   const year = kind === "publication" ? String(item.year || new Date().getFullYear()) : String((item.date || "").slice(0, 4) || new Date().getFullYear());
   let max = 0;
@@ -610,15 +775,33 @@ function withGeneratedId(kind, item, items) {
 }
 
 function sortItems(items, kind) {
-  return [...items].map((item) => kind === "publication" ? normalizePublication(item) : normalizeUpdate(item))
-    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+  if (kind === "profile") {
+    return sortProfile(items);
+  }
+  const normalized = [...items].map((item) => normalizeItem(kind, item));
+  if (kind === "project") {
+    return normalized.sort((a, b) => {
+      if (a.featured !== b.featured) return a.featured ? -1 : 1;
+      return String(a.title || "").localeCompare(String(b.title || ""));
+    });
+  }
+  return normalized.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
 }
 
 function attachmentPathsForItem(item, kind) {
   if (kind === "publication") {
     return [item.pdf, item.poster].filter(isRepoAttachmentPath);
   }
-  return normalizeStringArray(item.images).filter(isRepoAttachmentPath);
+  if (kind === "update") {
+    return normalizeStringArray(item.images).filter(isRepoAttachmentPath);
+  }
+  if (kind === "profile") {
+    return [item.cvUrl, item.avatarUrl].filter(isRepoAttachmentPath);
+  }
+  if (kind === "project") {
+    return [item.image].filter(isRepoAttachmentPath);
+  }
+  return [];
 }
 
 function isRepoAttachmentPath(path) {
@@ -630,9 +813,10 @@ function commitMessage(action, item, login) {
 }
 
 async function loadItemsForKind({ token, cfg, kind }) {
-  const dataPath = kind === "publication" ? "data/publications.json" : "data/updates.json";
+  const dataPath = dataPathForKind(kind);
   const dataFile = await getRepositoryFile({ token, cfg, path: dataPath });
-  const data = JSON.parse(dataFile.text || "{\"items\":[]}");
+  const data = JSON.parse(dataFile.text || (kind === "profile" ? "{}" : "{\"items\":[]}"));
+  if (kind === "profile") return data && typeof data === "object" ? [data] : [];
   return Array.isArray(data.items) ? data.items : [];
 }
 

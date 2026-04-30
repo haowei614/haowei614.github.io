@@ -30,12 +30,15 @@
       <div class="panel-head">
         <div>
           <p class="step">01</p>
-          <h2>Describe the update</h2>
+          <h2>Choose the module</h2>
+          <p id="moduleHint" class="hint">Use this panel for publications, updates, the home profile, or open projects.</p>
         </div>
         <select id="kindSelect" aria-label="Update type">
           <option value="auto">Auto detect</option>
           <option value="publication">Publication</option>
           <option value="update">Activity / News</option>
+          <option value="profile">Home profile / CV</option>
+          <option value="project">Open project</option>
         </select>
       </div>
 
@@ -54,6 +57,8 @@
         <button id="parseBtn" class="button button-primary" type="button">Parse & Preview</button>
         <button id="samplePubBtn" class="button button-ghost" type="button">Sample paper</button>
         <button id="sampleNewsBtn" class="button button-ghost" type="button">Sample activity</button>
+        <button id="sampleProfileBtn" class="button button-ghost" type="button">Sample profile</button>
+        <button id="sampleProjectBtn" class="button button-ghost" type="button">Sample project</button>
       </div>
     </section>
 
@@ -98,6 +103,8 @@
         <select id="manageKind" aria-label="Manage content kind">
           <option value="publication">Publications</option>
           <option value="update">Updates</option>
+          <option value="profile">Profile</option>
+          <option value="project">Projects</option>
         </select>
         <input id="manageSearch" type="search" placeholder="Search by title" />
       </div>

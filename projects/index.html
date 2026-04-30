@@ -4,13 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Haowei Cheng | Projects</title>
-  <meta name="description" content="This is the personal website of Haowei Cheng">
+  <meta name="description" content="Projects by Haowei Cheng">
   <link rel="canonical" href="/projects/">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com"> 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/site-v2.css">
-
 </head>
 <body>
   <canvas id="bg-canvas"></canvas>
@@ -28,67 +26,25 @@
   </nav>
 
   <main>
-    <div class="page-header">
-      <p class="section-label">// projects</p>
-      <h1 class="section-title">Research & Engineering Projects</h1>
+    <div class="section-head page-header">
+      <div>
+        <p class="section-label">// projects</p>
+        <h1 class="section-title">Open Projects</h1>
+      </div>
+      <a class="section-link" href="/admin/update.html">Add or edit projects</a>
     </div>
 
     <div class="content">
-    
-  <h1>Projects</h1>
-  <h6>some of the projects I have worked on</h6>
-
-
-<section id="projects-list" class="projects-list" aria-label="Project cards">
-  
-  
-    <article class="project-card">
-      
-        <a href="/projects/re/">
-      
-        <div>
-          <img class="card-img-top" src="/assets/img/re.jpeg" alt="project thumbnail" />
-          <div>
-            <h5 class="card-title">Requirements engineering</h5>
-            <p class="card-text">Requirements engineering is a crucial practice in software engineering, ensuring that development teams understand 
-              and fulfill user expectations through clear, standardized, and managed requirements. </p>
-            <div>
-              
-              
-            </div>
-          </div>
-        </div>
-      </a>
-    </article>
-  
-    <article class="project-card">
-      
-        <a href="https://www.youtube.com/watch?v=pkF3m5wVUYI" target="_blank">
-      
-        <div>
-          <img class="card-img-top" src="/assets/img/df.png" alt="project thumbnail" />
-          <div>
-            <h5 class="card-title">Deepfake Speech</h5>
-            <p class="card-text">Deepfake speech is a product of artificial intelligence used to create convincing speech sentences that sound like specific people saying things they did not say.</p>
-            <div>
-              
-              
-            </div>
-          </div>
-        </div>
-      </a>
-    </article>
-  
-</section>
-
-
-  </div>
+      <p class="section-intro">A live list of open project pages and archived resources. The homepage shows only featured cards.</p>
+      <div id="projects-listing"></div>
+    </div>
   </main>
 
   <footer>
     &copy; 2026 Haowei Cheng · Built on GitHub Pages
   </footer>
-  <script src="/assets/js/site-v2.js"></script>
 
+  <script src="/assets/js/site-v2.js"></script>
+  <script src="/assets/js/content-render.js"></script>
 </body>
 </html>
