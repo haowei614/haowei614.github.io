@@ -251,6 +251,9 @@ select:focus {
   gap: 0.65rem;
   margin-top: 1rem;
   min-height: 56px;
+  max-height: 42vh;
+  overflow: auto;
+  padding-right: 0.2rem;
 }
 
 .attachment-card {

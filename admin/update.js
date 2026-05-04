@@ -224,7 +224,22 @@ function renderAttachmentUi(kind = state.kind, item = state.item) {
   els.attachmentInput.disabled = !kind || !item;
   els.attachmentPanel.classList.toggle('hidden', !kind || !item);
   const attachments = item ? currentAttachmentRows(kind, item) : '';
-  els.currentAttachments.innerHTML = attachments || '<div class="attachment-empty">No existing attachments yet. Use the upload button to add files.</div>';
+  const count = kind === 'update'
+    ? (Array.isArray(item?.images) ? item.images.length : 0)
+    : kind === 'publication'
+      ? [item?.pdf, item?.poster].filter(Boolean).length
+      : kind === 'profile'
+        ? [item?.cvUrl, item?.avatarUrl].filter(Boolean).length
+        : kind === 'project'
+          ? [item?.image].filter(Boolean).length
+          : 0;
+  els.currentAttachments.innerHTML = `
+    <div class="attachment-empty">
+      ${count ? `${count} existing attachment${count === 1 ? '' : 's'}` : 'No existing attachments yet.'}
+      ${attachments ? '' : ' Use the upload button to add files.'}
+    </div>
+    ${attachments}
+  `;
 }
 
 function updateEditNotice(kind, mode) {
