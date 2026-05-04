@@ -601,7 +601,7 @@ function normalizeUpdate(input) {
     summary: String(input.summary || "").trim(),
     content: String(input.content || "").trim(),
     links: normalizeLinks(input.links),
-    images: normalizeStringArray(input.images),
+    images: normalizeUniqueStringArray(input.images),
     category: ["event", "talk", "award", "paper", "job", "other"].includes(input.category) ? input.category : "event",
     pinned: Boolean(input.pinned),
     status: input.status === "draft" ? "draft" : "published",
@@ -684,6 +684,10 @@ function normalizeStringArray(value) {
   if (Array.isArray(value)) return value.map((x) => String(x || "").trim()).filter(Boolean);
   if (typeof value === "string") return value.split(",").map((x) => x.trim()).filter(Boolean);
   return [];
+}
+
+function normalizeUniqueStringArray(value) {
+  return Array.from(new Set(normalizeStringArray(value)));
 }
 
 function normalizeLinks(value) {

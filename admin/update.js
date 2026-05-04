@@ -229,8 +229,18 @@ function renderAttachmentUi(kind = state.kind, item = state.item) {
 function addSelectedFiles(files) {
   const picked = Array.from(files || []);
   if (!picked.length) return;
-  state.files = [...state.files, ...picked];
+  const seen = new Set(state.files.map(fileKey));
+  picked.forEach((file) => {
+    const key = fileKey(file);
+    if (seen.has(key)) return;
+    seen.add(key);
+    state.files.push(file);
+  });
   renderFiles();
+}
+
+function fileKey(file) {
+  return [file.name, file.size, file.lastModified || 0].join('|');
 }
 
 function clearSelectedFiles() {
