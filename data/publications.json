@@ -92,8 +92,8 @@
       "id": "pub-2024-001",
       "title": "Generative AI for Requirements Engineering: A Systematic Literature Review",
       "authors": "Haowei Cheng, Jati H. Husen, Sien Reeve Peralta, Bowen Jiang, Nobukazu Yoshioka, Naoyasu Ubayashi, Hironori Washizaki",
-      "venue": "arXiv",
-      "year": 2024,
+      "venue": "Software: Practice and Experience",
+      "year": 2025,
       "date": "2024-09-14",
       "tags": [
         "GenAI",
@@ -106,7 +106,7 @@
       "code": "",
       "project": "",
       "doi": "",
-      "externalUrl": "",
+      "externalUrl": "https://onlinelibrary.wiley.com/doi/10.1002/spe.70029?",
       "featured": true,
       "status": "published"
     },
