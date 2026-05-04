@@ -220,9 +220,10 @@ select:focus {
 }
 
 .attachment-panel {
-  margin-top: 1.25rem;
-  padding-top: 1.15rem;
-  border-top: 1px solid var(--line);
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(238, 232, 216, 0.03);
 }
 
 .attachment-panel-head h3 {
@@ -249,6 +250,7 @@ select:focus {
   display: grid;
   gap: 0.65rem;
   margin-top: 1rem;
+  min-height: 56px;
 }
 
 .attachment-card {
@@ -284,6 +286,14 @@ select:focus {
 .attachment-card a {
   color: var(--text);
   text-decoration: none;
+}
+
+.attachment-empty {
+  padding: 0.85rem;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--subtle);
+  background: rgba(11, 13, 16, 0.35);
 }
 
 .attachment-thumb {
@@ -352,6 +362,31 @@ select:focus {
   color: #8ddcc4;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.74rem;
+}
+
+.edit-notice {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(102, 194, 165, 0.22);
+  border-radius: 8px;
+  background: rgba(102, 194, 165, 0.08);
+  color: var(--text);
+}
+
+.editor-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.editor-main {
+  min-width: 0;
+}
+
+.editor-side {
+  position: sticky;
+  top: 1rem;
 }
 
 .manage-bar {
@@ -466,6 +501,14 @@ pre {
   .form-grid,
   .manage-bar {
     grid-template-columns: 1fr;
+  }
+
+  .editor-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-side {
+    position: static;
   }
 
   .item-card {

@@ -41,6 +41,7 @@ const els = {
   sampleProjectBtn: document.getElementById('sampleProjectBtn'),
   previewPanel: document.getElementById('previewPanel'),
   previewKind: document.getElementById('previewKind'),
+  editNotice: document.getElementById('editNotice'),
   previewForm: document.getElementById('previewForm'),
   publishBtn: document.getElementById('publishBtn'),
   deleteBtn: document.getElementById('deleteBtn'),
@@ -222,7 +223,25 @@ function renderAttachmentUi(kind = state.kind, item = state.item) {
   els.attachmentInput.accept = spec.accept;
   els.attachmentInput.disabled = !kind || !item;
   els.attachmentPanel.classList.toggle('hidden', !kind || !item);
-  els.currentAttachments.innerHTML = item ? currentAttachmentRows(kind, item) : '';
+  const attachments = item ? currentAttachmentRows(kind, item) : '';
+  els.currentAttachments.innerHTML = attachments || '<div class="attachment-empty">No existing attachments yet. Use the upload button to add files.</div>';
+}
+
+function updateEditNotice(kind, mode) {
+  if (!els.editNotice) return;
+  const isEdit = mode === 'edit';
+  els.editNotice.classList.toggle('hidden', !isEdit);
+  if (!isEdit) {
+    els.editNotice.textContent = '';
+    return;
+  }
+  const messages = {
+    publication: 'Editing an existing publication. Update text fields on the left, then remove or replace the PDF/poster from the attachments panel.',
+    update: 'Editing an existing update. Remove photos directly from the attachment list, or upload more photos to append them before saving.',
+    profile: 'Editing the home profile. Use the form for bio details and the attachment panel for CV or avatar changes.',
+    project: 'Editing an open project. Update the text fields on the left and change the hero image from the attachment panel.',
+  };
+  els.editNotice.textContent = messages[kind] || 'Editing an existing entry. Update the fields and attachments, then save changes.';
 }
 
 function attachmentFieldFor(kind, role) {
@@ -583,6 +602,7 @@ function renderPreview(kind, item) {
 
   els.previewPanel.classList.remove('hidden');
   setPreviewMode(state.mode === 'edit' ? 'edit' : 'new');
+  updateEditNotice(kind, state.mode);
   renderAttachmentUi(kind, state.item);
   els.previewPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
