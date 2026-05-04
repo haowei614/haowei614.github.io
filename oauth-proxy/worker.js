@@ -289,7 +289,9 @@ async function handleSave(request, env) {
   });
 
   const { dataPath, payload, finalizedItem } = buildSavePayload(kind, existing, previous, item);
-  const deleteChanges = replacementDeletes.map((path) => ({ path, delete: true }));
+  const removedPaths = previous ? removedAttachmentPaths(previous, finalizedItem, kind) : [];
+  const deletePaths = Array.from(new Set([...replacementDeletes, ...removedPaths]));
+  const deleteChanges = deletePaths.map((path) => ({ path, delete: true }));
 
   const commit = await commitChanges({
     token,
@@ -701,8 +703,13 @@ function normalizeLinks(value) {
 }
 
 function nextAttachmentSequence(existingImages, index) {
-  const base = Array.isArray(existingImages) ? existingImages.length : 0;
-  return base + index + 1;
+  const images = Array.isArray(existingImages) ? existingImages : [];
+  let max = 0;
+  for (const path of images) {
+    const match = String(path || "").match(/\/(\d+)\.[a-z0-9]+$/i);
+    if (match) max = Math.max(max, Number(match[1]));
+  }
+  return max + index + 1;
 }
 
 function prepareUploadChange(kind, item, file, index) {
@@ -843,6 +850,12 @@ function attachmentPathsByKind(item, kind) {
     return { image: item.image || "" };
   }
   return {};
+}
+
+function removedAttachmentPaths(previous, next, kind) {
+  const prevPaths = attachmentPathsForItem(previous, kind);
+  const nextPaths = new Set(attachmentPathsForItem(next, kind));
+  return prevPaths.filter((path) => !nextPaths.has(path));
 }
 
 function previousAttachmentPath(snapshot, role) {

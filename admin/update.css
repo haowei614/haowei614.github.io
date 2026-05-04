@@ -262,9 +262,23 @@ select:focus {
   background: rgba(238, 232, 216, 0.035);
 }
 
+.attachment-card-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.attachment-card-copy {
+  min-width: 0;
+}
+
 .attachment-card small {
   display: block;
   color: var(--subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .attachment-card a {
@@ -465,5 +479,9 @@ pre {
   .attachment-card {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .attachment-card-main {
+    width: 100%;
   }
 }

@@ -165,50 +165,49 @@ function attachmentSpec(kind) {
 
 function currentAttachmentRows(kind, item) {
   const rows = [];
-  const addLink = (label, url) => {
+  const addRow = ({ label, url, role, index, image = false }) => {
     if (!url) return;
     rows.push(`
-      <div class="attachment-card">
-        <div>
-          <strong>${escapeHtml(label)}</strong>
-          <small>${escapeHtml(url)}</small>
-        </div>
-        <a href="${escapeHtml(url)}" target="_blank" rel="noopener">Open</a>
-      </div>
-    `);
-  };
-  const addImage = (label, url) => {
-    if (!url) return;
-    rows.push(`
-      <div class="attachment-card">
-        <div style="display:flex;align-items:center;gap:0.75rem;min-width:0;">
-          <img class="attachment-thumb" src="${escapeHtml(url)}" alt="${escapeHtml(label)}">
-          <div style="min-width:0;">
+      <div class="attachment-card"${typeof index === 'number' ? ` data-index="${index}"` : ''}>
+        <div class="attachment-card-main">
+          ${image ? `<img class="attachment-thumb" src="${escapeHtml(url)}" alt="${escapeHtml(label)}">` : ''}
+          <div class="attachment-card-copy">
             <strong>${escapeHtml(label)}</strong>
             <small>${escapeHtml(url)}</small>
           </div>
         </div>
-        <a href="${escapeHtml(url)}" target="_blank" rel="noopener">Open</a>
+        <div class="attachment-card-actions">
+          <a href="${escapeHtml(url)}" target="_blank" rel="noopener">Open</a>
+          <button type="button" class="button button-danger attachment-remove" data-role="${escapeHtml(role)}"${typeof index === 'number' ? ` data-index="${index}"` : ''}>Remove</button>
+        </div>
       </div>
     `);
   };
 
   if (kind === 'publication') {
-    addLink('PDF', item.pdf);
-    addLink('Poster', item.poster);
+    addRow({ label: 'PDF', url: item.pdf, role: 'pdf' });
+    addRow({ label: 'Poster', url: item.poster, role: 'poster' });
     return rows.join('');
   }
   if (kind === 'update') {
-    (item.images || []).forEach((url, index) => addImage(`Photo ${String(index + 1).padStart(2, '0')}`, url));
+    (item.images || []).forEach((url, index) => {
+      addRow({
+        label: `Photo ${String(index + 1).padStart(2, '0')}`,
+        url,
+        role: 'image',
+        index,
+        image: true,
+      });
+    });
     return rows.join('');
   }
   if (kind === 'profile') {
-    addLink('CV', item.cvUrl);
-    addImage('Avatar', item.avatarUrl);
+    addRow({ label: 'CV', url: item.cvUrl, role: 'cv' });
+    addRow({ label: 'Avatar', url: item.avatarUrl, role: 'avatar', image: true });
     return rows.join('');
   }
   if (kind === 'project') {
-    addImage('Project image', item.image);
+    addRow({ label: 'Project image', url: item.image, role: 'image', image: true });
     return rows.join('');
   }
   return '';
@@ -224,6 +223,46 @@ function renderAttachmentUi(kind = state.kind, item = state.item) {
   els.attachmentInput.disabled = !kind || !item;
   els.attachmentPanel.classList.toggle('hidden', !kind || !item);
   els.currentAttachments.innerHTML = item ? currentAttachmentRows(kind, item) : '';
+}
+
+function attachmentFieldFor(kind, role) {
+  if (kind === 'publication' && role === 'pdf') return 'pdf';
+  if (kind === 'publication' && role === 'poster') return 'poster';
+  if (kind === 'profile' && role === 'cv') return 'cvUrl';
+  if (kind === 'profile' && role === 'avatar') return 'avatarUrl';
+  if (kind === 'project' && role === 'image') return 'image';
+  return '';
+}
+
+function removeCurrentAttachment(kind, role, index) {
+  if (!kind || !state.item) return;
+  const item = collectPreview();
+  if (kind === 'update' && role === 'image') {
+    const images = Array.isArray(item.images) ? item.images.slice() : [];
+    images.splice(Number(index), 1);
+    item.images = images;
+  } else if (kind === 'publication' && role === 'pdf') {
+    item.pdf = '';
+  } else if (kind === 'publication' && role === 'poster') {
+    item.poster = '';
+  } else if (kind === 'profile' && role === 'cv') {
+    item.cvUrl = '';
+  } else if (kind === 'profile' && role === 'avatar') {
+    item.avatarUrl = '';
+  } else if (kind === 'project' && role === 'image') {
+    item.image = '';
+  }
+
+  const fieldName = attachmentFieldFor(kind, role);
+  if (fieldName) {
+    const field = els.previewForm.querySelector(`[name="${fieldName}"]`);
+    if (field) field.value = '';
+  }
+
+  state.item = item;
+  renderPreview(kind, item);
+  setPreviewMode(state.mode);
+  setResult(`Removed attachment from ${kindLabel(kind).toLowerCase()}. Save changes to persist it.`);
 }
 
 function addSelectedFiles(files) {
@@ -736,6 +775,12 @@ els.attachmentInput.addEventListener('change', () => {
   els.attachmentInput.value = '';
 });
 els.clearFilesBtn.addEventListener('click', clearSelectedFiles);
+els.currentAttachments.addEventListener('click', (event) => {
+  const button = event.target.closest('.attachment-remove');
+  if (!button) return;
+  event.preventDefault();
+  removeCurrentAttachment(state.kind, button.dataset.role, button.dataset.index);
+});
 els.parseBtn.dataset.label = els.parseBtn.textContent;
 els.publishBtn.dataset.label = els.publishBtn.textContent;
 els.deleteBtn.dataset.label = els.deleteBtn.textContent;
