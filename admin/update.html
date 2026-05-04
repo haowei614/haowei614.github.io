@@ -73,6 +73,22 @@
 
       <form id="previewForm" class="form-grid"></form>
 
+      <div id="attachmentPanel" class="attachment-panel">
+        <div class="attachment-panel-head">
+          <div>
+            <p class="step">Attachments</p>
+            <h3 id="attachmentTitle">Upload files for this entry</h3>
+            <p id="attachmentHint" class="hint">Use the buttons below to add PDFs or photos to the current record.</p>
+          </div>
+        </div>
+        <div class="attachment-actions">
+          <label id="attachmentButton" class="button button-ghost attachment-button" for="attachmentInput">Upload files</label>
+          <input id="attachmentInput" type="file" multiple />
+          <button id="clearFilesBtn" class="button button-ghost" type="button">Clear selected files</button>
+        </div>
+        <div id="currentAttachments" class="current-attachments"></div>
+      </div>
+
       <div class="actions">
         <button id="publishBtn" class="button button-primary" type="button">Publish to GitHub</button>
         <button id="deleteBtn" class="button button-danger hidden" type="button">Delete entry</button>

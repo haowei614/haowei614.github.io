@@ -253,9 +253,17 @@ async function handleSave(request, env) {
   const item = normalizeItem(kind, body.item || {});
   const existing = await loadItemsForKind({ token, cfg, kind });
   const previous = findExistingItem(existing, item, kind);
+  const priorAttachments = previous ? attachmentPathsByKind(previous, kind) : {};
+  if (!item.id) {
+    item.id = ensureUniqueId(kind, item, existing);
+  }
+  if (kind === "project" && !item.slug) {
+    item.slug = slugify(item.title || item.id || "project");
+  }
 
   const uploadChanges = [];
   const uploadedPaths = [];
+  const replacementDeletes = [];
   files.forEach((file, index) => {
     const uploaded = prepareUploadChange(kind, item, file, index);
     if (!uploaded) return;
@@ -273,14 +281,20 @@ async function handleSave(request, env) {
     } else if (kind === "project") {
       if (uploaded.role === "image") item.image = uploaded.publicPath;
     }
+
+    const previousPath = previousAttachmentPath(priorAttachments, uploaded.role);
+    if (previousPath && previousPath !== uploaded.publicPath && !replacementDeletes.includes(previousPath)) {
+      replacementDeletes.push(previousPath);
+    }
   });
 
   const { dataPath, payload, finalizedItem } = buildSavePayload(kind, existing, previous, item);
+  const deleteChanges = replacementDeletes.map((path) => ({ path, delete: true }));
 
   const commit = await commitChanges({
     token,
     cfg,
-    changes: [...uploadChanges, payload],
+    changes: [...uploadChanges, ...deleteChanges, payload],
     message: commitMessage(previous ? "updated" : "added", finalizedItem, user.login),
   });
 
@@ -682,6 +696,11 @@ function normalizeLinks(value) {
     .filter((link) => link.url);
 }
 
+function nextAttachmentSequence(existingImages, index) {
+  const base = Array.isArray(existingImages) ? existingImages.length : 0;
+  return base + index + 1;
+}
+
 function prepareUploadChange(kind, item, file, index) {
   if (!file || !file.base64 || !file.name) return null;
   if (Number(file.size || 0) > 24 * 1024 * 1024) {
@@ -689,31 +708,33 @@ function prepareUploadChange(kind, item, file, index) {
   }
 
   const ext = extensionFor(file);
-  const stamp = new Date().toISOString().replace(/\D/g, "").slice(0, 14);
-  const titleSlug = slugify(item.title || item.summary || "upload");
-  const date = item.date || new Date().toISOString().slice(0, 10);
+  const date = normalizeDate(item.date);
+  const year = String(item.year || date.slice(0, 4) || new Date().getFullYear());
+  const folderId = slugify(item.id || item.slug || item.title || item.summary || "upload");
+  const slug = slugify(item.slug || item.title || folderId);
   const isPdf = ext === ".pdf" || file.type === "application/pdf";
   const isImage = /^image\//.test(file.type || "");
 
   let path;
   let role;
   if (kind === "publication" && isPdf) {
-    path = `assets/pdf/publications/${item.year || date.slice(0, 4)}-${titleSlug}-${stamp}${ext}`;
+    path = `assets/pdf/publications/${year}/${folderId}/paper${ext}`;
     role = "pdf";
   } else if (kind === "publication" && isImage) {
-    path = `assets/img/publications/${item.year || date.slice(0, 4)}-${titleSlug}-${index + 1}-${stamp}${ext}`;
+    path = `assets/img/publications/${year}/${folderId}/poster-${String(index + 1).padStart(2, "0")}${ext}`;
     role = "poster";
   } else if (kind === "update" && isImage) {
-    path = `assets/img/news/${date}-${titleSlug}-${index + 1}-${stamp}${ext}`;
+    const nextSeq = nextAttachmentSequence(item.images, index);
+    path = `assets/img/news/${year}/${folderId}/${String(nextSeq).padStart(2, "0")}${ext}`;
     role = "image";
   } else if (kind === "profile" && isPdf) {
-    path = `assets/pdf/profile/${titleSlug}-${stamp}${ext}`;
+    path = `assets/pdf/profile/site-profile/cv${ext}`;
     role = "cv";
   } else if (kind === "profile" && isImage) {
-    path = `assets/img/profile/${titleSlug}-${index + 1}-${stamp}${ext}`;
+    path = `assets/img/profile/site-profile/avatar${ext}`;
     role = "avatar";
   } else if (kind === "project" && isImage) {
-    path = `assets/img/projects/${titleSlug}-${index + 1}-${stamp}${ext}`;
+    path = `assets/img/projects/${slug}/hero${ext}`;
     role = "image";
   } else {
     throw new HttpError(400, `Unsupported file for ${kind}: ${file.name}`);
@@ -802,6 +823,35 @@ function attachmentPathsForItem(item, kind) {
     return [item.image].filter(isRepoAttachmentPath);
   }
   return [];
+}
+
+function attachmentPathsByKind(item, kind) {
+  if (kind === "publication") {
+    return { pdf: item.pdf || "", poster: item.poster || "" };
+  }
+  if (kind === "update") {
+    return { images: normalizeStringArray(item.images) };
+  }
+  if (kind === "profile") {
+    return { cv: item.cvUrl || "", avatar: item.avatarUrl || "" };
+  }
+  if (kind === "project") {
+    return { image: item.image || "" };
+  }
+  return {};
+}
+
+function previousAttachmentPath(snapshot, role) {
+  if (!snapshot) return "";
+  if (role === "pdf") return snapshot.pdf || "";
+  if (role === "poster") return snapshot.poster || "";
+  if (role === "cv") return snapshot.cv || "";
+  if (role === "avatar") return snapshot.avatar || "";
+  if (role === "image") {
+    if (Array.isArray(snapshot.images) && snapshot.images.length) return "";
+    return snapshot.image || "";
+  }
+  return "";
 }
 
 function isRepoAttachmentPath(path) {

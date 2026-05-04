@@ -219,6 +219,69 @@ select:focus {
   white-space: nowrap;
 }
 
+.attachment-panel {
+  margin-top: 1.25rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--line);
+}
+
+.attachment-panel-head h3 {
+  margin: 0.2rem 0 0.35rem;
+  font-size: 1.15rem;
+}
+
+.attachment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.75rem;
+}
+
+.attachment-actions input[type="file"] {
+  display: none;
+}
+
+.attachment-button {
+  min-width: 160px;
+}
+
+.current-attachments {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.attachment-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(238, 232, 216, 0.035);
+}
+
+.attachment-card small {
+  display: block;
+  color: var(--subtle);
+}
+
+.attachment-card a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.attachment-thumb {
+  width: 64px;
+  height: 48px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  object-fit: cover;
+  background: rgba(11, 13, 16, 0.55);
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -397,5 +460,10 @@ pre {
 
   select {
     max-width: none;
+  }
+
+  .attachment-card {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

@@ -28,6 +28,12 @@ const els = {
   sourceText: document.getElementById('sourceText'),
   fileInput: document.getElementById('fileInput'),
   fileList: document.getElementById('fileList'),
+  attachmentInput: document.getElementById('attachmentInput'),
+  clearFilesBtn: document.getElementById('clearFilesBtn'),
+  attachmentButton: document.getElementById('attachmentButton'),
+  attachmentTitle: document.getElementById('attachmentTitle'),
+  attachmentHint: document.getElementById('attachmentHint'),
+  currentAttachments: document.getElementById('currentAttachments'),
   parseBtn: document.getElementById('parseBtn'),
   samplePubBtn: document.getElementById('samplePubBtn'),
   sampleNewsBtn: document.getElementById('sampleNewsBtn'),
@@ -116,6 +122,124 @@ function renderFiles() {
   )).join('');
 }
 
+function attachmentSpec(kind) {
+  if (kind === 'publication') {
+    return {
+      title: 'Upload PDF or poster',
+      hint: 'PDFs update the paper link. Images become poster attachments.',
+      button: 'Upload PDF / poster',
+      accept: '.pdf,image/*',
+    };
+  }
+  if (kind === 'update') {
+    return {
+      title: 'Upload update photos',
+      hint: 'Images are stored under a stable folder for this activity entry.',
+      button: 'Upload photos',
+      accept: 'image/*',
+    };
+  }
+  if (kind === 'profile') {
+    return {
+      title: 'Upload profile files',
+      hint: 'Use a PDF for the CV and an image for the avatar.',
+      button: 'Upload CV / avatar',
+      accept: '.pdf,image/*',
+    };
+  }
+  if (kind === 'project') {
+    return {
+      title: 'Upload project image',
+      hint: 'Images are stored with the project slug so the path stays stable.',
+      button: 'Upload image',
+      accept: 'image/*',
+    };
+  }
+  return {
+    title: 'Upload files',
+    hint: 'Choose files that match the selected module.',
+    button: 'Upload files',
+    accept: '.pdf,image/*',
+  };
+}
+
+function currentAttachmentRows(kind, item) {
+  const rows = [];
+  const addLink = (label, url) => {
+    if (!url) return;
+    rows.push(`
+      <div class="attachment-card">
+        <div>
+          <strong>${escapeHtml(label)}</strong>
+          <small>${escapeHtml(url)}</small>
+        </div>
+        <a href="${escapeHtml(url)}" target="_blank" rel="noopener">Open</a>
+      </div>
+    `);
+  };
+  const addImage = (label, url) => {
+    if (!url) return;
+    rows.push(`
+      <div class="attachment-card">
+        <div style="display:flex;align-items:center;gap:0.75rem;min-width:0;">
+          <img class="attachment-thumb" src="${escapeHtml(url)}" alt="${escapeHtml(label)}">
+          <div style="min-width:0;">
+            <strong>${escapeHtml(label)}</strong>
+            <small>${escapeHtml(url)}</small>
+          </div>
+        </div>
+        <a href="${escapeHtml(url)}" target="_blank" rel="noopener">Open</a>
+      </div>
+    `);
+  };
+
+  if (kind === 'publication') {
+    addLink('PDF', item.pdf);
+    addLink('Poster', item.poster);
+    return rows.join('');
+  }
+  if (kind === 'update') {
+    (item.images || []).forEach((url, index) => addImage(`Photo ${String(index + 1).padStart(2, '0')}`, url));
+    return rows.join('');
+  }
+  if (kind === 'profile') {
+    addLink('CV', item.cvUrl);
+    addImage('Avatar', item.avatarUrl);
+    return rows.join('');
+  }
+  if (kind === 'project') {
+    addImage('Project image', item.image);
+    return rows.join('');
+  }
+  return '';
+}
+
+function renderAttachmentUi(kind = state.kind, item = state.item) {
+  if (!els.attachmentPanel || !els.attachmentInput) return;
+  const spec = attachmentSpec(kind);
+  els.attachmentTitle.textContent = spec.title;
+  els.attachmentHint.textContent = spec.hint;
+  els.attachmentButton.textContent = spec.button;
+  els.attachmentInput.accept = spec.accept;
+  els.attachmentInput.disabled = !kind || !item;
+  els.attachmentPanel.classList.toggle('hidden', !kind || !item);
+  els.currentAttachments.innerHTML = item ? currentAttachmentRows(kind, item) : '';
+}
+
+function addSelectedFiles(files) {
+  const picked = Array.from(files || []);
+  if (!picked.length) return;
+  state.files = [...state.files, ...picked];
+  renderFiles();
+}
+
+function clearSelectedFiles() {
+  state.files = [];
+  els.fileInput.value = '';
+  if (els.attachmentInput) els.attachmentInput.value = '';
+  renderFiles();
+}
+
 function kindLabel(kind) {
   if (kind === 'publication') return 'Publication';
   if (kind === 'update') return 'Update';
@@ -180,6 +304,7 @@ function openExistingItem(item, kind = state.manageKind) {
   state.mode = 'edit';
   state.files = [];
   els.fileInput.value = '';
+  if (els.attachmentInput) els.attachmentInput.value = '';
   renderFiles();
   els.kindSelect.value = kind;
   renderPreview(kind, state.item);
@@ -207,6 +332,7 @@ async function deleteExistingItem() {
   state.mode = 'new';
   state.files = [];
   els.fileInput.value = '';
+  if (els.attachmentInput) els.attachmentInput.value = '';
   renderFiles();
   els.previewPanel.classList.add('hidden');
   await loadItems();
@@ -408,6 +534,7 @@ function renderPreview(kind, item) {
 
   els.previewPanel.classList.remove('hidden');
   setPreviewMode(state.mode === 'edit' ? 'edit' : 'new');
+  renderAttachmentUi(kind, state.item);
   els.previewPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -551,7 +678,9 @@ async function publishEntry() {
   setPreviewMode('edit');
   state.files = [];
   els.fileInput.value = '';
+  if (els.attachmentInput) els.attachmentInput.value = '';
   renderFiles();
+  renderAttachmentUi(state.kind, state.item);
   await loadItems();
 }
 
@@ -589,9 +718,14 @@ els.logoutBtn.addEventListener('click', () => {
   updateAuthUi();
 });
 els.fileInput.addEventListener('change', () => {
-  state.files = Array.from(els.fileInput.files || []);
-  renderFiles();
+  addSelectedFiles(els.fileInput.files || []);
+  els.fileInput.value = '';
 });
+els.attachmentInput.addEventListener('change', () => {
+  addSelectedFiles(els.attachmentInput.files || []);
+  els.attachmentInput.value = '';
+});
+els.clearFilesBtn.addEventListener('click', clearSelectedFiles);
 els.parseBtn.dataset.label = els.parseBtn.textContent;
 els.publishBtn.dataset.label = els.publishBtn.textContent;
 els.deleteBtn.dataset.label = els.deleteBtn.textContent;
@@ -642,6 +776,7 @@ els.refreshBtn.addEventListener('click', async () => {
   }
 });
 els.kindSelect.addEventListener('change', () => updateModuleHint(els.kindSelect.value));
+els.kindSelect.addEventListener('change', () => renderAttachmentUi(els.kindSelect.value, state.item));
 els.manageKind.addEventListener('change', async () => {
   state.manageKind = els.manageKind.value;
   await loadItems();
