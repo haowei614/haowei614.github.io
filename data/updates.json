@@ -1,6 +1,34 @@
 {
   "items": [
     {
+      "id": "activity-2025-10-31-woven-internship",
+      "title": "Software Engineer Internship at Woven by Toyota",
+      "date": "2025-10-31",
+      "summary": "Attended Software Engineer Internship.",
+      "content": "I attended a Software Engineer internship at Woven by Toyota.",
+      "links": [
+        {
+          "label": "Link",
+          "url": "https://woven.toyota/en/careers/"
+        }
+      ],
+      "images": [
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/01.jpg",
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/03.jpg",
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/05.jpg",
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/07.jpg",
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/09.jpg",
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/11.jpg",
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/13.jpg",
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/15.jpg",
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/17.jpg",
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/19.jpg"
+      ],
+      "category": "event",
+      "pinned": true,
+      "status": "published"
+    },
+    {
       "id": "upd-2025-001",
       "title": "Presented at MLSE Workshop in Hakone",
       "date": "2025-07-12",
