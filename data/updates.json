@@ -1,6 +1,33 @@
 {
   "items": [
     {
+      "id": "activity-2026-02-01-polymtl-internship",
+      "title": "Completed Research Internship at Polytechnique Montréal",
+      "date": "2026-02-01",
+      "summary": "Completed a research internship at Polytechnique Montréal under Prof. Foutse Khomh, working on multi-agent systems for requirements engineering.",
+      "content": "Spent three months (Nov 2025 – Feb 2026) as a research intern at Polytechnique Montréal, Canada, supervised by Prof. Foutse Khomh. Conducted research on multi-agent systems for requirements engineering, advancing key topics in my PhD work at Waseda University. Beyond the academic experience, gained valuable cross-cultural perspectives and enjoyed Montréal's vibrant tech ecosystem and winter sports scene.",
+      "links": [
+        {
+          "label": "Polytechnique Montréal",
+          "url": "https://www.polymtl.ca/en"
+        }
+      ],
+      "images": [
+        "/assets/img/news/2026/polymtl-internship/1.jpeg",
+        "/assets/img/news/2026/polymtl-internship/2.jpeg",
+        "/assets/img/news/2026/polymtl-internship/3.jpeg",
+        "/assets/img/news/2026/polymtl-internship/4.jpeg",
+        "/assets/img/news/2026/polymtl-internship/5.jpeg",
+        "/assets/img/news/2026/polymtl-internship/6.jpeg",
+        "/assets/img/news/2026/polymtl-internship/7.jpeg",
+        "/assets/img/news/2026/polymtl-internship/8.jpeg",
+        "/assets/img/news/2026/polymtl-internship/9.jpeg"
+      ],
+      "category": "event",
+      "pinned": true,
+      "status": "published"
+    },
+    {
       "id": "activity-2025-10-31-woven-internship",
       "title": "Software Engineer Internship at Woven by Toyota",
       "date": "2025-10-31",
@@ -18,11 +45,7 @@
         "/assets/img/news/2025/activity-2025-10-31-woven-internship/05.jpg",
         "/assets/img/news/2025/activity-2025-10-31-woven-internship/07.jpg",
         "/assets/img/news/2025/activity-2025-10-31-woven-internship/09.jpg",
-        "/assets/img/news/2025/activity-2025-10-31-woven-internship/11.jpg",
-        "/assets/img/news/2025/activity-2025-10-31-woven-internship/13.jpg",
-        "/assets/img/news/2025/activity-2025-10-31-woven-internship/15.jpg",
-        "/assets/img/news/2025/activity-2025-10-31-woven-internship/17.jpg",
-        "/assets/img/news/2025/activity-2025-10-31-woven-internship/19.jpg"
+        "/assets/img/news/2025/activity-2025-10-31-woven-internship/11.jpg"
       ],
       "category": "event",
       "pinned": true,

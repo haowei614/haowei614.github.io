@@ -18,6 +18,10 @@
     return new Date(b.date || 0) - new Date(a.date || 0);
   }
 
+  function highlightAuthor(authorsStr) {
+    return escapeHtml(authorsStr || '').replace(/Haowei\s+Cheng/g, '<strong style="color:var(--text);font-weight:600">Haowei Cheng</strong>');
+  }
+
   async function loadJson(path) {
     const res = await fetch(path);
     if (!res.ok) throw new Error('Failed to load ' + path);
@@ -70,7 +74,7 @@
     return '<article class="pub-card">'
       + '<div class="pub-card-head"><span class="pub-year">' + year + '</span><span class="pub-date">' + escapeHtml(fmtDate(item.date)) + '</span></div>'
       + '<h3 class="pub-card-title">' + title + '</h3>'
-      + '<p class="pub-card-meta">' + escapeHtml(item.authors || '') + '</p>'
+      + '<p class="pub-card-meta">' + highlightAuthor(item.authors) + '</p>'
       + '<p class="pub-card-venue">' + venue + '</p>'
       + '<p class="pub-card-abs">' + escapeHtml(item.abstract || '') + '</p>'
       + '<div class="pub-tags">' + tags + '</div>'
@@ -79,18 +83,19 @@
   }
 
   function updateCard(item, forHome) {
-    const links = (item.links || []).map(function (l) {
-      return '<a href="' + escapeHtml(l.url || '#') + '" target="_blank" rel="noopener">' + escapeHtml(l.label || 'Link') + '</a>';
-    }).join(' · ');
+    var linkBtns = (item.links || []).map(function (l) {
+      return '<a class="btn-mini" href="' + escapeHtml(l.url || '#') + '" target="_blank" rel="noopener">' + escapeHtml(l.label || 'Link') + '</a>';
+    }).join('');
 
     if (forHome) {
       return '<div class="news-item">'
         + '<span class="news-date">' + escapeHtml(fmtDate(item.date)) + '</span>'
-        + '<p class="news-text"><strong>' + escapeHtml(item.title) + '</strong> — ' + escapeHtml(item.summary || '')
-        + (links ? ' (' + links + ')' : '') + '</p></div>';
+        + '<div class="news-body"><p class="news-text"><strong>' + escapeHtml(item.title) + '</strong> — ' + escapeHtml(item.summary || '') + '</p>'
+        + (linkBtns ? '<div class="btn-mini-wrap">' + linkBtns + '</div>' : '')
+        + '</div></div>';
     }
 
-    const images = (item.images || []).map(function (src) {
+    var images = (item.images || []).map(function (src) {
       return '<img src="' + escapeHtml(src) + '" alt="update image" class="update-image">';
     }).join('');
 
@@ -99,8 +104,8 @@
       + '<h3 class="update-title">' + escapeHtml(item.title || '') + '</h3>'
       + '<p class="update-summary">' + escapeHtml(item.summary || '') + '</p>'
       + (item.content ? '<p class="update-content">' + escapeHtml(item.content) + '</p>' : '')
-      + (links ? '<p class="update-links">' + links + '</p>' : '')
       + (images ? '<div class="update-images">' + images + '</div>' : '')
+      + (linkBtns ? '<div class="btn-mini-wrap">' + linkBtns + '</div>' : '')
       + '</article>';
   }
 
@@ -273,7 +278,39 @@
     }
   }
 
-  Promise.allSettled([renderProfile(), renderPublications(), renderUpdates(), renderProjects()])
+  function blogCard(item) {
+    var tags = (item.tags || []).map(function (t) {
+      return '<span class="tag">' + escapeHtml(t) + '</span>';
+    }).join('');
+    var url = item.externalUrl || item.slug || '#';
+    var source = item.source ? '<span class="blog-source">' + escapeHtml(item.source) + '</span>' : '';
+    var langLabel = item.lang === 'ja' ? 'JP' : item.lang === 'en' ? 'EN' : '';
+    var lang = langLabel ? '<span class="blog-lang">' + langLabel + '</span>' : '';
+
+    return '<a class="blog-card" href="' + escapeHtml(url) + '" target="_blank" rel="noopener">'
+      + '<div class="blog-card-head">'
+      + '<span class="pub-date">' + escapeHtml(fmtDate(item.date)) + '</span>'
+      + '<div class="blog-card-badges">' + source + lang + '</div>'
+      + '</div>'
+      + '<h3 class="blog-card-title">' + escapeHtml(item.title) + '</h3>'
+      + '<p class="blog-card-summary">' + escapeHtml(item.summary || '') + '</p>'
+      + '<div class="pub-tags">' + tags + '</div>'
+      + '</a>';
+  }
+
+  async function renderBlog() {
+    var data = await loadJson('/data/blog.json');
+    var items = (data.items || []).filter(function (x) { return x.status === 'published'; }).sort(byDateDesc);
+
+    var listEl = document.getElementById('blog-listing');
+    if (listEl) {
+      listEl.innerHTML = items.length
+        ? '<div class="blog-grid">' + items.map(blogCard).join('') + '</div>'
+        : '<p class="section-intro">No posts yet.</p>';
+    }
+  }
+
+  Promise.allSettled([renderProfile(), renderPublications(), renderUpdates(), renderProjects(), renderBlog()])
     .then(function (results) {
       results.forEach(function (result) {
         if (result.status === 'rejected') console.error(result.reason);

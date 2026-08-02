@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ReMIND — Requirements Conflict Resolution</title>
+  <meta name="description" content="ReMIND: an AI-powered tool for detecting and resolving requirements conflicts through multi-agent argumentation.">
+  <link rel="canonical" href="/remind/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/site-v2.css">
+  <style>
+    .remind-hero {
+      text-align: center;
+      padding: 2rem 0 3rem;
+    }
+
+    .remind-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3.2rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .remind-logo span {
+      color: var(--accent);
+    }
+
+    .remind-tagline {
+      max-width: 640px;
+      margin: 0 auto 1.5rem;
+      color: var(--muted);
+      font-size: 1.15rem;
+      line-height: 1.7;
+    }
+
+    .remind-badges {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .remind-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 0.65rem;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .remind-badge.research {
+      border: 1px solid rgba(102, 194, 165, 0.25);
+      background: rgba(102, 194, 165, 0.08);
+      color: var(--accent2);
+    }
+
+    .remind-badge.status {
+      border: 1px solid rgba(184, 146, 46, 0.25);
+      background: rgba(184, 146, 46, 0.08);
+      color: var(--accent);
+    }
+
+    .remind-video {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+      aspect-ratio: 16 / 9;
+    }
+
+    .remind-video iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .remind-section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2.5rem 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .remind-section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 1.2rem;
+    }
+
+    .remind-section p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .remind-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .remind-feature {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 1.2rem;
+      background: var(--surface);
+    }
+
+    .remind-feature-icon {
+      display: inline-grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      margin-bottom: 0.8rem;
+      border: 1px solid rgba(184, 146, 46, 0.28);
+      border-radius: 8px;
+      background: rgba(184, 146, 46, 0.08);
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+
+    .remind-feature h4 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .remind-feature p {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .remind-papers {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .remind-paper {
+      display: block;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .remind-paper:hover {
+      border-color: var(--line-strong);
+      transform: translateX(4px);
+    }
+
+    .remind-paper-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .remind-paper-venue {
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-style: italic;
+    }
+
+    .moat-section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2.5rem 0 2rem;
+    }
+
+    .moat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 1.2rem;
+    }
+
+    .moat-col-header {
+      padding: 0.9rem 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .moat-col-header.others {
+      background: rgba(0, 0, 0, 0.03);
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+    }
+
+    .moat-col-header.ours {
+      background: rgba(184, 146, 46, 0.06);
+      color: var(--accent);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .moat-row {
+      display: contents;
+    }
+
+    .moat-cell {
+      padding: 0.85rem 1.2rem;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .moat-cell.others {
+      color: var(--muted);
+      border-right: 1px solid var(--line);
+    }
+
+    .moat-cell.ours {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .moat-row:last-child .moat-cell {
+      border-bottom: none;
+    }
+
+    .moat-cell .check {
+      color: var(--accent2);
+      margin-right: 0.3rem;
+    }
+
+    .moat-cell .cross {
+      color: var(--muted);
+      opacity: 0.5;
+      margin-right: 0.3rem;
+    }
+
+    @media (max-width: 600px) {
+      .moat-grid {
+        font-size: 0.82rem;
+      }
+      .moat-cell, .moat-col-header {
+        padding: 0.7rem 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <nav>
+    <a href="/" class="nav-logo">Haowei Cheng</a>
+    <ul class="nav-links">
+      <li><a href="/">About</a></li>
+      <li><a href="/publications/">Publications</a></li>
+      <li><a href="/projects/">Projects</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/news/">News</a></li>
+      <li><a href="/remind/" class="nav-cta active">ReMIND</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="remind-hero">
+      <h1 class="remind-logo">Re<span>MIND</span></h1>
+      <p class="remind-tagline">
+        AI-powered requirements conflict resolution through multi-agent dialectical negotiation.
+        Built on research from QUARE and ArgRE.
+      </p>
+      <div class="remind-badges">
+        <span class="remind-badge research">Based on RE 2026 & IEEE ACCESS</span>
+        <span class="remind-badge status">MVP — Early Preview</span>
+      </div>
+    </section>
+
+    <div class="remind-video">
+      <iframe
+        src="https://www.youtube.com/embed/LyhJ4g9_4Fs"
+        title="ReMIND Demo"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="remind-section">
+      <h2 class="remind-section-title">What is ReMIND?</h2>
+      <p>
+        ReMIND (Requirements conflict resolution through Multi-agent Intelligent Negotiation and Dialectics)
+        is a tool that helps software teams detect and resolve conflicting requirements
+        before they become costly downstream problems.
+      </p>
+      <p>
+        It uses multiple AI agents — each representing a different quality concern (safety, efficiency,
+        trustworthiness, etc.) — to systematically surface conflicts and negotiate balanced solutions
+        through structured argumentation.
+      </p>
+
+      <div class="remind-features">
+        <div class="remind-feature">
+          <div class="remind-feature-icon">MA</div>
+          <h4>Multi-Agent Negotiation</h4>
+          <p>Quality-specialized agents debate requirements from different stakeholder perspectives.</p>
+        </div>
+        <div class="remind-feature">
+          <div class="remind-feature-icon">CR</div>
+          <h4>Conflict Detection</h4>
+          <p>Automatically surfaces cross-quality conflicts that are hard to catch manually.</p>
+        </div>
+        <div class="remind-feature">
+          <div class="remind-feature-icon">FA</div>
+          <h4>Formal Argumentation</h4>
+          <p>Resolves disputes through structured dialectical protocols, not implicit aggregation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="moat-section">
+      <h2 class="remind-section-title">Why ReMIND?</h2>
+      <p style="color:var(--muted);font-size:1rem;line-height:1.8;margin-bottom:0.2rem;">
+        Most AI-based requirements tools stop at summarization or classification.
+        ReMIND goes further — it resolves conflicts with traceable reasoning.
+      </p>
+      <div class="moat-grid">
+        <div class="moat-col-header others">Typical AI Tools</div>
+        <div class="moat-col-header ours">ReMIND</div>
+
+        <div class="moat-row">
+          <div class="moat-cell others"><span class="cross">✗</span> Single LLM prompt, black-box output</div>
+          <div class="moat-cell ours"><span class="check">✓</span> Multi-agent negotiation with role separation</div>
+        </div>
+        <div class="moat-row">
+          <div class="moat-cell others"><span class="cross">✗</span> Detects conflicts but no resolution</div>
+          <div class="moat-cell ours"><span class="check">✓</span> Full closed-loop: detect → argue → resolve</div>
+        </div>
+        <div class="moat-row">
+          <div class="moat-cell others"><span class="cross">✗</span> No formal guarantees on reasoning</div>
+          <div class="moat-cell ours"><span class="check">✓</span> Backed by formal argumentation frameworks</div>
+        </div>
+        <div class="moat-row">
+          <div class="moat-cell others"><span class="cross">✗</span> Ad-hoc prompt engineering</div>
+          <div class="moat-cell ours"><span class="check">✓</span> Peer-reviewed at CORE A venue & SCIE journal</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="remind-section">
+      <h2 class="remind-section-title">Research Foundation</h2>
+      <p>ReMIND is built on peer-reviewed research published at top venues:</p>
+
+      <div class="remind-papers">
+        <a class="remind-paper" href="https://arxiv.org/abs/2603.11890" target="_blank" rel="noopener">
+          <p class="remind-paper-title">QUARE: Quality-Aware Requirements Analysis through Multi-Agent Dialectical Negotiation</p>
+          <p class="remind-paper-venue">RE 2026 (34th IEEE International Requirements Engineering Conference) · CORE Rank A</p>
+        </a>
+        <a class="remind-paper" href="https://ieeexplore.ieee.org/abstract/document/11610972" target="_blank" rel="noopener">
+          <p class="remind-paper-title">ArgRE: Formal Argumentation for Conflict Resolution in Multi-Agent Requirements Negotiation</p>
+          <p class="remind-paper-venue">IEEE ACCESS · SCIE, IF=3.6</p>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="mailto:haowei.cheng@fuji.waseda.jp">Email</a>
+      <a href="https://www.github.com/haowei614" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a>
+      <a href="/admin/update.html">Update Site</a>
+    </div>
+    <p>&copy; 2026 Haowei Cheng &middot; Built on GitHub Pages</p>
+  </footer>
+
+  <script src="/assets/js/site-v2.js"></script>
+</body>
+</html>

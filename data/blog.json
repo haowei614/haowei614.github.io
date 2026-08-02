@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "id": "blog-001",
+      "title": "安全関連システムの要求工学にLLMマルチエージェントを活用したら、何が変わるのか",
+      "date": "2026-08-02",
+      "summary": "自動車・ロボット・医療機器などの安全関連システム開発において、LLMマルチエージェントを要求工学に活用するアプローチを紹介。複数エージェントによる議論を通じた要求品質の多角的評価、コンフリクト検出、規格準拠チェックなどの可能性と課題を整理。",
+      "tags": ["LLM", "Requirements Engineering", "Functional Safety"],
+      "externalUrl": "https://qiita.com/Haowei988/items/b9cba4e3634c16b8416c",
+      "slug": "",
+      "source": "Qiita",
+      "lang": "ja",
+      "status": "published"
+    }
+  ]
+}

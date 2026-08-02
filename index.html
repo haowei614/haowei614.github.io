@@ -9,20 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b0d10;
-      --bg-soft: #10151a;
-      --surface: #15191f;
-      --surface-elev: #1a1f26;
-      --line: rgba(238, 232, 216, 0.12);
-      --line-strong: rgba(238, 232, 216, 0.22);
-      --text: #f1eee7;
-      --muted: #a8adb3;
-      --subtle: #747d86;
-      --accent: #d7a84d;
-      --accent-ink: #20180a;
-      --accent2: #66c2a5;
-      --accent3: #8fa8ff;
-      --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+      --bg: #faf9f6;
+      --bg-soft: #f3f2ee;
+      --surface: #ffffff;
+      --surface-elev: #f7f6f3;
+      --line: rgba(30, 30, 30, 0.10);
+      --line-strong: rgba(30, 30, 30, 0.18);
+      --text: #1a1a1a;
+      --muted: #555b63;
+      --subtle: #8a8f96;
+      --accent: #b8922e;
+      --accent-ink: #ffffff;
+      --accent2: #3a9e80;
+      --accent3: #5a7de6;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.06);
     }
 
     *, *::before, *::after {
@@ -37,8 +37,7 @@
     }
 
     body {
-      background:
-        linear-gradient(180deg, #0b0d10 0%, #10151a 46%, #0b0d10 100%);
+      background: var(--bg);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
@@ -48,27 +47,11 @@
     }
 
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(238, 232, 216, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(238, 232, 216, 0.025) 1px, transparent 1px);
-      background-size: 64px 64px;
-      -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.18) 72%, transparent);
-      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.18) 72%, transparent);
+      display: none;
     }
 
     body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-      opacity: 0.5;
+      display: none;
     }
 
     a {
@@ -82,7 +65,7 @@
       height: 100%;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.2;
+      opacity: 0.06;
     }
 
     .cursor-glow {
@@ -99,7 +82,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 3rem;
-      background: rgba(11, 13, 16, 0.78);
+      background: rgba(250, 249, 246, 0.88);
       backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--line);
       transition: background 0.25s ease, padding 0.25s ease, border-color 0.25s ease;
@@ -108,7 +91,7 @@
     nav.scrolled {
       padding-top: 0.78rem;
       padding-bottom: 0.78rem;
-      background: rgba(11, 13, 16, 0.92);
+      background: rgba(250, 249, 246, 0.96);
       border-color: var(--line-strong);
     }
 
@@ -162,7 +145,7 @@
 
     .nav-links a:hover {
       color: var(--text);
-      background: rgba(238, 232, 216, 0.06);
+      background: rgba(30, 30, 30, 0.05);
     }
 
     .nav-toggle {
@@ -173,7 +156,7 @@
       justify-content: center;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: rgba(238, 232, 216, 0.04);
+      background: rgba(30, 30, 30, 0.04);
       color: var(--text);
       cursor: pointer;
     }
@@ -296,7 +279,7 @@
     .hero-desc a:hover,
     .news-text a:hover,
     footer a:hover {
-      color: #85d8bf;
+      color: #2d8a6d;
       border-color: currentColor;
     }
 
@@ -316,7 +299,7 @@
       padding: 0 0.75rem;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(238, 232, 216, 0.045);
+      background: rgba(30, 30, 30, 0.04);
       color: var(--muted);
       font-size: 0.84rem;
       font-weight: 500;
@@ -355,19 +338,19 @@
     .btn-primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 18px 44px rgba(215, 168, 77, 0.24);
-      background: #e1b864;
+      background: #c99e2a;
     }
 
     .btn-outline {
       border: 1px solid var(--line-strong);
-      background: rgba(238, 232, 216, 0.035);
+      background: var(--surface);
       color: var(--text);
     }
 
     .btn-outline:hover {
       transform: translateY(-2px);
-      border-color: rgba(238, 232, 216, 0.36);
-      background: rgba(238, 232, 216, 0.075);
+      border-color: rgba(30, 30, 30, 0.25);
+      background: var(--surface-elev);
     }
 
     .hero-photo-wrap {
@@ -376,7 +359,7 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background:
-        linear-gradient(135deg, rgba(238, 232, 216, 0.08), rgba(238, 232, 216, 0.02));
+        linear-gradient(135deg, rgba(30, 30, 30, 0.03), rgba(30, 30, 30, 0.01));
       box-shadow: var(--shadow);
       opacity: 0;
       animation: fadeIn 0.8s 0.35s forwards;
@@ -419,7 +402,7 @@
       padding: 0 0.8rem;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: rgba(11, 13, 16, 0.62);
+      background: rgba(255, 255, 255, 0.85);
       color: var(--muted);
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.73rem;
@@ -480,8 +463,8 @@
       overflow: hidden;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: rgba(21, 25, 31, 0.78);
-      box-shadow: 0 14px 48px rgba(0, 0, 0, 0.18);
+      background: var(--surface);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
       transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
     }
 
@@ -506,9 +489,9 @@
     .project-card:hover,
     .pub-item:hover {
       transform: translateY(-4px);
-      border-color: rgba(238, 232, 216, 0.28);
-      background: rgba(26, 31, 38, 0.92);
-      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+      border-color: rgba(30, 30, 30, 0.15);
+      background: var(--surface);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.10);
     }
 
     .card-icon,
@@ -606,7 +589,7 @@
       border: 1px solid rgba(102, 194, 165, 0.25);
       border-radius: 999px;
       background: rgba(102, 194, 165, 0.08);
-      color: #8ddcc4;
+      color: var(--accent2);
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.7rem;
     }
@@ -702,6 +685,25 @@
       font-size: 0.8rem;
     }
 
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
     .reveal {
       opacity: 0;
       transform: translateY(24px);
@@ -758,7 +760,7 @@
         padding: 0.5rem;
         border: 1px solid var(--line);
         border-radius: 8px;
-        background: rgba(11, 13, 16, 0.96);
+        background: rgba(255, 255, 255, 0.98);
         box-shadow: var(--shadow);
       }
 
@@ -884,8 +886,9 @@
     <li><a href="#about">About</a></li>
     <li><a href="/publications/">Publications</a></li>
     <li><a href="#projects">Projects</a></li>
+    <li><a href="/blog/">Blog</a></li>
     <li><a href="/news/">News</a></li>
-    <li><a href="/admin/update.html" class="nav-cta">Update</a></li>
+    <li><a href="/remind/" class="nav-cta">ReMIND</a></li>
   </ul>
 </nav>
 
@@ -919,10 +922,6 @@
         <a href="https://www.github.com/haowei614" class="btn btn-outline" target="_blank" rel="noopener" id="github-link">
           <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
-        </a>
-        <a href="/admin/update.html" class="btn btn-outline">
-          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
-          Update Site
         </a>
       </div>
     </div>
@@ -978,30 +977,22 @@
     </div>
     <p class="section-intro reveal">A short list of pinned work. The full publication page keeps the complete archive with PDF and external links.</p>
     <div class="pub-list" id="home-publications">
-      <a class="pub-item reveal" href="/assets/pdf/D2/IEEE_HTC.pdf" target="_blank" rel="noopener">
-        <span class="pub-year">2025</span>
+      <div class="pub-item reveal">
+        <span class="pub-year">2026</span>
         <div>
-          <p class="pub-title">Translating Requirements into CARLA Executable Scripts: an LLM-Driven Automated Scenario Realization</p>
-          <p class="pub-venue">IEEE R10 HTC 2025</p>
-          <div class="pub-tags"><span class="tag">LLM</span><span class="tag">Requirements</span><span class="tag">CARLA</span></div>
+          <p class="pub-title">QUARE: Quality-Aware Requirements Analysis through Multi-Agent Dialectical Negotiation</p>
+          <p class="pub-venue">RE 2026 (34th IEEE International Requirements Engineering Conference) · CORE Rank A</p>
+          <div class="pub-tags"><span class="tag">Requirements</span><span class="tag">Multi-Agent</span><span class="tag">Quality</span></div>
         </div>
-      </a>
-      <a class="pub-item reveal" href="/assets/pdf/D1/SLR.pdf" target="_blank" rel="noopener">
-        <span class="pub-year">2024</span>
+      </div>
+      <div class="pub-item reveal">
+        <span class="pub-year">2026</span>
         <div>
-          <p class="pub-title">Generative AI for Requirements Engineering: A Systematic Literature Review</p>
-          <p class="pub-venue">arXiv</p>
-          <div class="pub-tags"><span class="tag">GenAI</span><span class="tag">SLR</span><span class="tag">Requirements</span></div>
+          <p class="pub-title">ArgRE: Formal Argumentation for Conflict Resolution in Multi-Agent Requirements Negotiation</p>
+          <p class="pub-venue">IEEE ACCESS · SCIE, IF=3.6</p>
+          <div class="pub-tags"><span class="tag">Argumentation</span><span class="tag">Multi-Agent</span><span class="tag">Requirements</span></div>
         </div>
-      </a>
-      <a class="pub-item reveal" href="/assets/pdf/deepfakes/Analysis_of_Spectro-Temporal_Modulation_Representation_for_Deep-Fake_Speech_Detection.pdf" target="_blank" rel="noopener">
-        <span class="pub-year">2023</span>
-        <div>
-          <p class="pub-title">Analysis of Spectro-Temporal Modulation Representation for Deep-Fake Speech Detection</p>
-          <p class="pub-venue">APSIPA ASC 2023</p>
-          <div class="pub-tags"><span class="tag">DeepFake</span><span class="tag">Speech</span><span class="tag">Audio</span></div>
-        </div>
-      </a>
+      </div>
     </div>
   </section>
 
@@ -1057,7 +1048,13 @@
 </main>
 
 <footer>
-  &copy; 2026 Haowei Cheng · Built on GitHub Pages
+  <div class="footer-links">
+    <a href="mailto:haowei.cheng@fuji.waseda.jp">Email</a>
+    <a href="https://www.github.com/haowei614" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a>
+    <a href="/admin/update.html">Update Site</a>
+  </div>
+  <p>&copy; 2026 Haowei Cheng &middot; Built on GitHub Pages</p>
 </footer>
 
 <script>
@@ -1080,8 +1077,8 @@ function makeParticle() {
     r: Math.random() * 1.35 + 0.25,
     vx: (Math.random() - 0.5) * 0.18,
     vy: (Math.random() - 0.5) * 0.18,
-    alpha: Math.random() * 0.35 + 0.08,
-    color: Math.random() > 0.45 ? '215,168,77' : '102,194,165'
+    alpha: Math.random() * 0.12 + 0.03,
+    color: Math.random() > 0.45 ? '184,146,46' : '58,158,128'
   };
 }
 

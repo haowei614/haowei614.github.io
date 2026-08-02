@@ -19,8 +19,8 @@ if (canvas && !reducedMotion) {
       r: Math.random() * 1.4 + 0.3,
       vx: (Math.random() - 0.5) * 0.18,
       vy: (Math.random() - 0.5) * 0.18,
-      alpha: Math.random() * 0.35 + 0.08,
-      color: Math.random() > 0.45 ? '215,168,77' : '102,194,165'
+      alpha: Math.random() * 0.12 + 0.03,
+      color: Math.random() > 0.45 ? '184,146,46' : '58,158,128'
     };
   }
 
