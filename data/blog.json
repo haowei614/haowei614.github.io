@@ -1,6 +1,18 @@
 {
   "items": [
     {
+      "id": "blog-002",
+      "title": "ASPICE 4.0 SYS.2の整合性チェックは、どこまで自動化できるのか",
+      "date": "2026-08-08",
+      "summary": "Automotive SPICE 4.0のSYS.2を起点に、各ベースプラクティスの自動化余地を整理。特にBP5の一貫性確保について、文単位チェックでは検出できない横断的不整合と、根拠付き出力・人間による最終判断の必要性を論じる。",
+      "tags": ["ASPICE", "Requirements Engineering", "LLM"],
+      "externalUrl": "https://qiita.com/Haowei988/items/6e82ed960c6bf2f8138d",
+      "slug": "",
+      "source": "Qiita",
+      "lang": "ja",
+      "status": "published"
+    },
+    {
       "id": "blog-001",
       "title": "安全関連システムの要求工学にLLMマルチエージェントを活用したら、何が変わるのか",
       "date": "2026-08-02",
