@@ -90,7 +90,7 @@
     if (forHome) {
       return '<div class="news-item">'
         + '<span class="news-date">' + escapeHtml(fmtDate(item.date)) + '</span>'
-        + '<div class="news-body"><p class="news-text"><strong>' + escapeHtml(item.title) + '</strong> — ' + escapeHtml(item.summary || '') + '</p>'
+        + '<div class="news-body"><p class="news-text"><strong>' + escapeHtml(item.title) + '</strong> — ' + escapeHtml(item.summary || item.content || '') + '</p>'
         + (linkBtns ? '<div class="btn-mini-wrap">' + linkBtns + '</div>' : '')
         + '</div></div>';
     }
@@ -99,11 +99,15 @@
       return '<img src="' + escapeHtml(src) + '" alt="update image" class="update-image">';
     }).join('');
 
+    var contentBlock = item.contentHtml
+      ? '<p class="update-content">' + item.contentHtml + '</p>'
+      : (item.content ? '<p class="update-content">' + escapeHtml(item.content) + '</p>' : '');
+
     return '<article class="update-card">'
       + '<div class="update-head"><span class="pub-year">' + escapeHtml((item.date || '').slice(0, 4)) + '</span><span class="pub-date">' + escapeHtml(fmtDate(item.date)) + '</span></div>'
       + '<h3 class="update-title">' + escapeHtml(item.title || '') + '</h3>'
-      + '<p class="update-summary">' + escapeHtml(item.summary || '') + '</p>'
-      + (item.content ? '<p class="update-content">' + escapeHtml(item.content) + '</p>' : '')
+      + (item.summary ? '<p class="update-summary">' + escapeHtml(item.summary) + '</p>' : '')
+      + contentBlock
       + (images ? '<div class="update-images">' + images + '</div>' : '')
       + (linkBtns ? '<div class="btn-mini-wrap">' + linkBtns + '</div>' : '')
       + '</article>';

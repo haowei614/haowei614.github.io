@@ -1,6 +1,31 @@
 {
   "items": [
     {
+      "id": "activity-2026-08-23-re-2026-montreal",
+      "title": "Received IEEE RE'26 Open Science Award at RE 2026 in Montréal",
+      "date": "2026-08-23",
+      "summary": "",
+      "content": "Attended the IEEE International Requirements Engineering Conference (RE 2026) in Montréal, Canada (Aug 17–23). The artifact from our Research Track paper, \"QUARE: Quality-Aware Requirements Engineering through Multi-Agent Dialectic Negotiation,\" was awarded the IEEE RE'26 Open Science Award (Best ORKG Comparison).",
+      "contentHtml": "Attended the <a href=\"https://conf.researchr.org/home/RE-2026\" target=\"_blank\" rel=\"noopener\">IEEE International Requirements Engineering Conference (RE 2026)</a> in Montréal, Canada (Aug 17–23). The artifact from our Research Track paper, \"QUARE: Quality-Aware Requirements Engineering through Multi-Agent Dialectic Negotiation,\" was awarded the IEEE RE'26 Open Science Award (Best ORKG Comparison).",
+      "links": [
+        {
+          "label": "RE 2026",
+          "url": "https://conf.researchr.org/home/RE-2026"
+        }
+      ],
+      "images": [
+        "/assets/img/news/2026/re-2026-montreal/1.jpg",
+        "/assets/img/news/2026/re-2026-montreal/2.jpg",
+        "/assets/img/news/2026/re-2026-montreal/3.jpg",
+        "/assets/img/news/2026/re-2026-montreal/6.jpg",
+        "/assets/img/news/2026/re-2026-montreal/7.jpg",
+        "/assets/img/news/2026/re-2026-montreal/8.jpg"
+      ],
+      "category": "award",
+      "pinned": true,
+      "status": "published"
+    },
+    {
       "id": "activity-2026-02-01-polymtl-internship",
       "title": "Completed Research Internship at Polytechnique Montréal",
       "date": "2026-02-01",
