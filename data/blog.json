@@ -1,6 +1,18 @@
 {
   "items": [
     {
+      "id": "blog-003",
+      "title": "AIプロダクト開発を一気通貫で考える：顧客課題から要求・データ・評価・本番運用まで",
+      "date": "2026-10-05",
+      "summary": "生成AI・LLMエージェントを使ったプロダクト開発を、Model-centricではなくSystem-centricに捉える視点から整理。顧客課題の要求化、データ品質の要求としての検証、問題構造に応じたModel/RAG/Agentの選択、4レベルの評価設計、本番運用のフィードバックを要求へ戻すループまでを一気通貫で論じる。",
+      "tags": ["LLM", "Requirements Engineering", "MLOps"],
+      "externalUrl": "https://qiita.com/Haowei988/items/c0372df4c961a7215e89",
+      "slug": "",
+      "source": "Qiita",
+      "lang": "ja",
+      "status": "published"
+    },
+    {
       "id": "blog-002",
       "title": "ASPICE 4.0 SYS.2の整合性チェックは、どこまで自動化できるのか",
       "date": "2026-08-08",

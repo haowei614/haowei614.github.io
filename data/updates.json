@@ -1,6 +1,23 @@
 {
   "items": [
     {
+      "id": "upd-2026-001-profes2026-accepted",
+      "title": "Paper Accepted at PROFES 2026",
+      "date": "2026-09-12",
+      "summary": "Our paper \"Does Agent Configuration Matter? An Empirical Study of Process-Level Quality Adaptation in Multi-Agent Requirements Engineering\" has been accepted to the Research Track of PROFES 2026 (27th International Conference on Product-Focused Software Process Improvement), to be held in Karlskrona, Sweden.",
+      "content": "Note: This work is currently under patent application, so the preprint and detailed results cannot be disclosed at this time.",
+      "links": [
+        {
+          "label": "PROFES 2026",
+          "url": "https://conf.researchr.org/home/profes-2026"
+        }
+      ],
+      "images": [],
+      "category": "paper",
+      "pinned": true,
+      "status": "published"
+    },
+    {
       "id": "activity-2026-08-23-re-2026-montreal",
       "title": "Received IEEE RE'26 Open Science Award at RE 2026 in Montréal",
       "date": "2026-08-23",
