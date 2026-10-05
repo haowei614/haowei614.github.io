@@ -3,275 +3,630 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ReMIND — Requirements Conflict Resolution</title>
-  <meta name="description" content="ReMIND: an AI-powered tool for detecting and resolving requirements conflicts through multi-agent argumentation.">
+  <title>ReMIND — AI Requirements Review for Engineering Teams</title>
+  <meta name="description" content="ReMIND reviews complex requirements from multiple expert perspectives, finds conflicts and gaps, and explains how to fix them.">
   <link rel="canonical" href="/remind/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/site-v2.css">
   <style>
-    .remind-hero {
-      text-align: center;
-      padding: 2rem 0 3rem;
+    :root {
+      --nav-h: 69px;
     }
 
-    .remind-logo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 3.2rem;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
+    /* ---- Language toggling ---- */
+    html:not(.lang-ja) [data-lang="ja"] { display: none !important; }
+    html.lang-ja [data-lang="en"] { display: none !important; }
+
+    .rm-main {
+      width: min(960px, calc(100% - 2.5rem));
+      margin: 0 auto;
     }
 
-    .remind-logo span {
-      color: var(--accent);
+    /* ---- Language switch ---- */
+    .rm-langbar {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 0.5rem;
     }
 
-    .remind-tagline {
-      max-width: 640px;
-      margin: 0 auto 1.5rem;
+    .rm-langtoggle {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .rm-langtoggle button {
+      appearance: none;
+      border: 0;
+      background: transparent;
       color: var(--muted);
-      font-size: 1.15rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 500;
+      padding: 0.4rem 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .rm-langtoggle button.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ---- Hero ---- */
+    .rm-hero {
+      padding: 2.4rem 0 2.8rem;
+    }
+
+    .rm-eyebrow {
+      margin: 0 0 1rem;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .rm-h1 {
+      margin: 0 0 1.1rem;
+      font-family: 'DM Serif Display', serif;
+      font-weight: 400;
+      font-size: 2.9rem;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      max-width: 760px;
+    }
+
+    .rm-sub {
+      margin: 0 0 1.8rem;
+      max-width: 680px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.75;
+    }
+
+    .rm-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .rm-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-height: 46px;
+      padding: 0 1.3rem;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .rm-btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .rm-btn-primary:hover { background: #a07f22; border-color: #a07f22; }
+
+    .rm-btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--line-strong);
+    }
+
+    .rm-btn-secondary:hover { background: rgba(30, 30, 30, 0.04); }
+
+    .rm-hero-note {
+      margin: 0;
+      color: var(--subtle);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+    }
+
+    /* ---- Sticky anchor nav ---- */
+    .rm-anchornav {
+      position: sticky;
+      top: var(--nav-h, 69px);
+      z-index: 50;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 0.4rem;
+      padding: 0.6rem 0;
+      margin-bottom: 0.5rem;
+      background: rgba(250, 249, 246, 0.94);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .rm-anchornav::-webkit-scrollbar { display: none; }
+
+    .rm-anchornav a {
+      flex: 0 0 auto;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .rm-anchornav a:hover { color: var(--text); background: rgba(30, 30, 30, 0.05); }
+
+    /* ---- Generic section ---- */
+    .rm-section {
+      padding: 3.4rem 0;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: calc(var(--nav-h, 69px) + 60px);
+    }
+
+    .rm-h2 {
+      margin: 0 0 1rem;
+      font-family: 'DM Serif Display', serif;
+      font-weight: 400;
+      font-size: 2.05rem;
+      line-height: 1.18;
+      max-width: 760px;
+    }
+
+    .rm-lead {
+      margin: 0 0 1.5rem;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.8;
+    }
+
+    /* ---- Card grids ---- */
+    .rm-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.6rem;
+    }
+
+    .rm-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.3rem;
+      background: var(--surface);
+    }
+
+    .rm-card h3 {
+      margin: 0 0 0.5rem;
+      font-family: 'DM Serif Display', serif;
+      font-weight: 400;
+      font-size: 1.12rem;
+      line-height: 1.3;
+    }
+
+    .rm-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
       line-height: 1.7;
     }
 
-    .remind-badges {
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
+    /* ---- Cost-of-late-fix highlight ---- */
+    .rm-stat {
+      margin-top: 1.8rem;
+      display: grid;
+      grid-template-columns: minmax(190px, auto) 1fr;
+      gap: 1rem 1.6rem;
+      align-items: center;
+      padding: 1.5rem 1.6rem;
+      border: 1px solid rgba(184, 146, 46, 0.35);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      background: rgba(184, 146, 46, 0.05);
     }
 
-    .remind-badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      padding: 0 0.65rem;
-      border-radius: 999px;
+    .rm-stat-fig {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .rm-stat-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.9rem;
+      font-weight: 500;
+      line-height: 1.1;
+      color: var(--muted);
+    }
+
+    .rm-stat-num.accent {
+      color: var(--accent);
+      font-size: 2.3rem;
+    }
+
+    .rm-stat-arrow {
+      color: var(--subtle);
+      font-size: 1.4rem;
+    }
+
+    .rm-stat-cap {
+      flex-basis: 100%;
+      margin-top: 0.2rem;
+      color: var(--subtle);
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .rm-stat-lead {
+      margin: 0;
+      color: var(--text);
+      font-size: 1.02rem;
+      line-height: 1.6;
       font-weight: 500;
     }
 
-    .remind-badge.research {
-      border: 1px solid rgba(102, 194, 165, 0.25);
-      background: rgba(102, 194, 165, 0.08);
-      color: var(--accent2);
+    .rm-stat-sub {
+      margin: 0.55rem 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.65;
     }
 
-    .remind-badge.status {
-      border: 1px solid rgba(184, 146, 46, 0.25);
+    .rm-stat-src {
+      margin: 0.6rem 0 0;
+      color: var(--subtle);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      line-height: 1.5;
+    }
+
+    /* ---- How it works steps ---- */
+    .rm-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 1.6rem 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .rm-step {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.3rem;
+      background: var(--surface);
+    }
+
+    .rm-step-num {
+      display: inline-grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      margin-bottom: 0.8rem;
+      border: 1px solid rgba(184, 146, 46, 0.3);
+      border-radius: 8px;
       background: rgba(184, 146, 46, 0.08);
       color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
     }
 
-    .remind-video {
+    .rm-step h3 {
+      margin: 0 0 0.45rem;
+      font-family: 'DM Serif Display', serif;
+      font-weight: 400;
+      font-size: 1.05rem;
+      line-height: 1.3;
+    }
+
+    .rm-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    /* ---- Sample finding (tool output) ---- */
+    .rm-finding {
+      margin-top: 1.8rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface-elev);
+      overflow: hidden;
+    }
+
+    .rm-finding-head {
+      padding: 0.7rem 1.1rem;
+      border-bottom: 1px solid var(--line);
+      background: rgba(30, 30, 30, 0.03);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .rm-finding-rows {
+      margin: 0;
+      padding: 0.4rem 0;
+    }
+
+    .rm-finding-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 0.5rem 1rem;
+      padding: 0.65rem 1.1rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .rm-finding-row:first-child { border-top: 0; }
+
+    .rm-finding-row dt {
+      margin: 0;
+      color: var(--subtle);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding-top: 0.1rem;
+    }
+
+    .rm-finding-row dd {
+      margin: 0;
+      color: var(--text);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .rm-mono {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .rm-mono + .rm-mono { margin-top: 0.35rem; }
+
+    /* ---- Demo video ---- */
+    .rm-video {
       position: relative;
-      max-width: 800px;
-      margin: 0 auto 3rem;
+      margin-top: 1.6rem;
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid var(--line);
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
       aspect-ratio: 16 / 9;
     }
 
-    .remind-video iframe {
+    .rm-video iframe {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       border: 0;
     }
 
-    .remind-section {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2.5rem 0;
+    /* ---- Comparison table ---- */
+    .rm-table-wrap {
+      margin-top: 1.6rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .rm-table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .rm-table th,
+    .rm-table td {
+      padding: 0.85rem 1.1rem;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+      line-height: 1.55;
+    }
+
+    .rm-table thead th {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      background: rgba(30, 30, 30, 0.03);
+    }
+
+    .rm-table thead th:last-child { color: var(--accent); background: rgba(184, 146, 46, 0.06); }
+
+    .rm-table tbody th {
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .rm-table td:first-of-type { color: var(--muted); }
+
+    .rm-table td:last-child { color: var(--text); font-weight: 500; }
+
+    .rm-table tbody tr:last-child th,
+    .rm-table tbody tr:last-child td { border-bottom: 0; }
+
+    /* ---- Research foundation (quieter) ---- */
+    .rm-research {
+      padding: 2.6rem 0;
       border-top: 1px solid var(--line);
     }
 
-    .remind-section-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.8rem;
-      font-weight: 400;
-      margin-bottom: 1.2rem;
+    .rm-research .rm-h2 { font-size: 1.5rem; color: var(--muted); }
+
+    .rm-research .rm-lead { font-size: 0.95rem; }
+
+    .rm-papers {
+      margin: 1rem 0 0;
+      padding: 0;
+      list-style: none;
     }
 
-    .remind-section p {
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.8;
-      margin-bottom: 1rem;
-    }
-
-    .remind-features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .remind-feature {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 1.2rem;
-      background: var(--surface);
-    }
-
-    .remind-feature-icon {
-      display: inline-grid;
-      width: 36px;
-      height: 36px;
-      place-items: center;
-      margin-bottom: 0.8rem;
-      border: 1px solid rgba(184, 146, 46, 0.28);
-      border-radius: 8px;
-      background: rgba(184, 146, 46, 0.08);
-      color: var(--accent);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      font-weight: 500;
-    }
-
-    .remind-feature h4 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.1rem;
-      font-weight: 400;
-      margin-bottom: 0.5rem;
-    }
-
-    .remind-feature p {
-      color: var(--muted);
-      font-size: 0.88rem;
+    .rm-papers li {
+      padding: 0.7rem 0;
+      border-top: 1px solid var(--line);
+      color: var(--subtle);
+      font-size: 0.9rem;
       line-height: 1.65;
-      margin: 0;
     }
 
-    .remind-papers {
-      display: grid;
-      gap: 0.8rem;
-      margin-top: 1rem;
-    }
+    .rm-papers li:first-child { border-top: 0; }
 
-    .remind-paper {
-      display: block;
-      padding: 1rem;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--surface);
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .remind-paper:hover {
-      border-color: var(--line-strong);
-      transform: translateX(4px);
-    }
-
-    .remind-paper-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.05rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .remind-paper-venue {
+    .rm-papers a {
       color: var(--muted);
-      font-size: 0.84rem;
-      font-style: italic;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
     }
 
-    .moat-section {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2.5rem 0 2rem;
+    .rm-papers a:hover { color: var(--text); border-color: var(--line-strong); }
+
+    /* ---- Contact ---- */
+    .rm-contact {
+      padding: 3.4rem 0 1rem;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: calc(var(--nav-h, 69px) + 60px);
     }
 
-    .moat-grid {
+    /* ---- Contact form ---- */
+    .rm-form {
+      margin-top: 1.8rem;
+      display: grid;
+      gap: 1.1rem;
+      max-width: 720px;
+    }
+
+    .rm-form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 1.2rem;
+      gap: 1.1rem;
     }
 
-    .moat-col-header {
-      padding: 0.9rem 1.2rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+    .rm-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
     }
 
-    .moat-col-header.others {
-      background: rgba(0, 0, 0, 0.03);
-      color: var(--muted);
-      border-bottom: 1px solid var(--line);
-      border-right: 1px solid var(--line);
-    }
-
-    .moat-col-header.ours {
-      background: rgba(184, 146, 46, 0.06);
-      color: var(--accent);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .moat-row {
-      display: contents;
-    }
-
-    .moat-cell {
-      padding: 0.85rem 1.2rem;
-      font-size: 0.9rem;
-      line-height: 1.55;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .moat-cell.others {
-      color: var(--muted);
-      border-right: 1px solid var(--line);
-    }
-
-    .moat-cell.ours {
+    .rm-field label {
+      font-size: 0.8rem;
+      font-weight: 600;
       color: var(--text);
-      font-weight: 500;
     }
 
-    .moat-row:last-child .moat-cell {
-      border-bottom: none;
+    .rm-field .req {
+      color: var(--accent);
+      margin-left: 0.15rem;
     }
 
-    .moat-cell .check {
-      color: var(--accent2);
-      margin-right: 0.3rem;
+    .rm-field input,
+    .rm-field select,
+    .rm-field textarea {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.92rem;
+      line-height: 1.5;
     }
 
-    .moat-cell .cross {
+    .rm-field input::placeholder,
+    .rm-field textarea::placeholder {
+      color: var(--subtle);
+    }
+
+    .rm-field input:focus,
+    .rm-field select:focus,
+    .rm-field textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184, 146, 46, 0.12);
+    }
+
+    .rm-field textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    button.rm-btn {
+      font-family: inherit;
+      cursor: pointer;
+      justify-self: start;
+    }
+
+    .rm-form-note {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.7rem 0.9rem;
+      border-left: 2px solid var(--line-strong);
+      background: rgba(30, 30, 30, 0.025);
       color: var(--muted);
-      opacity: 0.5;
-      margin-right: 0.3rem;
+      font-size: 0.82rem;
+      line-height: 1.6;
     }
 
-    @media (max-width: 600px) {
-      .moat-grid {
-        font-size: 0.82rem;
-      }
-      .moat-cell, .moat-col-header {
-        padding: 0.7rem 0.8rem;
-      }
+    /* ---- Responsive ---- */
+    @media (max-width: 860px) {
+      .rm-cards { grid-template-columns: 1fr 1fr; }
+      .rm-steps { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .rm-h1 { font-size: 2.1rem; }
+      .rm-h2 { font-size: 1.7rem; }
+      .rm-cards { grid-template-columns: 1fr; }
+      .rm-steps { grid-template-columns: 1fr; }
+      .rm-hero-actions .rm-btn { flex: 1 1 auto; justify-content: center; }
+      .rm-finding-row { grid-template-columns: 1fr; gap: 0.2rem; }
+      .rm-stat { grid-template-columns: 1fr; }
+      .rm-stat-num.accent { font-size: 2rem; }
+      .rm-form-grid { grid-template-columns: 1fr; }
     }
   </style>
+  <script>
+    /* Set language before paint to avoid a flash of the wrong language. */
+    (function () {
+      try {
+        var stored = localStorage.getItem('remind-lang');
+        var lang = stored || ((navigator.language || '').toLowerCase().indexOf('ja') === 0 ? 'ja' : 'en');
+        if (lang === 'ja') document.documentElement.classList.add('lang-ja');
+        document.documentElement.setAttribute('lang', lang);
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
 </head>
 <body>
-  <canvas id="bg-canvas"></canvas>
-  <div class="cursor-glow" id="cursorGlow"></div>
-
   <nav>
     <a href="/" class="nav-logo">Haowei Cheng</a>
     <ul class="nav-links">
@@ -284,116 +639,445 @@
     </ul>
   </nav>
 
-  <main>
-    <section class="remind-hero">
-      <h1 class="remind-logo">Re<span>MIND</span></h1>
-      <p class="remind-tagline">
-        AI-powered requirements conflict resolution through multi-agent dialectical negotiation.
-        Built on research from QUARE and ArgRE.
+  <main class="rm-main">
+    <!-- Language switch -->
+    <div class="rm-langbar">
+      <div class="rm-langtoggle" role="group" aria-label="Language">
+        <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-set-lang="ja" aria-pressed="false">日本語</button>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="rm-hero">
+      <p class="rm-eyebrow">
+        <span data-lang="en">For automotive and safety-critical engineering teams</span>
+        <span data-lang="ja">自動車・セーフティクリティカル領域のエンジニアリングチームへ</span>
       </p>
-      <div class="remind-badges">
-        <span class="remind-badge research">Based on RE 2026 & IEEE ACCESS</span>
-        <span class="remind-badge status">MVP — Early Preview</span>
+      <h1 class="rm-h1">
+        <span data-lang="en">Catch costly requirement gaps before they reach development.</span>
+        <span data-lang="ja">要件の抜け漏れを、開発に入る前に。</span>
+      </h1>
+      <p class="rm-sub">
+        <span data-lang="en">ReMIND is an AI review board for engineering requirements. Specialized agents review your specification from safety, quality, and feasibility perspectives, surface conflicts and missing requirements, and explain how to fix them.</span>
+        <span data-lang="ja">ReMINDは、エンジニアリング要件のためのAIレビューボードです。安全性・品質・実現性などの観点を持つ専門エージェントが仕様をレビューし、矛盾や不足している要件を洗い出して、修正の方向性を根拠とともに示します。</span>
+      </p>
+      <div class="rm-hero-actions">
+        <a class="rm-btn rm-btn-primary" href="#contact">
+          <span data-lang="en">Get in touch →</span>
+          <span data-lang="ja">お問い合わせ →</span>
+        </a>
+        <a class="rm-btn rm-btn-secondary" href="#demo">
+          <span data-lang="en">Watch the demo →</span>
+          <span data-lang="ja">デモを見る →</span>
+        </a>
+      </div>
+      <!-- TODO: verify (on-premise claim) -->
+      <p class="rm-hero-note">
+        <span data-lang="en">Runs on-premise · Built on peer-reviewed research</span>
+        <span data-lang="ja">オンプレミス対応 · 査読済み研究に基づく技術</span>
+      </p>
+    </section>
+
+    <!-- Sticky in-page anchor nav -->
+    <div class="rm-anchornav" role="navigation" aria-label="On this page">
+      <a href="#problem"><span data-lang="en">Problem</span><span data-lang="ja">課題</span></a>
+      <a href="#how"><span data-lang="en">How it works</span><span data-lang="ja">仕組み</span></a>
+      <a href="#why"><span data-lang="en">Why ReMIND</span><span data-lang="ja">特長</span></a>
+      <a href="#contact"><span data-lang="en">Contact</span><span data-lang="ja">お問い合わせ</span></a>
+    </div>
+
+    <!-- Problem -->
+    <section class="rm-section" id="problem">
+      <h2 class="rm-h2">
+        <span data-lang="en">Requirements reviews take weeks — and conflicts still slip through.</span>
+        <span data-lang="ja">要件レビューには何週間もかかる。それでも矛盾は見逃される。</span>
+      </h2>
+      <p class="rm-lead">
+        <span data-lang="en">System and software specifications run to hundreds of pages, written by different teams with different priorities. A safety requirement can quietly contradict a performance target three chapters away. Manual reviews catch what each reviewer knows to look for; cross-cutting conflicts are the ones that survive.</span>
+        <span data-lang="ja">システム要件・ソフトウェア要件は数百ページに及び、異なるチームが異なる優先度で書いています。ある安全要件が、別の章の性能目標と静かに矛盾していることもあります。人手のレビューは、各レビュアーが知っている観点では強い一方、観点をまたぐ矛盾ほど残りやすいのが現実です。</span>
+      </p>
+      <div class="rm-cards">
+        <div class="rm-card">
+          <h3><span data-lang="en">Scattered across documents</span><span data-lang="ja">ドキュメントに散在</span></h3>
+          <p><span data-lang="en">Related requirements live in different chapters, owners, and versions.</span><span data-lang="ja">関連する要件が、章・担当者・版をまたいで存在する。</span></p>
+        </div>
+        <div class="rm-card">
+          <h3><span data-lang="en">Competing priorities</span><span data-lang="ja">相反する優先度</span></h3>
+          <p><span data-lang="en">Safety, cost, performance, and schedule pull in different directions.</span><span data-lang="ja">安全性・コスト・性能・スケジュールが互いに引っ張り合う。</span></p>
+        </div>
+        <div class="rm-card">
+          <h3><span data-lang="en">Found too late</span><span data-lang="ja">発見が遅い</span></h3>
+          <p><span data-lang="en">A conflict found during integration costs far more to fix than one found in review.</span><span data-lang="ja">統合段階で見つかった矛盾は、レビュー段階よりはるかに修正コストが高い。</span></p>
+        </div>
+      </div>
+
+      <!-- Cost escalation figures from: Boehm, Software Engineering Economics (1981); NIST report 02-3 (2002); IBM Rational "ROI from More Effective Requirements Management" (2003). The 1:10:100 rule and 70-85% rework share are widely cited industry heuristics, not project-specific guarantees. -->
+      <div class="rm-stat">
+        <div class="rm-stat-fig">
+          <span class="rm-stat-num">$100</span>
+          <span class="rm-stat-arrow">→</span>
+          <span class="rm-stat-num accent">$10,000+</span>
+          <span class="rm-stat-cap">
+            <span data-lang="en">same error · review → production</span>
+            <span data-lang="ja">同じ誤り · レビュー → 本番</span>
+          </span>
+        </div>
+        <div class="rm-stat-body">
+          <p class="rm-stat-lead">
+            <span data-lang="en">A requirement error that costs around $100 to fix in review can cost $10,000 or more once it reaches production — the well-known 1:10:100 rule.</span>
+            <span data-lang="ja">レビュー段階なら約$100で直せる要件の誤りも、本番に到達すると$10,000以上かかることがあります。これはよく知られた 1:10:100 の法則です。</span>
+          </p>
+          <p class="rm-stat-sub">
+            <span data-lang="en">Decades of studies find that fixing a defect after release runs 10–100× the cost of fixing it during requirements, and requirement errors drive an estimated 70–85% of all project rework.</span>
+            <span data-lang="ja">数十年にわたる研究では、リリース後の修正コストは要件段階の10〜100倍とされ、要件の誤りはプロジェクトの手戻りコストの推定70〜85%を占めます。</span>
+          </p>
+          <p class="rm-stat-src">
+            <span data-lang="en">Sources: Boehm, Software Engineering Economics (1981); NIST (2002); IBM Rational (2003)</span>
+            <span data-lang="ja">出典: Boehm, Software Engineering Economics (1981); NIST (2002); IBM Rational (2003)</span>
+          </p>
+        </div>
       </div>
     </section>
 
-    <div class="remind-video">
-      <iframe
-        src="https://www.youtube.com/embed/LyhJ4g9_4Fs"
-        title="ReMIND Demo"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
-    </div>
+    <!-- How it works -->
+    <section class="rm-section" id="how">
+      <h2 class="rm-h2">
+        <span data-lang="en">An AI review board, not a single prompt</span>
+        <span data-lang="ja">一つのプロンプトではなく、AIのレビューボード</span>
+      </h2>
+      <ol class="rm-steps">
+        <li class="rm-step">
+          <span class="rm-step-num">1</span>
+          <h3><span data-lang="en">Upload your requirements</span><span data-lang="ja">要件をアップロード</span></h3>
+          <p><span data-lang="en">A full specification or selected sections.</span><span data-lang="ja">仕様書全体、または一部の章から。</span></p>
+        </li>
+        <li class="rm-step">
+          <span class="rm-step-num">2</span>
+          <h3><span data-lang="en">Specialized reviewers analyze them</span><span data-lang="ja">専門エージェントが分析</span></h3>
+          <p><span data-lang="en">Each agent owns one concern: safety, consistency, feasibility, quality.</span><span data-lang="ja">安全性・一貫性・実現性・品質など、観点ごとに担当を分けてレビュー。</span></p>
+        </li>
+        <li class="rm-step">
+          <span class="rm-step-num">3</span>
+          <h3><span data-lang="en">Reviewers challenge each other</span><span data-lang="ja">エージェント同士が議論</span></h3>
+          <p><span data-lang="en">Disagreements are argued out, so findings don't depend on one model's guess.</span><span data-lang="ja">意見の対立を議論で突き詰めるため、単一モデルの判断に依存しない。</span></p>
+        </li>
+        <li class="rm-step">
+          <span class="rm-step-num">4</span>
+          <h3><span data-lang="en">Get actionable findings</span><span data-lang="ja">すぐ使える指摘を受け取る</span></h3>
+          <p><span data-lang="en">Each issue lists the affected requirements, the reasoning, and a proposed revision.</span><span data-lang="ja">各指摘に、関係する要件・根拠・修正案を添えて提示。</span></p>
+        </li>
+      </ol>
 
-    <div class="remind-section">
-      <h2 class="remind-section-title">What is ReMIND?</h2>
-      <p>
-        ReMIND (Requirements conflict resolution through Multi-agent Intelligent Negotiation and Dialectics)
-        is a tool that helps software teams detect and resolve conflicting requirements
-        before they become costly downstream problems.
-      </p>
-      <p>
-        It uses multiple AI agents — each representing a different quality concern (safety, efficiency,
-        trustworthiness, etc.) — to systematically surface conflicts and negotiate balanced solutions
-        through structured argumentation.
-      </p>
+      <!-- TODO: verify (sample finding) -->
+      <div class="rm-finding">
+        <div class="rm-finding-head">
+          <span data-lang="en">Sample finding</span>
+          <span data-lang="ja">指摘の例</span>
+        </div>
+        <dl class="rm-finding-rows">
+          <div class="rm-finding-row">
+            <dt><span data-lang="en">Finding</span><span data-lang="ja">指摘</span></dt>
+            <dd>
+              <span data-lang="en">Conflict: SYS-112 vs SYS-207</span>
+              <span data-lang="ja">矛盾：SYS-112 と SYS-207</span>
+            </dd>
+          </div>
+          <div class="rm-finding-row">
+            <dt><span data-lang="en">Requirements</span><span data-lang="ja">要件</span></dt>
+            <dd>
+              <span data-lang="en">
+                <span class="rm-mono">SYS-112: The system shall enter a safe state within 100 ms of sensor loss.</span>
+                <span class="rm-mono">SYS-207: The controller shall complete diagnostics before any mode transition.</span>
+              </span>
+              <span data-lang="ja">
+                <span class="rm-mono">SYS-112：センサ喪失から100 ms以内に安全状態へ移行すること。</span>
+                <span class="rm-mono">SYS-207：モード遷移の前に診断を完了すること。</span>
+              </span>
+            </dd>
+          </div>
+          <div class="rm-finding-row">
+            <dt><span data-lang="en">Why it matters</span><span data-lang="ja">影響</span></dt>
+            <dd>
+              <span data-lang="en">Diagnostics can take longer than 100 ms, so both cannot be met when a sensor is lost.</span>
+              <span data-lang="ja">診断が100 msを超える場合、センサ喪失時に両方を満たせない。</span>
+            </dd>
+          </div>
+          <div class="rm-finding-row">
+            <dt><span data-lang="en">Raised by</span><span data-lang="ja">指摘者</span></dt>
+            <dd>
+              <span data-lang="en">Safety reviewer; challenged and confirmed by Feasibility reviewer</span>
+              <span data-lang="ja">安全性エージェントが指摘、実現性エージェントが検証</span>
+            </dd>
+          </div>
+          <div class="rm-finding-row">
+            <dt><span data-lang="en">Proposed fix</span><span data-lang="ja">修正案</span></dt>
+            <dd>
+              <span data-lang="en">Exempt safe-state transitions from SYS-207, or bound diagnostic time below 100 ms.</span>
+              <span data-lang="ja">安全状態への遷移をSYS-207の対象外とする、または診断時間を100 ms未満に制限する。</span>
+            </dd>
+          </div>
+        </dl>
+      </div>
 
-      <div class="remind-features">
-        <div class="remind-feature">
-          <div class="remind-feature-icon">MA</div>
-          <h4>Multi-Agent Negotiation</h4>
-          <p>Quality-specialized agents debate requirements from different stakeholder perspectives.</p>
-        </div>
-        <div class="remind-feature">
-          <div class="remind-feature-icon">CR</div>
-          <h4>Conflict Detection</h4>
-          <p>Automatically surfaces cross-quality conflicts that are hard to catch manually.</p>
-        </div>
-        <div class="remind-feature">
-          <div class="remind-feature-icon">FA</div>
-          <h4>Formal Argumentation</h4>
-          <p>Resolves disputes through structured dialectical protocols, not implicit aggregation.</p>
+      <!-- Demo -->
+      <div id="demo" style="scroll-margin-top: calc(var(--nav-h, 69px) + 60px);">
+        <h3 class="rm-h2" style="font-size:1.5rem; margin-top:2.6rem;">
+          <span data-lang="en">See a full review</span>
+          <span data-lang="ja">実際のレビューを見る</span>
+        </h3>
+        <div class="rm-video">
+          <iframe
+            src="https://www.youtube.com/embed/LyhJ4g9_4Fs"
+            title="ReMIND Demo"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="moat-section">
-      <h2 class="remind-section-title">Why ReMIND?</h2>
-      <p style="color:var(--muted);font-size:1rem;line-height:1.8;margin-bottom:0.2rem;">
-        Most AI-based requirements tools stop at summarization or classification.
-        ReMIND goes further — it resolves conflicts with traceable reasoning.
+    <!-- Why ReMIND -->
+    <section class="rm-section" id="why">
+      <h2 class="rm-h2">
+        <span data-lang="en">Built for how engineering teams actually review</span>
+        <span data-lang="ja">エンジニアリングの実際のレビューに合わせて設計</span>
+      </h2>
+
+      <div class="rm-table-wrap">
+        <table class="rm-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th><span data-lang="en">General-purpose LLM tools</span><span data-lang="ja">汎用LLMツール</span></th>
+              <th><span data-lang="en">ReMIND</span><span data-lang="ja">ReMIND</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><span data-lang="en">Review</span><span data-lang="ja">レビュー</span></th>
+              <td><span data-lang="en">One prompt, one answer</span><span data-lang="ja">1つのプロンプト、1つの回答</span></td>
+              <td><span data-lang="en">Specialized reviewers, one per concern</span><span data-lang="ja">観点ごとの専門エージェント</span></td>
+            </tr>
+            <tr>
+              <th scope="row"><span data-lang="en">Scope</span><span data-lang="ja">範囲</span></th>
+              <td><span data-lang="en">Obvious, local issues</span><span data-lang="ja">目立つ局所的な問題</span></td>
+              <td><span data-lang="en">Conflicts across requirements and chapters</span><span data-lang="ja">要件・章をまたぐ矛盾</span></td>
+            </tr>
+            <tr>
+              <th scope="row"><span data-lang="en">Output</span><span data-lang="ja">出力</span></th>
+              <td><span data-lang="en">Flags problems</span><span data-lang="ja">問題の指摘のみ</span></td>
+              <td><span data-lang="en">Proposes resolutions with rationale</span><span data-lang="ja">根拠つきの修正案</span></td>
+            </tr>
+            <tr>
+              <th scope="row"><span data-lang="en">Reasoning</span><span data-lang="ja">推論</span></th>
+              <td><span data-lang="en">Opaque</span><span data-lang="ja">ブラックボックス</span></td>
+              <td><span data-lang="en">Traceable argument for every finding</span><span data-lang="ja">すべての指摘に追跡可能な論証</span></td>
+            </tr>
+            <!-- TODO: verify (on-premise claim) -->
+            <tr>
+              <th scope="row"><span data-lang="en">Data</span><span data-lang="ja">データ</span></th>
+              <td><span data-lang="en">Sent to a cloud API</span><span data-lang="ja">クラウドAPIへ送信</span></td>
+              <td><span data-lang="en">Runs on-premise; specifications stay in-house</span><span data-lang="ja">オンプレミスで動作、仕様書は社外に出ない</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rm-cards">
+        <!-- TODO: verify (on-premise claim) -->
+        <div class="rm-card">
+          <h3><span data-lang="en">Your specs stay inside.</span><span data-lang="ja">仕様書は社内に</span></h3>
+          <p><span data-lang="en">ReMIND runs on locally deployed models, so confidential specifications never leave your network.</span><span data-lang="ja">ローカルに配備したモデルで動作するため、機密性の高い仕様書が社外ネットワークに出ることはありません。</span></p>
+        </div>
+        <div class="rm-card">
+          <h3><span data-lang="en">Faster than building it yourself.</span><span data-lang="ja">自社開発より早く</span></h3>
+          <p><span data-lang="en">A working review pipeline today, instead of a multi-quarter internal project.</span><span data-lang="ja">何四半期もかかる社内開発を待たず、すぐに使えるレビューの仕組みを。</span></p>
+        </div>
+        <div class="rm-card">
+          <h3><span data-lang="en">Grounded in research.</span><span data-lang="ja">研究に裏付けられた手法</span></h3>
+          <p><span data-lang="en">The method behind ReMIND is peer-reviewed in requirements engineering, not ad-hoc prompting.</span><span data-lang="ja">ReMINDの手法は要求工学分野で査読を経たもので、場当たり的なプロンプトではありません。</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research foundation (quieter) -->
+    <section class="rm-research">
+      <h2 class="rm-h2">
+        <span data-lang="en">Backed by peer-reviewed research</span>
+        <span data-lang="ja">査読済みの研究に基づく技術</span>
+      </h2>
+      <p class="rm-lead">
+        <span data-lang="en">ReMIND builds on published work in requirements engineering and multi-agent reasoning.</span>
+        <span data-lang="ja">ReMINDは、要求工学とマルチエージェント推論に関する公開研究に基づいています。</span>
       </p>
-      <div class="moat-grid">
-        <div class="moat-col-header others">Typical AI Tools</div>
-        <div class="moat-col-header ours">ReMIND</div>
+      <ul class="rm-papers">
+        <li>
+          <a href="https://arxiv.org/abs/2603.11890" target="_blank" rel="noopener">QUARE</a>
+          <span data-lang="en"> — Quality-aware requirements analysis through multi-agent negotiation. IEEE RE 2026 (CORE A) · Open Science Award</span>
+          <span data-lang="ja"> — マルチエージェントの交渉による品質指向の要件分析。IEEE RE 2026（CORE A）· Open Science Award</span>
+        </li>
+        <li>
+          <a href="https://ieeexplore.ieee.org/abstract/document/11610972" target="_blank" rel="noopener">ArgRE</a>
+          <span data-lang="en"> — Formal argumentation for conflict resolution in multi-agent requirements negotiation. IEEE Access</span>
+          <span data-lang="ja"> — マルチエージェント要件交渉における形式的論証による矛盾解消。IEEE Access</span>
+        </li>
+      </ul>
+    </section>
 
-        <div class="moat-row">
-          <div class="moat-cell others"><span class="cross">✗</span> Single LLM prompt, black-box output</div>
-          <div class="moat-cell ours"><span class="check">✓</span> Multi-agent negotiation with role separation</div>
-        </div>
-        <div class="moat-row">
-          <div class="moat-cell others"><span class="cross">✗</span> Detects conflicts but no resolution</div>
-          <div class="moat-cell ours"><span class="check">✓</span> Full closed-loop: detect → argue → resolve</div>
-        </div>
-        <div class="moat-row">
-          <div class="moat-cell others"><span class="cross">✗</span> No formal guarantees on reasoning</div>
-          <div class="moat-cell ours"><span class="check">✓</span> Backed by formal argumentation frameworks</div>
-        </div>
-        <div class="moat-row">
-          <div class="moat-cell others"><span class="cross">✗</span> Ad-hoc prompt engineering</div>
-          <div class="moat-cell ours"><span class="check">✓</span> Peer-reviewed at CORE A venue & SCIE journal</div>
-        </div>
-      </div>
-    </div>
+    <!-- Contact -->
+    <!-- NOTE: The Contact copy was cut off in the brief; reasonable bilingual copy used below. -->
+    <section class="rm-contact" id="contact">
+      <h2 class="rm-h2">
+        <span data-lang="en">Get in touch</span>
+        <span data-lang="ja">お問い合わせ</span>
+      </h2>
+      <p class="rm-lead">
+        <span data-lang="en">Tell us about your requirements review process — a demo, a pilot, pricing, or a partnership. We'll review your message and get back to you.</span>
+        <span data-lang="ja">デモ・PoC・料金・協業など、要件レビューに関するご相談をお送りください。内容を確認のうえ、担当者よりご連絡します。</span>
+      </p>
 
-    <div class="remind-section">
-      <h2 class="remind-section-title">Research Foundation</h2>
-      <p>ReMIND is built on peer-reviewed research published at top venues:</p>
+      <form class="rm-form" action="https://formspree.io/f/xaeqydre" method="POST">
+        <input type="hidden" name="_subject" value="ReMIND inquiry">
 
-      <div class="remind-papers">
-        <a class="remind-paper" href="https://arxiv.org/abs/2603.11890" target="_blank" rel="noopener">
-          <p class="remind-paper-title">QUARE: Quality-Aware Requirements Analysis through Multi-Agent Dialectical Negotiation</p>
-          <p class="remind-paper-venue">RE 2026 (34th IEEE International Requirements Engineering Conference) · CORE Rank A</p>
-        </a>
-        <a class="remind-paper" href="https://ieeexplore.ieee.org/abstract/document/11610972" target="_blank" rel="noopener">
-          <p class="remind-paper-title">ArgRE: Formal Argumentation for Conflict Resolution in Multi-Agent Requirements Negotiation</p>
-          <p class="remind-paper-venue">IEEE ACCESS · SCIE, IF=3.6</p>
-        </a>
-      </div>
-    </div>
+        <div class="rm-form-grid">
+          <div class="rm-field">
+            <label for="rm-name"><span data-lang="en">Name</span><span data-lang="ja">お名前</span><span class="req">*</span></label>
+            <input id="rm-name" name="name" type="text" required
+                   data-ph-en="Jane Doe" data-ph-ja="山田 太郎">
+          </div>
+          <div class="rm-field">
+            <label for="rm-company"><span data-lang="en">Company</span><span data-lang="ja">会社名</span><span class="req">*</span></label>
+            <input id="rm-company" name="company" type="text" required
+                   data-ph-en="Acme Inc." data-ph-ja="株式会社○○">
+          </div>
+        </div>
+
+        <div class="rm-field">
+          <label for="rm-email"><span data-lang="en">Email</span><span data-lang="ja">メールアドレス</span><span class="req">*</span></label>
+          <input id="rm-email" name="email" type="email" required
+                 data-ph-en="name@example.com" data-ph-ja="name@example.com">
+        </div>
+
+        <div class="rm-form-grid">
+          <div class="rm-field">
+            <label for="rm-dept"><span data-lang="en">Department</span><span data-lang="ja">部署</span></label>
+            <input id="rm-dept" name="department" type="text"
+                   data-ph-en="Engineering" data-ph-ja="開発部">
+          </div>
+          <div class="rm-field">
+            <label for="rm-role"><span data-lang="en">Role</span><span data-lang="ja">役職</span></label>
+            <input id="rm-role" name="role" type="text"
+                   data-ph-en="Manager" data-ph-ja="部長">
+          </div>
+        </div>
+
+        <div class="rm-field">
+          <label for="rm-type"><span data-lang="en">Inquiry type</span><span data-lang="ja">お問い合わせ種別</span><span class="req">*</span></label>
+          <select id="rm-type" name="inquiry_type" required>
+            <option value="" data-opt-en="Please select" data-opt-ja="選択してください">Please select</option>
+            <option value="demo" data-opt-en="Product demo" data-opt-ja="製品デモ">Product demo</option>
+            <option value="pilot" data-opt-en="Pilot / PoC" data-opt-ja="PoC・試験導入">Pilot / PoC</option>
+            <option value="pricing" data-opt-en="Pricing" data-opt-ja="料金について">Pricing</option>
+            <option value="partnership" data-opt-en="Partnership" data-opt-ja="協業・提携">Partnership</option>
+            <option value="other" data-opt-en="Other" data-opt-ja="その他">Other</option>
+          </select>
+        </div>
+
+        <div class="rm-field">
+          <label for="rm-message"><span data-lang="en">Message</span><span data-lang="ja">お問い合わせ内容</span><span class="req">*</span></label>
+          <textarea id="rm-message" name="message" required
+                    data-ph-en="How can we help?" data-ph-ja="ご相談内容をご記入ください"></textarea>
+        </div>
+
+        <p class="rm-form-note">
+          <span data-lang="en">The information you provide is used only to respond to your inquiry.</span>
+          <span data-lang="ja">ご入力いただいた情報は、お問い合わせへの回答にのみ使用します。</span>
+        </p>
+
+        <button type="submit" class="rm-btn rm-btn-primary">
+          <span data-lang="en">Send →</span>
+          <span data-lang="ja">送信する →</span>
+        </button>
+      </form>
+    </section>
   </main>
 
   <footer>
     <div class="footer-links">
       <a href="mailto:haowei.cheng@fuji.waseda.jp">Email</a>
       <a href="https://www.github.com/haowei614" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://scholar.google.com/citations?user=r79yNIAAAAAJ&hl=ja&oi=sra" target="_blank" rel="noopener">Google Scholar</a>
-      <a href="/admin/update.html">Update Site</a>
     </div>
     <p>&copy; 2026 Haowei Cheng &middot; Built on GitHub Pages</p>
   </footer>
 
-  <script src="/assets/js/site-v2.js"></script>
+  <script>
+    (function () {
+      var htmlEl = document.documentElement;
+      var STORAGE_KEY = 'remind-lang';
+      var meta = {
+        en: {
+          title: 'ReMIND — AI Requirements Review for Engineering Teams',
+          desc: 'ReMIND reviews complex requirements from multiple expert perspectives, finds conflicts and gaps, and explains how to fix them.'
+        },
+        ja: {
+          title: 'ReMIND — エンジニアリングチームのためのAI要件レビュー',
+          desc: 'ReMINDは複数の専門的観点から要件をレビューし、矛盾や抜け漏れを見つけ、修正案を根拠とともに提示します。'
+        }
+      };
+
+      function getStored() {
+        try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+      }
+      function setStored(v) {
+        try { localStorage.setItem(STORAGE_KEY, v); } catch (e) { /* ignore */ }
+      }
+
+      function apply(lang) {
+        if (lang !== 'ja') lang = 'en';
+        htmlEl.classList.toggle('lang-ja', lang === 'ja');
+        htmlEl.setAttribute('lang', lang);
+        document.title = meta[lang].title;
+        var d = document.querySelector('meta[name="description"]');
+        if (d) d.setAttribute('content', meta[lang].desc);
+        var buttons = document.querySelectorAll('[data-set-lang]');
+        for (var i = 0; i < buttons.length; i++) {
+          var isActive = buttons[i].getAttribute('data-set-lang') === lang;
+          buttons[i].classList.toggle('active', isActive);
+          buttons[i].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        }
+
+        // Localize form placeholders and select options.
+        var phEls = document.querySelectorAll('[data-ph-' + lang + ']');
+        for (var p = 0; p < phEls.length; p++) {
+          phEls[p].setAttribute('placeholder', phEls[p].getAttribute('data-ph-' + lang));
+        }
+        var optEls = document.querySelectorAll('option[data-opt-' + lang + ']');
+        for (var o = 0; o < optEls.length; o++) {
+          optEls[o].textContent = optEls[o].getAttribute('data-opt-' + lang);
+        }
+      }
+
+      var stored = getStored();
+      var initial = stored || ((navigator.language || '').toLowerCase().indexOf('ja') === 0 ? 'ja' : 'en');
+      apply(initial);
+
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-set-lang]');
+        if (!btn) return;
+        var lang = btn.getAttribute('data-set-lang');
+        apply(lang);
+        setStored(lang);
+      });
+
+      function setNavHeight() {
+        var nav = document.querySelector('nav');
+        if (nav) htmlEl.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+      }
+      setNavHeight();
+      window.addEventListener('resize', setNavHeight);
+      window.addEventListener('load', setNavHeight);
+    })();
+  </script>
 </body>
 </html>
