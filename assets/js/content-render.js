@@ -146,32 +146,100 @@
       + '</article>';
   }
 
+  function wrapProjectTables(html) {
+    if (!html || html.indexOf('<table') === -1) return html;
+    return html.replace(/<table\b/g, '<div class="project-detail-body-table-wrap"><table')
+      .replace(/<\/table>/g, '</table></div>');
+  }
+
+  function sectionizeProjectBody(html) {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = wrapProjectTables(html || '');
+    const sections = [];
+    let current = null;
+
+    function startSection() {
+      current = document.createElement('section');
+      current.className = 'project-section';
+      sections.push(current);
+    }
+
+    Array.from(wrap.childNodes).forEach(function (node) {
+      if (node.nodeType === 1 && node.tagName === 'H2') {
+        startSection();
+      } else if (!current) {
+        startSection();
+      }
+      current.appendChild(node);
+    });
+
+    return sections.map(function (section) { return section.outerHTML; }).join('');
+  }
+
+  function enhanceProjectMetrics(root) {
+    root.querySelectorAll('.project-detail-body table').forEach(function (table) {
+      const rows = table.querySelectorAll('tbody tr');
+      if (!rows.length || !rows[0].cells || rows[0].cells.length !== 2) return;
+
+      const grid = document.createElement('div');
+      grid.className = 'project-metrics';
+      rows.forEach(function (row) {
+        const card = document.createElement('article');
+        card.className = 'project-metric';
+        card.innerHTML = '<p class="project-metric-value">' + row.cells[1].innerHTML + '</p>'
+          + '<p class="project-metric-label">' + escapeHtml(row.cells[0].textContent || '') + '</p>';
+        grid.appendChild(card);
+      });
+
+      const holder = table.closest('.project-detail-body-table-wrap') || table;
+      holder.replaceWith(grid);
+    });
+  }
+
   function projectDetail(item) {
     const links = (item.links || []).map(function (l) {
       return '<a href="' + escapeHtml(l.url || '#') + '" target="_blank" rel="noopener">' + escapeHtml(l.label || 'Link') + '</a>';
     }).join('');
-    const highlights = (item.highlights || []).map(function (x) {
+    const highlightItems = (item.highlights || []).map(function (x) {
       return '<li>' + escapeHtml(x) + '</li>';
     }).join('');
-    const image = item.image ? '<img class="project-image" src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.title || 'project') + '">' : '';
-    const body = item.bodyHtml ? item.bodyHtml : splitParagraphs(item.overview || item.summary || '');
-    const demo = item.demoUrl ? '<div class="project-links"><a href="' + escapeHtml(item.demoUrl) + '" target="_blank" rel="noopener">Demo / Video</a></div>' : '';
+    const image = item.image
+      ? '<img class="project-image" src="' + escapeHtml(item.image) + '" alt="' + escapeHtml((item.title || 'project') + ' flow') + '">'
+      : '';
+    const rawBody = item.bodyHtml ? item.bodyHtml : splitParagraphs(item.overview || item.summary || '');
+    const hasRichBody = Boolean(item.bodyHtml && (item.bodyHtml.indexOf('<h2') !== -1 || item.bodyHtml.length > 600));
+    const body = hasRichBody ? sectionizeProjectBody(rawBody) : wrapProjectTables(rawBody);
+    const demo = item.demoUrl
+      ? '<div class="project-links"><a href="' + escapeHtml(item.demoUrl) + '" target="_blank" rel="noopener">Demo / Video</a></div>'
+      : '';
+    const linksBlock = links ? '<div class="project-links">' + links + '</div>' : '';
+    const highlightsBlock = highlightItems
+      ? '<div class="project-aside-block"><h2 class="project-aside-heading">Highlights</h2><ul>' + highlightItems + '</ul></div>'
+      : '';
+    const caption = item.imageCaption
+      ? '<figcaption>' + escapeHtml(item.imageCaption) + '</figcaption>'
+      : '';
+    const figure = image && hasRichBody
+      ? '<figure class="project-flow">' + image + caption + '</figure>'
+      : '';
+    const asideHtml = (hasRichBody ? '' : image) + demo + linksBlock + highlightsBlock;
+    const lead = item.subtitle || item.summary || '';
+    const overview = hasRichBody && item.overview && item.overview !== lead
+      ? '<p class="project-detail-overview">' + escapeHtml(item.overview) + '</p>'
+      : '';
 
-    return '<article class="project-detail">'
-      + '<div class="project-detail-hero">'
-      + '<div>'
+    return '<article class="project-detail' + (hasRichBody ? ' project-detail--case' : '') + '">'
+      + '<header class="project-detail-header">'
       + '<span class="project-detail-kicker">Open project</span>'
       + '<h1 class="project-detail-title">' + escapeHtml(item.title || '') + '</h1>'
-      + '<p class="project-detail-subtitle">' + escapeHtml(item.subtitle || item.summary || '') + '</p>'
+      + (lead ? '<p class="project-detail-lead">' + escapeHtml(lead) + '</p>' : '')
+      + overview
+      + '</header>'
+      + figure
+      + '<div class="project-detail-layout' + (asideHtml ? '' : ' project-detail-layout--single') + '">'
+      + (asideHtml ? '<aside class="project-detail-aside">' + asideHtml + '</aside>' : '')
+      + '<div class="project-detail-main"><div class="project-detail-body">' + body + '</div></div>'
       + '</div>'
-      + '<div class="project-detail-panel">'
-      + image
-      + demo
-      + '<div class="project-links">' + links + '</div>'
-      + '</div>'
-      + '</div>'
-      + '<div class="project-detail-body">' + body + '</div>'
-      + (highlights ? '<div class="project-highlights"><h2 class="year-heading">Highlights</h2><ul>' + highlights + '</ul></div>' : '')
       + '</article>';
   }
 
@@ -261,7 +329,7 @@
     const homeEl = document.getElementById('home-projects');
     if (homeEl) {
       const featured = items.filter(function (x) { return x.featured; });
-      const pick = (featured.length ? featured : items).slice(0, 3);
+      const pick = (featured.length ? featured : items).slice(0, 6);
       homeEl.innerHTML = pick.map(function (x) { return projectCard(x, true); }).join('');
     }
 
@@ -276,6 +344,12 @@
       const item = items.find(function (x) { return x.slug === slug; });
       if (item) {
         detailEl.innerHTML = projectDetail(item);
+        enhanceProjectMetrics(detailEl);
+        const contentEl = detailEl.closest('.content');
+        if (contentEl) contentEl.classList.add('content--project-detail');
+        const pageHeader = document.querySelector('.page-header');
+        if (pageHeader) pageHeader.classList.add('page-header--project');
+        if (item.title) document.title = 'Haowei Cheng | ' + item.title;
       } else {
         detailEl.innerHTML = '<p class="section-intro">Project not found.</p>';
       }

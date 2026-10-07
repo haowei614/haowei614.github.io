@@ -1,6 +1,72 @@
 {
   "items": [
     {
+      "id": "proj-ml-auth",
+      "slug": "ml-auth",
+      "title": "ML Inference Authentication System",
+      "subtitle": "OAuth2 authentication with stampede prevention for distributed ML services",
+      "summary": "Designed OAuth2 authentication for ML inference services, reducing concurrent token refreshes by 90% and improving response latency by 53% in high-throughput async pipelines.",
+      "overview": "Built OAuth2-based authentication for production ML inference services handling thousands of concurrent requests. Solved the \"refresh stampede\" problem in distributed async environments and implemented intelligent error classification for production reliability.",
+      "bodyHtml": "<h2>The Problem</h2><p>When introducing OAuth2 authentication to high-throughput ML inference services, three critical challenges emerged:</p><ul><li><strong>Refresh Stampede</strong>: Multiple concurrent async workers simultaneously detecting token expiry led to redundant authentication requests, triggering rate limits</li><li><strong>Naive Error Handling</strong>: All HTTP errors retried uniformly (including unrecoverable 401s), wasting 30+ seconds on configuration errors</li><li><strong>Resource Leaks</strong>: Per-request HTTP client instantiation added 50-100ms connection overhead</li></ul><h2>Solution Architecture</h2><h3>1. Stampede-Proof Token Cache</h3><p>Core innovation: Single shared <code>asyncio.Task</code> for concurrent refresh attempts. When multiple coroutines detect token expiry, only the first creates a refresh task; others await the same task.</p><p><strong>Result</strong>: N concurrent callers → 1 network call per process</p><h3>2. Intelligent Error Classification</h3><ul><li><strong>Permanent errors</strong> (401 bad credentials, 400 missing params) → Fail fast, alert, dead-letter queue</li><li><strong>Transient errors</strong> (503 service down, 429 rate limit) → Exponential backoff retry</li></ul><h3>3. Production-Grade HTTP Client</h3><ul><li>Singleton pattern with shared connection pool</li><li>Auto-inject <code>Authorization: Bearer &lt;token&gt;</code> header</li><li>401 response triggers token invalidation + retry flow</li><li>Graceful shutdown integrated with app lifecycle</li></ul><h2>Technical Highlights</h2><h3>Concurrency Safety</h3><p>Double-checked locking prevents race conditions. Fast path avoids lock if token is valid; slow path acquires lock and rechecks before creating refresh task.</p><h3>Failure Recovery</h3><p>Never overwrite valid tokens on refresh failure. If refresh fails but cached token is still valid, continue using it — graceful degradation over service interruption.</p><h3>401 Handling Flow</h3><p>Service returns 401 → Client invalidates token → TokenProvider refreshes → Retry request with new token</p><h2>Impact</h2><table><thead><tr><th>Metric</th><th>Improvement</th></tr></thead><tbody><tr><td>Token refresh rate</td><td><strong>90% reduction</strong></td></tr><tr><td>Average latency</td><td><strong>53% reduction</strong> (180ms → 85ms)</td></tr><tr><td>Connection overhead</td><td><strong>100% eliminated</strong> (connection pooling)</td></tr><tr><td>Error handling time</td><td><strong>93% reduction</strong> (30+ sec → &lt;2 sec)</td></tr><tr><td>CPU utilization</td><td><strong>40% reduction</strong></td></tr><tr><td>Memory usage</td><td><strong>32% reduction</strong></td></tr><tr><td>Auth service load</td><td><strong>90% reduction</strong></td></tr></tbody></table><h3>Reliability</h3><p>Auth service outage simulation (30 seconds):</p><ul><li><strong>Before</strong>: Service degradation, recovery required manual intervention</li><li><strong>After</strong>: Zero failures (used cached tokens), auto-recovered in &lt;2 seconds</li></ul><h2>Validation</h2><p>The checks cover two questions: authenticated requests reach the inference service, and an expired token triggers one refresh per process no matter how many callers notice it at once.</p><h3>500 callers at once</h3><p>500 coroutines requested a token together against an empty cache. One fetch ran. The other 499 waited on that same task and received the same token. Without the shared task, that moment would have been 500 refresh calls.</p><h3>12-minute load</h3><p>A 12-minute run with 30 concurrent users refreshed the token once per expiry window. The token lifetime was 5 minutes, and refresh started 60 seconds early, so a new token landed about every 4 minutes. Four windows produced four refreshes, and there were no authentication failures. Callers that arrived during a refresh waited and shared the result.</p><h2>Testing</h2><p>The suite also covers:</p><ul><li>Error classification across HTTP status codes</li><li>Bearer injection and a single retry after 401</li><li>Malformed token responses</li></ul><h2>Engineering Practices</h2><ul><li>✅ Type-safe: 100% type annotations, zero type errors</li><li>✅ Linted and formatted (Ruff)</li><li>✅ Comprehensive design documentation with ADRs</li><li>✅ Conventional Commits for clean history</li><li>✅ Feature-flagged deployment for zero-risk rollout</li></ul><h2>Key Learnings</h2><h3>Technical</h3><ol><li><strong>Shared Task Pattern</strong>: Using a single <code>asyncio.Task</code> as a coordination primitive for concurrent operations</li><li><strong>Error Semantics</strong>: HTTP status codes encode retry logic; respect their meaning</li><li><strong>Graceful Degradation</strong>: Prefer stale-but-valid data over service interruption</li></ol><h3>Process</h3><ol><li><strong>Document-Driven Design</strong>: Writing design docs first catches issues before implementation</li><li><strong>Mock Transport Testing</strong>: Comprehensive error scenario coverage without external dependencies</li><li><strong>Feature Flags</strong>: Safe incremental rollout in production environments</li></ol>",
+      "image": "/assets/img/ml-auth-flow.jpg",
+      "demoUrl": "",
+      "highlights": [
+        "500 concurrent callers collapsed to 1 token fetch",
+        "90% reduction in token refresh rate through stampede prevention",
+        "53% latency improvement via connection pooling and optimized caching",
+        "Async-native TokenProvider with shared Task coordination pattern",
+        "Two-tier error classification (permanent/transient) with intelligent retry",
+        "Production hardening: graceful degradation, lifecycle management"
+      ],
+      "links": [],
+      "featured": true,
+      "status": "published",
+      "imageCaption": "Request flow: cache hit, one shared refresh, and a single 401 retry."
+    },
+    {
+      "id": "proj-gpu-partition",
+      "slug": "gpu-partition",
+      "title": "GPU Partitioning for Inference",
+      "subtitle": "Full-GPU vs 1/3-GPU inference under the same load",
+      "summary": "Compared full-GPU and 1/3-GPU image inference under the same load. Partitioning kept about 85% of throughput on about a quarter of the GPUs.",
+      "overview": "Measured whether slicing each replica to one-third of a GPU could serve a similar image-inference load.",
+      "bodyHtml": "<h2>Question</h2><p>An image-inference service was moving from one full GPU per replica to a one-third GPU slice. The open question was whether the smaller slice could carry a similar load, or whether each image actually needed the whole GPU.</p><h2>What I measured</h2><p>I ran the same images, at the same concurrency, against the old and new deployments. The load test recorded throughput and latency only. It does not collect GPU utilization; that has to come from the monitoring system for the same window.</p><ul><li>Closed-loop load: the next request starts as soon as the previous one returns</li><li>Request bodies prepared once up front, so the client is not the bottleneck</li><li>Identical steps for both deployments; only the endpoint changes</li></ul><h2>Result</h2><p>The partitioned deployment kept about <strong>85% of the throughput</strong> while using about <strong>one quarter of the GPU</strong>. Throughput per GPU was about <strong>3×</strong> the full-GPU baseline. Median latency stayed similar. Tail latency got worse. There were no request failures in that run.</p><p>The original target was higher than either deployment reached. Throughput moved with replica count, at a similar rate per replica, which points to per-replica concurrency rather than GPU compute as the ceiling.</p><h2>What it does not prove</h2><p>This reading comes from throughput and replica counts. It is not confirmed by per-pod GPU utilization. Low utilization at saturation would support the concurrency explanation; high utilization would mean the slice is actually full.</p>",
+      "image": "/assets/img/gpu-partition.jpg",
+      "imageCaption": "Same images and load: about 85% of the throughput on about one quarter of the GPUs, with a worse tail.",
+      "demoUrl": "",
+      "highlights": [
+        "About 85% of throughput on about 1/4 of the GPU",
+        "About 3× throughput per GPU versus the full-GPU baseline",
+        "Median latency similar; tail latency worse",
+        "Ceiling looks like per-replica concurrency, not GPU compute",
+        "GPU utilization was not measured in this run"
+      ],
+      "links": [],
+      "featured": true,
+      "status": "published"
+    },
+    {
+      "id": "proj-agentic-annotation",
+      "slug": "agentic-annotation",
+      "title": "Multi-Agent Annotation System",
+      "subtitle": "Multi-agent orchestration for ML annotation workflows",
+      "summary": "Proof-of-concept orchestration for automated ML annotation workflows, using Claude Code agents and Gemini on Google Vertex AI.",
+      "overview": "Prototyped a hierarchical agent system that turns a high-level annotation request into a plan and then executes it.",
+      "bodyHtml": "<h2>Overview</h2><p>I worked as a software engineer on a prototype that explores whether a multi-agent system can plan and carry out machine learning annotation workflows.</p><p><strong>Type:</strong> Proof of concept, not a production system. <strong>Stack:</strong> Python, Claude Code, Google Vertex AI, Gemini, Docker, and the Model Context Protocol (MCP).</p><h2>Problem</h2><p>Annotation projects are usually planned and coordinated by hand: splitting work across stages, tracking dependencies, and keeping quality checks consistent. This PoC asked whether agents could draft that plan and then execute it.</p><h2>Approach</h2><h3>Hierarchical agents</h3><ul><li><strong>Orchestrator</strong>: takes a high-level annotation request, breaks it into tasks, and hands off work outside its role.</li><li><strong>Plan executor</strong>: runs the generated plan, keeps task order, and reports progress and failures.</li></ul><h3>Tools and models</h3><p>Agents reach annotation tools through MCP, so tool access stays behind one interface. The runtime uses Claude Code with Gemini models on Vertex AI, and can fall back to a smaller model when quota or rate limits block the larger one.</p><h2>What I worked on</h2><ul><li>Agent roles with explicit boundaries and delegation between agents</li><li>A markdown plan that one agent writes and another executes</li><li>Connecting the agent runtime to Vertex AI and an MCP tool server</li><li>A containerized development environment, including a path for switching models when rate limits hit</li></ul><h2>Outcome</h2><p>The prototype showed that automated planning and agent handoff are feasible for this workflow. It also surfaced the gaps before any larger build: error handling, observability, and a clearer evaluation of the use case.</p>",
+      "image": "/assets/img/agentic-annotation-flow.jpg",
+      "demoUrl": "",
+      "highlights": [
+        "Hierarchical orchestrator and plan-executor agents",
+        "Tool access through the Model Context Protocol",
+        "Claude Code runtime with Gemini on Vertex AI",
+        "Quota-aware fallback when the larger model is rate limited"
+      ],
+      "links": [],
+      "featured": true,
+      "status": "published",
+      "imageCaption": "Request flow: orchestrator writes a plan, the executor runs it through MCP, with a smaller model when rate limited."
+    },
+    {
       "id": "proj-re",
       "slug": "re",
       "title": "Requirements Engineering",
