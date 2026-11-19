@@ -756,6 +756,25 @@ main {
   font-size: 0.94rem;
 }
 
+.pub-venue .pub-rank,
+.pub-card-venue .pub-rank {
+  font-family: 'JetBrains Mono', monospace;
+  font-style: normal;
+  font-size: 0.78em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.pub-venue .pub-rank::before,
+.pub-card-venue .pub-rank::before {
+  content: '·';
+  margin: 0 0.45em 0 0.2em;
+  color: var(--subtle);
+  font-weight: 400;
+}
+
 .pub-tags {
   display: flex;
   flex-wrap: wrap;

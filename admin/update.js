@@ -333,7 +333,7 @@ function kindLabel(kind) {
 
 function itemSummary(item, kind) {
   if (kind === 'publication') {
-    return [item.venue, item.year, (item.tags || []).slice(0, 3).join(', ')].filter(Boolean).join(' · ');
+    return [item.venue, item.venueRank, item.year, (item.tags || []).slice(0, 3).join(', ')].filter(Boolean).join(' · ');
   }
   if (kind === 'project') {
     return [item.slug, item.featured ? 'featured' : '', item.summary].filter(Boolean).join(' · ');
@@ -470,6 +470,7 @@ function normalizeParsed(kind, item) {
       title: item.title || '',
       authors: item.authors || '',
       venue: item.venue || '',
+      venueRank: item.venueRank || '',
       year: Number(item.year || new Date().getFullYear()),
       date: toDateInput(item.date),
       tags: Array.isArray(item.tags) ? item.tags : [],
@@ -559,6 +560,7 @@ function renderPreview(kind, item) {
       fieldHtml('title', 'Title', state.item.title, { wide: true }),
       fieldHtml('authors', 'Authors', state.item.authors, { wide: true, type: 'textarea', rows: 3 }),
       fieldHtml('venue', 'Venue', state.item.venue),
+      fieldHtml('venueRank', 'Venue rank (e.g. CORE Rank A, JCR Q1)', state.item.venueRank),
       fieldHtml('year', 'Year', state.item.year, { type: 'number' }),
       fieldHtml('date', 'Date', state.item.date, { type: 'date' }),
       fieldHtml('tags', 'Tags (comma separated)', state.item.tags.join(', ')),
@@ -646,6 +648,7 @@ function collectPreview() {
       title: form.get('title') || '',
       authors: form.get('authors') || '',
       venue: form.get('venue') || '',
+      venueRank: form.get('venueRank') || '',
       year: Number(form.get('year') || new Date().getFullYear()),
       date: form.get('date') || new Date().toISOString().slice(0, 10),
       tags: String(form.get('tags') || '').split(',').map((x) => x.trim()).filter(Boolean),

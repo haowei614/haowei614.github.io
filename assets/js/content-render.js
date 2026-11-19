@@ -53,13 +53,16 @@
     const link = item.pdf || item.externalUrl || doiUrl || item.project || '#';
     const title = escapeHtml(item.title);
     const venue = escapeHtml(item.venue || '');
+    const venueRank = escapeHtml(String(item.venueRank || '').trim());
+    const venueHtml = venue
+      + (venueRank ? ' <span class="pub-rank">' + venueRank + '</span>' : '');
     const year = escapeHtml(item.year || '');
 
     if (forHome) {
       return '<a class="pub-item reveal" href="' + escapeHtml(link) + '" target="_blank" rel="noopener">'
         + '<span class="pub-year">' + year + '</span>'
         + '<div><p class="pub-title">' + title + '</p>'
-        + '<p class="pub-venue">' + venue + '</p>'
+        + '<p class="pub-venue">' + venueHtml + '</p>'
         + '<div class="pub-tags">' + tags + '</div></div></a>';
     }
 
@@ -75,7 +78,7 @@
       + '<div class="pub-card-head"><span class="pub-year">' + year + '</span><span class="pub-date">' + escapeHtml(fmtDate(item.date)) + '</span></div>'
       + '<h3 class="pub-card-title">' + title + '</h3>'
       + '<p class="pub-card-meta">' + highlightAuthor(item.authors) + '</p>'
-      + '<p class="pub-card-venue">' + venue + '</p>'
+      + '<p class="pub-card-venue">' + venueHtml + '</p>'
       + '<p class="pub-card-abs">' + escapeHtml(item.abstract || '') + '</p>'
       + '<div class="pub-tags">' + tags + '</div>'
       + '<div class="btn-mini-wrap">' + actions.join('') + '</div>'

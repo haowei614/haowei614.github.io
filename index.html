@@ -574,6 +574,23 @@
       font-style: italic;
     }
 
+    .pub-venue .pub-rank {
+      font-family: 'JetBrains Mono', monospace;
+      font-style: normal;
+      font-size: 0.78em;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .pub-venue .pub-rank::before {
+      content: '·';
+      margin: 0 0.45em 0 0.2em;
+      color: var(--subtle);
+      font-weight: 400;
+    }
+
     .pub-tags {
       display: flex;
       flex-wrap: wrap;
@@ -981,7 +998,7 @@
         <span class="pub-year">2026</span>
         <div>
           <p class="pub-title">QUARE: Quality-Aware Requirements Analysis through Multi-Agent Dialectical Negotiation</p>
-          <p class="pub-venue">RE 2026 (34th IEEE International Requirements Engineering Conference) · CORE Rank A</p>
+          <p class="pub-venue">RE 2026 (34th IEEE International Requirements Engineering Conference) <span class="pub-rank">CORE Rank A</span></p>
           <div class="pub-tags"><span class="tag">Requirements</span><span class="tag">Multi-Agent</span><span class="tag">Quality</span></div>
         </div>
       </div>
@@ -989,7 +1006,7 @@
         <span class="pub-year">2026</span>
         <div>
           <p class="pub-title">ArgRE: Formal Argumentation for Conflict Resolution in Multi-Agent Requirements Negotiation</p>
-          <p class="pub-venue">IEEE ACCESS · SCIE, IF=3.6</p>
+          <p class="pub-venue">IEEE ACCESS <span class="pub-rank">JCR Q1</span></p>
           <div class="pub-tags"><span class="tag">Argumentation</span><span class="tag">Multi-Agent</span><span class="tag">Requirements</span></div>
         </div>
       </div>
